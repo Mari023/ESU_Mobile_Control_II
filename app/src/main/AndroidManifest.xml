@@ -24,6 +24,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="net.rocrail.androc.activities.ActConnect" android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name="net.rocrail.androc.activities.ActThrottle" android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name="net.rocrail.androc.activities.ActSystem" android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name="net.rocrail.androc.activities.ActMenu" android:theme="@android:style/Theme.NoTitleBar" />
+        <activity android:name="net.rocrail.androc.activities.ActLayout" android:theme="@android:style/Theme.NoTitleBar" />
+        <activity android:name="net.rocrail.androc.activities.ActLoco" android:theme="@android:style/Theme.NoTitleBar" />
+        <activity android:name="net.rocrail.androc.activities.ActLocoSetup" android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name="net.rocrail.androc.activities.ActLevel" android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name="net.rocrail.androc.activities.ActInfo" android:theme="@android:style/Theme.NoTitleBar" />
+        <activity android:name="net.rocrail.androc.activities.ActRoutes" android:theme="@android:style/Theme.NoTitleBar" />
+        <activity android:name="net.rocrail.androc.activities.ActBlock" android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name="net.rocrail.androc.activities.ActStage" android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name="net.rocrail.androc.activities.ActFiddleYard" android:theme="@android:style/Theme.NoTitleBar" />
+        <activity android:name="net.rocrail.androc.activities.ActTurntable" android:theme="@android:style/Theme.NoTitleBar" />
+        <activity android:name="net.rocrail.androc.activities.ActPreferences" android:theme="@android:style/Theme.NoTitleBar" />
+        <activity android:name="net.rocrail.androc.activities.ActAccessory" android:theme="@android:style/Theme.NoTitleBar" />
+        <activity android:name="net.rocrail.androc.activities.ActActions" android:theme="@android:style/Theme.NoTitleBar" />
+        <activity android:name="net.rocrail.androc.activities.ActSwitches" android:theme="@android:style/Theme.NoTitleBar" />
+        <activity android:name="net.rocrail.androc.activities.ActOutputs" android:theme="@android:style/Theme.NoTitleBar" />
+        <activity android:name="net.rocrail.androc.activities.ActLocoList" android:theme="@android:style/Theme.NoTitleBar" />
+        <activity android:name="net.rocrail.androc.activities.ActLocoExpList" android:theme="@android:style/Theme.NoTitleBar" />
+        <activity android:name="net.rocrail.androc.activities.ActLocoConsist" android:theme="@android:style/Theme.NoTitleBar" />
+        <activity android:name="net.rocrail.androc.activities.ActGuestLoco" android:theme="@android:style/Theme.NoTitleBar" />
+        <service android:name="net.rocrail.androc.RocrailService"/>
     </application>
 
 </manifest>
