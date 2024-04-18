@@ -42,9 +42,8 @@ import net.rocrail.androc.objects.Item;
 import org.xml.sax.Attributes;
 
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -53,8 +52,8 @@ import javax.xml.parsers.SAXParser;
 
 public class RocrailService extends Service {
     private static final int NOTIFICATION_POWER = 1;
-    private final List<SystemListener> m_Listeners = new ArrayList<SystemListener>();
-    private final List<PoMListener> m_PoMListeners = new ArrayList<PoMListener>();
+    private final List<SystemListener> m_Listeners = new ArrayList<>();
+    private final List<PoMListener> m_PoMListeners = new ArrayList<>();
     private final IBinder rocrailBinder = new RocrailLocalBinder();
     public Preferences Prefs = null;
     public Model m_Model = null;
@@ -67,10 +66,9 @@ public class RocrailService extends Service {
     public boolean Connected = false;
     public boolean m_bDidShowDonate = false;
     public int ThrottleNr = 1;
-    public List<String> MessageList = new ArrayList<String>();
+    public List<String> MessageList = new ArrayList<>();
     Socket m_Socket = null;
     Connection m_Connection = null;
-    SAXParser m_Parser = null;
     MessageListener messageListener = null;
     TimerTask timerTask = null;
     Timer timer = new Timer();
@@ -85,21 +83,10 @@ public class RocrailService extends Service {
         Prefs = new Preferences(this);
         Prefs.restore();
 
-    /*
-    TelephonyManager tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
-    if( tm != null ) {
-      if(tm.getLine1Number()!=null)
-        m_DeviceId = tm.getLine1Number();
-      else
-        m_DeviceId = tm.getDeviceId();
-    }
-    */
         m_DeviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         if (m_DeviceId == null) {
             m_DeviceId = "unknown";
         }
-
-
     }
 
     public void startTimer() {
@@ -148,8 +135,7 @@ public class RocrailService extends Service {
         m_Socket = new Socket(Prefs.Host, Prefs.Port);
 
         if (!reconnect) {
-            sendMessage("model", String.format("<model cmd=\"plan\" controlcode=\"%s\" disablemonitor=\"%s\"/>",
-                    Prefs.CtrlCode, Prefs.Monitoring ? "false" : "true"));
+            sendMessage("model", String.format("<model cmd=\"plan\" controlcode=\"%s\" disablemonitor=\"%s\"/>", Prefs.CtrlCode, Prefs.Monitoring ? "false" : "true"));
         }
 
         if (m_Connection == null) {
@@ -167,8 +153,7 @@ public class RocrailService extends Service {
     public void disConnect(boolean stop) {
         try {
             m_Connection.stopReading();
-            if (stop)
-                m_Connection.stopRunning();
+            if (stop) m_Connection.stopRunning();
             Thread.sleep(500);
         } catch (Exception e) {
             e.printStackTrace();
@@ -191,28 +176,21 @@ public class RocrailService extends Service {
     }
 
     public synchronized void sendMessage(String name, String msg) {
-        if (m_Socket != null && m_Socket.isConnected() && !m_Socket.isClosed() &&
-                !m_Socket.isOutputShutdown() && !m_Socket.isInputShutdown()) {
+        if (m_Socket != null && m_Socket.isConnected() && !m_Socket.isClosed() && !m_Socket.isOutputShutdown() && !m_Socket.isInputShutdown()) {
             try {
-                int msgLen = msg.getBytes(StandardCharsets.UTF_8).length;
+                int msgLen = msg.getBytes(Charset.forName("UTF-8")).length;
                 String stringToSend = String.format("<xmlh><xml size=\"%d\" name=\"%s\"/></xmlh>%s", msgLen, name, msg);
-                byte[] msgToSend = stringToSend.getBytes(StandardCharsets.UTF_8);
-                msgLen = msgToSend.length;
+                byte[] msgToSend = stringToSend.getBytes(Charset.forName("UTF-8"));
                 m_Socket.getOutputStream().write(msgToSend);
             } catch (Exception e) {
                 e.printStackTrace();
                 informListeners(SystemListener.EVENT_DISCONNECTED);
             }
-        } else if (m_Socket != null) {
-            // Reconnect in the Connection Class.
-            //informListeners(SystemListener.EVENT_DISCONNECTED);
         }
     }
 
     public void informPoMListeners(int addr, int cv, int value) {
-        Iterator<PoMListener> it = m_PoMListeners.iterator();
-        while (it.hasNext()) {
-            PoMListener listener = it.next();
+        for (PoMListener listener : m_PoMListeners) {
             listener.ReadResponse(addr, cv, value);
         }
     }
@@ -223,9 +201,7 @@ public class RocrailService extends Service {
             // TODO: remove all views and clean up the model...
 
             // set the connection view active again
-            Iterator<SystemListener> it = m_Listeners.iterator();
-            while (it.hasNext()) {
-                SystemListener listener = it.next();
+            for (SystemListener listener : m_Listeners) {
                 listener.SystemShutdown();
             }
         } else if (SystemListener.EVENT_DISCONNECTED.equals(event)) {
@@ -233,9 +209,7 @@ public class RocrailService extends Service {
             Connected = false;
 
             // set the connection view active again
-            Iterator<SystemListener> it = m_Listeners.iterator();
-            while (it.hasNext()) {
-                SystemListener listener = it.next();
+            for (SystemListener listener : m_Listeners) {
                 listener.SystemDisconnected();
             }
         }
@@ -269,15 +243,13 @@ public class RocrailService extends Service {
                 CharSequence contentText = "Global Power is down.";      // expanded message text
 
                 Intent notificationIntent = new Intent(this, ActSystem.class);
-                PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+                PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
                 // the next two lines initialize the Notification, using the configurations above
-                Notification notification = new Notification.Builder(context).setSmallIcon(icon).setTicker(tickerText).setWhen(when).build();
+                Notification notification = new Notification.Builder(context).setSmallIcon(icon).setTicker(tickerText).setWhen(when).setContentTitle(contentTitle).setContentText(contentText).setContentIntent(contentIntent).build();
                 notification.flags = notification.flags | Notification.FLAG_AUTO_CANCEL;
-                notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 
-                String ns = Context.NOTIFICATION_SERVICE;
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.notify(NOTIFICATION_POWER, notification);
             }
 
@@ -286,20 +258,18 @@ public class RocrailService extends Service {
         }
         if (itemtype.equals("auto")) {
             String cmd = Item.getAttrValue(atts, "cmd", "");
-            if (cmd.equals("on") || cmd.equals("off"))
-                AutoMode = cmd.equals("on");
+            if (cmd.equals("on") || cmd.equals("off")) AutoMode = cmd.equals("on");
             return;
         }
         if (itemtype.equals("exception")) {
             String text = Item.getAttrValue(atts, "text", null);
-            if (text != null && text.length() > 0) {
+            if (text != null && !text.isEmpty()) {
                 synchronized (MessageList) {
                     MessageList.add(0, text);
                     if (MessageList.size() > 50) {
                         MessageList.remove(MessageList.size() - 1);
                     }
-                    if (messageListener != null)
-                        messageListener.newMessages();
+                    if (messageListener != null) messageListener.newMessages();
                 }
             }
         }
@@ -307,7 +277,6 @@ public class RocrailService extends Service {
 
     public synchronized void setMessageListener(MessageListener listener) {
         messageListener = listener;
-
     }
 
     public class RocrailLocalBinder extends Binder {
@@ -319,6 +288,4 @@ public class RocrailService extends Service {
             return m_Model;
         }
     }
-
 }
-
