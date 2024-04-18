@@ -26,7 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import net.rocrail.androc.Preferences;
-import net.rocrail.androc.R;
+import com.example.test.R;
 
 public class ActAccessory extends ActBase {
   @Override

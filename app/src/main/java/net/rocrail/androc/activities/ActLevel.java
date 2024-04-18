@@ -39,7 +39,7 @@ import android.widget.Toast;
 import android.widget.ZoomButtonsController;
 import android.widget.ZoomButtonsController.OnZoomListener;
 
-import net.rocrail.androc.R;
+import com.example.test.R;
 import net.rocrail.androc.objects.Item;
 import net.rocrail.androc.objects.ZLevel;
 import net.rocrail.androc.widgets.LevelCanvas;

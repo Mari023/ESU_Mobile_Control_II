@@ -27,7 +27,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import net.rocrail.androc.R;
+import com.example.test.R;
 import net.rocrail.androc.interfaces.ServiceListener;
 
 public class ActInfo extends ListActivity implements ServiceListener {

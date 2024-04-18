@@ -29,7 +29,7 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
-import net.rocrail.androc.R;
+import com.example.test.R;
 import net.rocrail.androc.interfaces.Mobile;
 import net.rocrail.androc.interfaces.PoMListener;
 import net.rocrail.androc.objects.Loco;

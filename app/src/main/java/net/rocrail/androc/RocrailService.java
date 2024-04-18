@@ -29,7 +29,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.provider.Settings;
 
-import net.rocrail.androc.R;
+import com.example.test.R;
 import net.rocrail.androc.activities.ActLevel;
 import net.rocrail.androc.activities.ActSystem;
 import net.rocrail.androc.interfaces.MessageListener;

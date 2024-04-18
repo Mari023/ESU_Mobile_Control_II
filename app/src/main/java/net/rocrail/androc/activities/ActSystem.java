@@ -26,7 +26,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import net.rocrail.androc.R;
+import com.example.test.R;
 import net.rocrail.androc.interfaces.MessageListener;
 import net.rocrail.androc.widgets.LEDButton;
 

@@ -30,7 +30,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import net.rocrail.androc.R;
+import com.example.test.R;
 
 public class ActPreferences extends ActBase implements OnItemSelectedListener {
   @Override

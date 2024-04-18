@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 
-import net.rocrail.androc.R;
+import com.example.test.R;
 import net.rocrail.androc.interfaces.Mobile;
 
 import java.util.ArrayList;

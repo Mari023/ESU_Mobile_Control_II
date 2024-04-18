@@ -22,7 +22,7 @@ package net.rocrail.androc.objects;
 import android.view.View;
 import android.widget.Toast;
 
-import net.rocrail.androc.R;
+import com.example.test.R;
 import net.rocrail.androc.RocrailService;
 
 import org.xml.sax.Attributes;

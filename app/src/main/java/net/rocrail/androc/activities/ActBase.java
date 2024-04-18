@@ -32,7 +32,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
-import net.rocrail.androc.R;
+import com.example.test.R;
 import net.rocrail.androc.RocrailService;
 import net.rocrail.androc.interfaces.ServiceListener;
 

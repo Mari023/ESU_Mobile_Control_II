@@ -6,7 +6,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
-import net.rocrail.androc.R;
+import com.example.test.R;
 
 public class ActGuestLoco extends ActBase {
 

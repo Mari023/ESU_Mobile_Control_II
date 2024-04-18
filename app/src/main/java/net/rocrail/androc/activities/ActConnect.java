@@ -35,7 +35,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import net.rocrail.androc.R;
+import com.example.test.R;
 import net.rocrail.androc.interfaces.ModelListener;
 import net.rocrail.androc.interfaces.SystemListener;
 import net.rocrail.androc.objects.RRConnection;

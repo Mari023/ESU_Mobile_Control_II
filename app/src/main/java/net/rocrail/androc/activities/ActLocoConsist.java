@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import net.rocrail.androc.R;
+import com.example.test.R;
 import net.rocrail.androc.objects.Loco;
 import net.rocrail.androc.widgets.LocoImage;
 

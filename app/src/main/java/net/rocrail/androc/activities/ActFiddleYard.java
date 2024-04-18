@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
-import net.rocrail.androc.R;
+import com.example.test.R;
 import net.rocrail.androc.objects.FiddleYard;
 import net.rocrail.androc.widgets.LEDButton;
 

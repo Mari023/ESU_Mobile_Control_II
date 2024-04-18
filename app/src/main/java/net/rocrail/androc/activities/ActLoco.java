@@ -32,7 +32,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import net.rocrail.androc.R;
+import com.example.test.R;
 import net.rocrail.androc.interfaces.Mobile;
 import net.rocrail.androc.objects.Block;
 import net.rocrail.androc.widgets.LEDButton;
