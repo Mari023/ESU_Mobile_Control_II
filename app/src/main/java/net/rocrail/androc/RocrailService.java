@@ -30,6 +30,7 @@ import android.os.IBinder;
 import android.provider.Settings;
 
 import com.example.test.R;
+
 import net.rocrail.androc.activities.ActLevel;
 import net.rocrail.androc.activities.ActSystem;
 import net.rocrail.androc.interfaces.MessageListener;
@@ -51,41 +52,39 @@ import java.util.TimerTask;
 import javax.xml.parsers.SAXParser;
 
 public class RocrailService extends Service {
-  public Preferences Prefs = null;
-  public Model   m_Model       = null;
-  public String  m_DeviceId    = "andRoc";
-  
-  public Mobile SelectedLoco = null;
-  public ActLevel  LevelView = null;
-  
-  public boolean Power     = false;
-  public boolean AutoMode  = false;
-  public boolean AutoStart = false;
-  public boolean Connected = false;
-  public boolean m_bDidShowDonate = false;
-  public int ThrottleNr = 1;
-  
-  Socket        m_Socket     = null;
-  Connection    m_Connection = null;
-  
-  SAXParser m_Parser = null;
-  private final List<SystemListener>  m_Listeners = new ArrayList<SystemListener>();
-  private final List<PoMListener>  m_PoMListeners = new ArrayList<PoMListener>();
-  public List<String>  MessageList = new ArrayList<String>();
+    private static final int NOTIFICATION_POWER = 1;
+    private final List<SystemListener> m_Listeners = new ArrayList<SystemListener>();
+    private final List<PoMListener> m_PoMListeners = new ArrayList<PoMListener>();
+    private final IBinder rocrailBinder = new RocrailLocalBinder();
+    public Preferences Prefs = null;
+    public Model m_Model = null;
+    public String m_DeviceId = "andRoc";
+    public Mobile SelectedLoco = null;
+    public ActLevel LevelView = null;
+    public boolean Power = false;
+    public boolean AutoMode = false;
+    public boolean AutoStart = false;
+    public boolean Connected = false;
+    public boolean m_bDidShowDonate = false;
+    public int ThrottleNr = 1;
+    public List<String> MessageList = new ArrayList<String>();
+    Socket m_Socket = null;
+    Connection m_Connection = null;
+    SAXParser m_Parser = null;
+    MessageListener messageListener = null;
+    TimerTask timerTask = null;
+    Timer timer = new Timer();
 
-  MessageListener messageListener = null;
-  private static final int NOTIFICATION_POWER = 1;
-  
-  TimerTask timerTask = null;
-  Timer timer = new Timer();
-  
 
-  @Override
-  public void onCreate() {
-    m_Model = new Model(this);
-    Prefs = new Preferences(this);
-    Prefs.restore();
-    
+    public RocrailService() {
+    }
+
+    @Override
+    public void onCreate() {
+        m_Model = new Model(this);
+        Prefs = new Preferences(this);
+        Prefs.restore();
+
     /*
     TelephonyManager tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
     if( tm != null ) {
@@ -95,241 +94,231 @@ public class RocrailService extends Service {
         m_DeviceId = tm.getDeviceId();
     }
     */
-    m_DeviceId = Settings.Secure.getString(this.getContentResolver(),Settings.Secure.ANDROID_ID);
-    if( m_DeviceId == null ) {
-      m_DeviceId = "unknown";
-    }
-    
-    
-    
-  }
-
-  
-  public void startTimer() {
-    timerTask = new TimerTask() {
-      public void run() {
-        if( LevelView != null && !m_Model.m_bDonKey ) {
-          System.out.println("shutdown andRoc...");
-          LevelView.finish();
+        m_DeviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        if (m_DeviceId == null) {
+            m_DeviceId = "unknown";
         }
-      }};
-    
-    System.out.println("scheduling timer for shutdown in 5 minutes...");
-    timer.schedule(timerTask, 5 * 60 * 1000 );
-  }
-  
-  private final IBinder rocrailBinder = new RocrailLocalBinder();
-  public class RocrailLocalBinder extends Binder {
-    public RocrailService getService() {
-        return RocrailService.this;
-    }
-    public Model getModel() {
-      return m_Model;
-    }
-  }
 
-  @Override
-  public IBinder onBind(Intent intent) {
-    return rocrailBinder;
-  }
-  
-  
-  public RocrailService() {
-  }
-  
-  public void addListener( SystemListener listener ) {
-    m_Listeners.add(listener);
-  }
-  public void addPoMListener( PoMListener listener ) {
-    m_PoMListeners.add(listener);
-  }
-  public void removeListener( SystemListener listener ) {
-    m_Listeners.remove(listener);
-  }
-  
 
-  public void connect(boolean reconnect) throws Exception {
-    // TODO: clean up all activities and model
-    
-    try {
-      if( m_Connection != null ) {
-        m_Connection.stopReading();
-        Thread.sleep(500);
-      }
-    } 
-    catch (Exception e) {
-      e.printStackTrace();
     }
-    
-    m_Socket = new Socket(Prefs.Host, Prefs.Port);
-    
-    if( !reconnect ) {
-      sendMessage("model",String.format("<model cmd=\"plan\" controlcode=\"%s\" disablemonitor=\"%s\"/>", 
-          Prefs.CtrlCode, Prefs.Monitoring?"false":"true"));
-    }
-    
-    if( m_Connection == null ) {
-      m_Connection = new Connection(this, m_Model, m_Socket);
-      m_Connection.start();
-    }
-    m_Connection.startReading();
-    Connected = true;
-  }
-  
-  
-  public void onDestroy() {
-    disConnect(true);
-  }
-  
-  public void disConnect(boolean stop) {
-    try {
-      m_Connection.stopReading();
-      if( stop )
-        m_Connection.stopRunning();
-      Thread.sleep(500);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    try {
-      if( m_Socket != null ) {
-        m_Socket.close();
-      }
 
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    Connected = false;
-    m_Socket = null;
+    public void startTimer() {
+        timerTask = new TimerTask() {
+            public void run() {
+                if (LevelView != null && !m_Model.m_bDonKey) {
+                    System.out.println("shutdown andRoc...");
+                    LevelView.finish();
+                }
+            }
+        };
 
-  }
-  
-  public String getDeviceName() {
-    return m_DeviceId;
-  }
-  
-  public synchronized void sendMessage(String name, String msg) {
-    if( m_Socket != null && m_Socket.isConnected() && !m_Socket.isClosed() &&
-        !m_Socket.isOutputShutdown() && !m_Socket.isInputShutdown() ) 
-    {
-      try {
-        int msgLen = msg.getBytes(StandardCharsets.UTF_8).length;
-        String stringToSend = String.format("<xmlh><xml size=\"%d\" name=\"%s\"/></xmlh>%s", msgLen, name, msg);
-        byte[] msgToSend = stringToSend.getBytes(StandardCharsets.UTF_8);
-        msgLen = msgToSend.length;
-        m_Socket.getOutputStream().write(msgToSend);
-      }
-      catch( Exception e) {
-        e.printStackTrace();
-        informListeners(SystemListener.EVENT_DISCONNECTED);
-      }
+        System.out.println("scheduling timer for shutdown in 5 minutes...");
+        timer.schedule(timerTask, 5 * 60 * 1000);
     }
-    else if( m_Socket != null ) {
-      // Reconnect in the Connection Class.
-      //informListeners(SystemListener.EVENT_DISCONNECTED);
-    }
-  }
 
-  public void informPoMListeners(int addr, int cv, int value) {
-    Iterator<PoMListener> it = m_PoMListeners.iterator();
-    while( it.hasNext() ) {
-      PoMListener listener = it.next();
-      listener.ReadResponse(addr, cv, value);
+    @Override
+    public IBinder onBind(Intent intent) {
+        return rocrailBinder;
     }
-  }
-  
-  public void informListeners(String event) {
-    if( SystemListener.EVENT_SHUTDOWN.equals(event) ) {
-      disConnect(false);
-      // TODO: remove all views and clean up the model...
-      
-      // set the connection view active again
-      Iterator<SystemListener> it = m_Listeners.iterator();
-      while( it.hasNext() ) {
-        SystemListener listener = it.next();
-        listener.SystemShutdown();
-      }
-    }
-    else if( SystemListener.EVENT_DISCONNECTED.equals(event) ) {
-      m_Socket = null;
-      Connected = false;
-      
-      // set the connection view active again
-      Iterator<SystemListener> it = m_Listeners.iterator();
-      while( it.hasNext() ) {
-        SystemListener listener = it.next();
-        listener.SystemDisconnected();
-      }
-    }
-  }
-  
-  public synchronized void event(String itemtype, Attributes atts) {
-    if( itemtype.equals("sys") ) {
-      informListeners(Item.getAttrValue(atts, "cmd", ""));
-      return;
-    }
-    
-    if( itemtype.equals("program") ) {
-      String cmd = Item.getAttrValue(atts, "cmd", "");
-      int cv = Item.getAttrValue(atts, "cv", 0);
-      int val = Item.getAttrValue(atts, "value", 0);
-      if (cmd.equals("7") || cmd.equals("8")) {
-        informPoMListeners(0, cv, val);
-      }
-      return;  
-    }
-    
-    if( itemtype.equals("state") ) {
-      boolean l_Power = Item.getAttrValue(atts, "power", Power);
-      if( Power && !l_Power ) {
-      
-        int icon = R.drawable.power_notify;        // icon from resources
-        CharSequence tickerText = "Power Down";              // ticker-text
-        long when = System.currentTimeMillis();         // notification time
-        Context context = getApplicationContext();      // application Context
-        CharSequence contentTitle = "Rocrail Event";  // expanded message title
-        CharSequence contentText = "Global Power is down.";      // expanded message text
-  
-        Intent notificationIntent = new Intent(this, ActSystem.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-  
-        // the next two lines initialize the Notification, using the configurations above
-        Notification notification = new Notification(icon, tickerText, when);
-        notification.flags = notification.flags | Notification.FLAG_AUTO_CANCEL;
-        notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);      
 
-        String ns = Context.NOTIFICATION_SERVICE;
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
-        mNotificationManager.notify(NOTIFICATION_POWER, notification);
-      }
-      
-      Power = l_Power;
-      return;
+    public void addListener(SystemListener listener) {
+        m_Listeners.add(listener);
     }
-    if( itemtype.equals("auto") ) {
-      String cmd = Item.getAttrValue(atts, "cmd", "");
-      if( cmd.equals("on") || cmd.equals("off") )
-        AutoMode = cmd.equals("on");
-      return;
+
+    public void addPoMListener(PoMListener listener) {
+        m_PoMListeners.add(listener);
     }
-    if( itemtype.equals("exception") ) {
-      String text = Item.getAttrValue(atts, "text", null);
-      if( text != null && text.length() > 0 ) {
-        synchronized(MessageList) {
-          MessageList.add(0, text);
-          if( MessageList.size() > 50 ) {
-            MessageList.remove(MessageList.size()-1);
-          }
-          if( messageListener != null )
-            messageListener.newMessages();
+
+    public void removeListener(SystemListener listener) {
+        m_Listeners.remove(listener);
+    }
+
+    public void connect(boolean reconnect) throws Exception {
+        // TODO: clean up all activities and model
+
+        try {
+            if (m_Connection != null) {
+                m_Connection.stopReading();
+                Thread.sleep(500);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-      }
-    }
-  }
 
-  public synchronized void setMessageListener(MessageListener listener) {
-    messageListener = listener;
-    
-  }
+        m_Socket = new Socket(Prefs.Host, Prefs.Port);
+
+        if (!reconnect) {
+            sendMessage("model", String.format("<model cmd=\"plan\" controlcode=\"%s\" disablemonitor=\"%s\"/>",
+                    Prefs.CtrlCode, Prefs.Monitoring ? "false" : "true"));
+        }
+
+        if (m_Connection == null) {
+            m_Connection = new Connection(this, m_Model, m_Socket);
+            m_Connection.start();
+        }
+        m_Connection.startReading();
+        Connected = true;
+    }
+
+    public void onDestroy() {
+        disConnect(true);
+    }
+
+    public void disConnect(boolean stop) {
+        try {
+            m_Connection.stopReading();
+            if (stop)
+                m_Connection.stopRunning();
+            Thread.sleep(500);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            if (m_Socket != null) {
+                m_Socket.close();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Connected = false;
+        m_Socket = null;
+
+    }
+
+    public String getDeviceName() {
+        return m_DeviceId;
+    }
+
+    public synchronized void sendMessage(String name, String msg) {
+        if (m_Socket != null && m_Socket.isConnected() && !m_Socket.isClosed() &&
+                !m_Socket.isOutputShutdown() && !m_Socket.isInputShutdown()) {
+            try {
+                int msgLen = msg.getBytes(StandardCharsets.UTF_8).length;
+                String stringToSend = String.format("<xmlh><xml size=\"%d\" name=\"%s\"/></xmlh>%s", msgLen, name, msg);
+                byte[] msgToSend = stringToSend.getBytes(StandardCharsets.UTF_8);
+                msgLen = msgToSend.length;
+                m_Socket.getOutputStream().write(msgToSend);
+            } catch (Exception e) {
+                e.printStackTrace();
+                informListeners(SystemListener.EVENT_DISCONNECTED);
+            }
+        } else if (m_Socket != null) {
+            // Reconnect in the Connection Class.
+            //informListeners(SystemListener.EVENT_DISCONNECTED);
+        }
+    }
+
+    public void informPoMListeners(int addr, int cv, int value) {
+        Iterator<PoMListener> it = m_PoMListeners.iterator();
+        while (it.hasNext()) {
+            PoMListener listener = it.next();
+            listener.ReadResponse(addr, cv, value);
+        }
+    }
+
+    public void informListeners(String event) {
+        if (SystemListener.EVENT_SHUTDOWN.equals(event)) {
+            disConnect(false);
+            // TODO: remove all views and clean up the model...
+
+            // set the connection view active again
+            Iterator<SystemListener> it = m_Listeners.iterator();
+            while (it.hasNext()) {
+                SystemListener listener = it.next();
+                listener.SystemShutdown();
+            }
+        } else if (SystemListener.EVENT_DISCONNECTED.equals(event)) {
+            m_Socket = null;
+            Connected = false;
+
+            // set the connection view active again
+            Iterator<SystemListener> it = m_Listeners.iterator();
+            while (it.hasNext()) {
+                SystemListener listener = it.next();
+                listener.SystemDisconnected();
+            }
+        }
+    }
+
+    public synchronized void event(String itemtype, Attributes atts) {
+        if (itemtype.equals("sys")) {
+            informListeners(Item.getAttrValue(atts, "cmd", ""));
+            return;
+        }
+
+        if (itemtype.equals("program")) {
+            String cmd = Item.getAttrValue(atts, "cmd", "");
+            int cv = Item.getAttrValue(atts, "cv", 0);
+            int val = Item.getAttrValue(atts, "value", 0);
+            if (cmd.equals("7") || cmd.equals("8")) {
+                informPoMListeners(0, cv, val);
+            }
+            return;
+        }
+
+        if (itemtype.equals("state")) {
+            boolean l_Power = Item.getAttrValue(atts, "power", Power);
+            if (Power && !l_Power) {
+
+                int icon = R.drawable.power_notify;        // icon from resources
+                CharSequence tickerText = "Power Down";              // ticker-text
+                long when = System.currentTimeMillis();         // notification time
+                Context context = getApplicationContext();      // application Context
+                CharSequence contentTitle = "Rocrail Event";  // expanded message title
+                CharSequence contentText = "Global Power is down.";      // expanded message text
+
+                Intent notificationIntent = new Intent(this, ActSystem.class);
+                PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+                // the next two lines initialize the Notification, using the configurations above
+                Notification notification = new Notification.Builder(context).setSmallIcon(icon).setTicker(tickerText).setWhen(when).build();
+                notification.flags = notification.flags | Notification.FLAG_AUTO_CANCEL;
+                notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+
+                String ns = Context.NOTIFICATION_SERVICE;
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
+                mNotificationManager.notify(NOTIFICATION_POWER, notification);
+            }
+
+            Power = l_Power;
+            return;
+        }
+        if (itemtype.equals("auto")) {
+            String cmd = Item.getAttrValue(atts, "cmd", "");
+            if (cmd.equals("on") || cmd.equals("off"))
+                AutoMode = cmd.equals("on");
+            return;
+        }
+        if (itemtype.equals("exception")) {
+            String text = Item.getAttrValue(atts, "text", null);
+            if (text != null && text.length() > 0) {
+                synchronized (MessageList) {
+                    MessageList.add(0, text);
+                    if (MessageList.size() > 50) {
+                        MessageList.remove(MessageList.size() - 1);
+                    }
+                    if (messageListener != null)
+                        messageListener.newMessages();
+                }
+            }
+        }
+    }
+
+    public synchronized void setMessageListener(MessageListener listener) {
+        messageListener = listener;
+
+    }
+
+    public class RocrailLocalBinder extends Binder {
+        public RocrailService getService() {
+            return RocrailService.this;
+        }
+
+        public Model getModel() {
+            return m_Model;
+        }
+    }
 
 }
 
