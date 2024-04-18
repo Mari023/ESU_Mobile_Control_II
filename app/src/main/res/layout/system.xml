@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Rocrail - Model Railroad Software
+
+ Copyright (C) 2002-2010 - Rob Versluis <r.j.versluis@rocrail.net>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="300dp" android:layout_height="fill_parent"
+  android:orientation="vertical" android:padding="5px">
+
+  <LinearLayout android:id="@+id/systemLayout3"
+    android:layout_width="fill_parent" android:layout_height="fill_parent"
+    android:orientation="vertical">
+    <LinearLayout android:id="@+id/systemLayout1"
+      android:layout_width="fill_parent" android:layout_height="0px" android:layout_weight="33">
+      <net.rocrail.androc.widgets.LEDButton android:text="@string/Power_ON" android:textStyle="bold"
+        android:id="@+id/systemPowerON" android:layout_width="0px"
+        android:layout_weight="50" android:layout_height="60dp"/>
+      <net.rocrail.androc.widgets.LEDButton android:text="@string/Power_OFF" android:textStyle="bold"
+        android:id="@+id/systemPowerOFF" android:layout_width="0px"
+        android:layout_weight="50" android:layout_height="60dp"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/systemLayout2"
+      android:layout_width="fill_parent" android:layout_height="0px" android:layout_weight="33">
+      <Button android:text="@string/Init_Field" android:textStyle="bold"
+        android:id="@+id/systemInitField" android:layout_width="0px"
+        android:layout_weight="50" android:layout_height="60dp"></Button>
+      <Button android:text="@string/EmergencyStop" android:textStyle="bold"
+        android:id="@+id/systemEmergencyStop" android:layout_width="0px"
+        android:layout_weight="50" android:layout_height="60dp"></Button>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/systemLayout1"
+      android:layout_width="fill_parent" android:layout_height="0px" android:layout_weight="33">
+      <net.rocrail.androc.widgets.LEDButton android:text="@string/Auto_ON" android:textStyle="bold"
+        android:id="@+id/systemAutoON" android:layout_width="0px"
+        android:layout_weight="50" android:layout_height="60dp"/>
+      <net.rocrail.androc.widgets.LEDButton android:text="@string/Auto_Start" android:textStyle="bold"
+        android:id="@+id/systemAutoStart" android:layout_width="0px"
+        android:layout_weight="50" android:layout_height="60dp"/>
+    </LinearLayout>
+  </LinearLayout>
+
+  <LinearLayout android:id="@+id/systemLayout4"
+    android:layout_width="fill_parent" android:layout_height="120dp">
+    <ScrollView android:layout_width="fill_parent" android:layout_height="fill_parent">
+  <TextView android:text="System messages..." android:id="@+id/systemMessages"
+    android:layout_width="fill_parent" android:layout_height="fill_parent"
+    android:scrollHorizontally="true"></TextView>
+    </ScrollView>
+</LinearLayout>
+
+</LinearLayout>

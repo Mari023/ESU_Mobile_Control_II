@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Rocrail - Model Railroad Software
+
+ Copyright (C) 2002-2010 - Rob Versluis <r.j.versluis@rocrail.net>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent" android:orientation="vertical"
+  android:layout_height="fill_parent" android:padding="3px">
+  <ScrollView android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout android:layout_width="fill_parent"
+      android:orientation="vertical" android:layout_height="fill_parent">
+
+
+      <net.rocrail.androc.widgets.LocoImage
+        android:id="@+id/locoImage" android:layout_width="236px"
+        android:clickable="true" android:layout_height="60px"
+        android:src="@drawable/noimg" android:padding="5dp" />
+
+      <TextView android:text="@string/Address" android:id="@+id/locoAddress"
+        android:paddingLeft="5px" android:layout_width="fill_parent"
+        android:layout_height="wrap_content"></TextView>
+      <TextView android:text="@string/Runtime" android:id="@+id/locoRuntime"
+        android:paddingLeft="5px" android:layout_width="fill_parent"
+        android:layout_height="wrap_content"></TextView>
+      <TextView android:text="@string/Description" android:id="@+id/locoDesc"
+        android:paddingLeft="5px" android:layout_width="fill_parent"
+        android:layout_height="wrap_content"></TextView>
+      <TextView android:text="@string/Roadname" android:id="@+id/locoRoadname"
+        android:paddingLeft="5px" android:layout_width="fill_parent"
+        android:layout_height="wrap_content"></TextView>
+
+      <LinearLayout android:id="@+id/locoLayout1"
+        android:orientation="vertical" android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout android:id="@+id/locoLayout2"
+          android:layout_width="fill_parent" android:layout_height="wrap_content">
+          <net.rocrail.androc.widgets.LEDButton
+            android:text="@string/START" android:textStyle="bold"
+            android:id="@+id/locoStart" android:layout_width="wrap_content"
+            android:layout_weight="50" android:layout_height="wrap_content" />
+          <net.rocrail.androc.widgets.LEDButton
+            android:text="@string/HalfAuto" android:textStyle="bold"
+            android:id="@+id/locoHalfAuto" android:layout_width="wrap_content"
+            android:layout_weight="50" android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/locoLayout3"
+          android:orientation="vertical" android:layout_width="fill_parent"
+          android:layout_height="wrap_content">
+          <Spinner android:id="@+id/locoSchedules"
+            android:textStyle="bold" android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true" />
+          <Spinner android:id="@+id/locoBlocks"
+            android:textStyle="bold" android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true" />
+          <LinearLayout android:id="@+id/locoLayout20"
+            android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <Button android:text="@string/SetInBlock"
+              android:textStyle="bold" android:id="@+id/locoSetInBlock"
+              android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="50"/>
+            <net.rocrail.androc.widgets.LEDButton android:text="@string/Swap"
+              android:textStyle="bold" android:id="@+id/locoSwap"
+              android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="50"/>
+          </LinearLayout>
+        </LinearLayout>
+      </LinearLayout>
+
+    </LinearLayout>
+  </ScrollView>
+</LinearLayout>
