@@ -7,6 +7,7 @@
 
 package com.example.mobilecontrol2.sdk;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -167,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                 yield true;
             }
             case MobileControl2.KEYCODE_BOTTOM_RIGHT -> {
-                showMessage("Bottom right");
+                startActivity(new Intent(this, net.rocrail.androc.activities.ActConnect.class));
                 yield true;
             }
             default -> super.onKeyDown(keyCode, event);
