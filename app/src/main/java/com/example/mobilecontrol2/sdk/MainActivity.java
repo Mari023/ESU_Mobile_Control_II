@@ -150,25 +150,28 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case ThrottleFragment.KEYCODE_THROTTLE_WAKEUP:
+        return switch (keyCode) {
+            case ThrottleFragment.KEYCODE_THROTTLE_WAKEUP ->
                 // Ignore the wake up key. You must return true here to avoid further input key handling.
-                return true;
-            case MobileControl2.KEYCODE_TOP_LEFT:
+                    true;
+            case MobileControl2.KEYCODE_TOP_LEFT -> {
                 showMessage("Top left");
-                return true;
-            case MobileControl2.KEYCODE_BOTTOM_LEFT:
+                yield true;
+            }
+            case MobileControl2.KEYCODE_BOTTOM_LEFT -> {
                 showMessage("Bottom left");
-                return true;
-            case MobileControl2.KEYCODE_TOP_RIGHT:
+                yield true;
+            }
+            case MobileControl2.KEYCODE_TOP_RIGHT -> {
                 showMessage("Top right");
-                return true;
-            case MobileControl2.KEYCODE_BOTTOM_RIGHT:
+                yield true;
+            }
+            case MobileControl2.KEYCODE_BOTTOM_RIGHT -> {
                 showMessage("Bottom right");
-                return true;
-            default:
-                return super.onKeyDown(keyCode, event);
-        }
+                yield true;
+            }
+            default -> super.onKeyDown(keyCode, event);
+        };
     }
 
     @Override
