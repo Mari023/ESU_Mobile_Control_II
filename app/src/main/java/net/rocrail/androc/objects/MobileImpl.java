@@ -222,7 +222,7 @@ public abstract class MobileImpl implements Mobile {
     File file = new File("/sdcard/androc/" + IconName );
     if( file.exists()) {
       try {
-        byte rawdata[] = new byte[(int)file.length()]; 
+        byte[] rawdata = new byte[(int)file.length()];
         FileInputStream fis = new FileInputStream(file);
         fis.read(rawdata);
         fis.close();
@@ -312,7 +312,7 @@ public abstract class MobileImpl implements Mobile {
     File file = new File("/sdcard/androc/" + PicName );
     if( file.exists()) {
       try {
-        byte rawdata[] = new byte[(int)file.length()]; 
+        byte[] rawdata = new byte[(int)file.length()];
         FileInputStream fis = new FileInputStream(file);
         fis.read(rawdata);
         fis.close();

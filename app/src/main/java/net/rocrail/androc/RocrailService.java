@@ -41,6 +41,7 @@ import net.rocrail.androc.objects.Item;
 import org.xml.sax.Attributes;
 
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -68,8 +69,8 @@ public class RocrailService extends Service {
   Connection    m_Connection = null;
   
   SAXParser m_Parser = null;
-  private List<SystemListener>  m_Listeners = new ArrayList<SystemListener>();
-  private List<PoMListener>  m_PoMListeners = new ArrayList<PoMListener>();
+  private final List<SystemListener>  m_Listeners = new ArrayList<SystemListener>();
+  private final List<PoMListener>  m_PoMListeners = new ArrayList<PoMListener>();
   public List<String>  MessageList = new ArrayList<String>();
 
   MessageListener messageListener = null;
@@ -211,9 +212,9 @@ public class RocrailService extends Service {
         !m_Socket.isOutputShutdown() && !m_Socket.isInputShutdown() ) 
     {
       try {
-        int msgLen = msg.getBytes("UTF-8").length;
+        int msgLen = msg.getBytes(StandardCharsets.UTF_8).length;
         String stringToSend = String.format("<xmlh><xml size=\"%d\" name=\"%s\"/></xmlh>%s", msgLen, name, msg);
-        byte[] msgToSend = stringToSend.getBytes("UTF-8");
+        byte[] msgToSend = stringToSend.getBytes(StandardCharsets.UTF_8);
         msgLen = msgToSend.length;
         m_Socket.getOutputStream().write(msgToSend);
       }
@@ -322,7 +323,6 @@ public class RocrailService extends Service {
             messageListener.newMessages();
         }
       }
-      return;
     }
   }
 

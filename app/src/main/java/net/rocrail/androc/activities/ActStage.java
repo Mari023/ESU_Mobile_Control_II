@@ -34,7 +34,7 @@ public class ActStage extends ActBase  {
     if( m_Stage == null )
       return;
     
-    updateTitle("Stage \'"+m_Stage.ID+"\'");
+    updateTitle("Stage '" +m_Stage.ID+ "'");
 
     final Button OpenEnter = (Button) findViewById(R.id.stageEnter);
     OpenEnter.setText(m_Stage.Closed?getText(R.string.OpenEnter):getText(R.string.CloseEnter));

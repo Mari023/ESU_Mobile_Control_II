@@ -136,7 +136,7 @@ public class ActBlock extends ActBase implements OnItemSelectedListener {
     }    
     
     LocoID = m_Block.LocoID;
-    updateTitle("Block \'"+m_Block.ID+"\'");
+    updateTitle("Block '" +m_Block.ID+ "'");
     
     
     updateLoco();

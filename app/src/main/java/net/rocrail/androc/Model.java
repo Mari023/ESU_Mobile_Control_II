@@ -48,7 +48,7 @@ import java.util.List;
 
 public class Model {
   RocrailService  rocrailService  = null;
-  private List<ModelListener>  m_Listeners = new ArrayList<ModelListener>();
+  private final List<ModelListener>  m_Listeners = new ArrayList<ModelListener>();
   public List<Loco>  m_LocoList = new ArrayList<Loco>();
   public List<Car>  m_CarList = new ArrayList<Car>();
   public HashMap<String,Mobile> m_LocoMap = new HashMap<String,Mobile>();
@@ -323,7 +323,6 @@ public class Model {
       if( tk != null ) {
         tk.updateWithAttributes(atts);
       }
-      return;
     }
   }
   
@@ -454,7 +453,6 @@ public class Model {
     }
     if( objName.equals("ac") ) {
       m_ActionList.add(Item.getAttrValue(atts, "id", "?"));
-      return;
     }
   }
   

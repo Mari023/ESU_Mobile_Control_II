@@ -39,9 +39,7 @@ public class RRConnection {
     this.ControlCode = ControlCode;
   }
   public boolean equals( RRConnection con ) {
-    if( con.HostName.equals(this.HostName) && con.Port == this.Port )
-      return true;
-    return false;
+      return con.HostName.equals(this.HostName) && con.Port == this.Port;
   }
   public String toString() {
     return Title+":"+HostName+":"+Port+":"+ControlCode;

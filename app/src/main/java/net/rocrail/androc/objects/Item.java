@@ -137,9 +137,7 @@ public class Item implements View.OnClickListener, View.OnLongClickListener, Upd
   
   public static boolean hasAttribute(Attributes atts, String key) {
     String val = atts.getValue(key);
-    if( val != null && val.length() > 0 )
-      return true;
-    return false;
+      return val != null && val.length() > 0;
   }
   
   void __updateWithAttributes(Attributes atts ) {

@@ -107,7 +107,6 @@ class XmlHandler extends DefaultHandler {
     
     if( m_bParsingPlan ) {
       m_Model.addObject(localName, atts);
-      return;
     }
     else {
       if( localName.equals("state") || localName.equals("auto") || 

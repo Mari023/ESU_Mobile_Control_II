@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.charset.StandardCharsets;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -89,7 +90,7 @@ public class Connection extends Thread {
             if( readHdr ) {
               if( !hdr.endsWith("</xmlh>") ) {
                 // read next byte
-                hdr = hdr + String.valueOf((char) is.read());
+                hdr = hdr + (char) is.read();
               }
 
               // check if the header end is read
@@ -100,7 +101,7 @@ public class Connection extends Thread {
                   hdr = hdr.substring(hdr.indexOf("<?xml"));
                   hdr = hdr.trim();
                   // parse the header
-                  saxparser.parse(new ByteArrayInputStream(hdr.getBytes("UTF-8")), xmlhandler);
+                  saxparser.parse(new ByteArrayInputStream(hdr.getBytes(StandardCharsets.UTF_8)), xmlhandler);
                   xmlSize = xmlhandler.getXmlSize();
                   // reset header string and signal reading data
                   hdr = "";
@@ -132,10 +133,10 @@ public class Connection extends Thread {
               // all bytes are read
               if( read == xmlSize ) {
                 // create the xml string from the byte with utf-8 encoding
-                String xml = new String(buffer, "UTF-8").trim();
+                String xml = new String(buffer, StandardCharsets.UTF_8).trim();
                 // parse the xml
                 if( xml != null && xml.length() > 0 ) {
-                  ByteArrayInputStream bai = new ByteArrayInputStream(xml.getBytes("UTF-8"));
+                  ByteArrayInputStream bai = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8));
                   saxparser.parse(bai, xmlhandler);
                 }
                 // reset for next header

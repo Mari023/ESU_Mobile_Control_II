@@ -176,7 +176,7 @@ public class ActConnect extends ActBase implements ModelListener, SystemListener
     
     Spinner recent = (Spinner) findViewById(R.id.connectRecent);
     
-    recent.setPrompt(new String("Select connection"));
+    recent.setPrompt("Select connection");
 
     ArrayAdapter<String> m_adapterForSpinner = new ArrayAdapter<String>(this,
         android.R.layout.simple_spinner_item);
@@ -227,7 +227,7 @@ public class ActConnect extends ActBase implements ModelListener, SystemListener
       s = (EditText) findViewById(R.id.connectPort);
       s.setText(""+m_RocrailService.Prefs.Port);
       TextView tv = (TextView) findViewById(R.id.connectTitle);
-      tv.setText(""+m_RocrailService.Prefs.Title);
+      tv.setText(m_RocrailService.Prefs.Title);
     }
 
   }
@@ -262,7 +262,7 @@ public class ActConnect extends ActBase implements ModelListener, SystemListener
       s = (EditText) findViewById(R.id.connectPort);
       s.setText(""+con.Port);
       TextView tv = (TextView) findViewById(R.id.connectTitle);
-      tv.setText(""+con.Title);
+      tv.setText(con.Title);
 
       doConnect(con.HostName, con.Port, con.ControlCode);
     }

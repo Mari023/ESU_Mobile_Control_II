@@ -81,7 +81,7 @@ public class ActFiddleYard  extends ActBase implements OnItemSelectedListener {
 
     // Track spinner
     Spinner s = (Spinner) findViewById(R.id.fyTracks);
-    s.setPrompt(new String("Select Track"));
+    s.setPrompt("Select Track");
 
     ArrayAdapter<String> m_adapterForSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
     m_adapterForSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -95,7 +95,7 @@ public class ActFiddleYard  extends ActBase implements OnItemSelectedListener {
 
     
     
-    updateTitle(getText(R.string.FiddleYard) + " \'"+m_FiddleYard.ID+"\'");
+    updateTitle(getText(R.string.FiddleYard) + " '" +m_FiddleYard.ID+ "'");
  
   }
 

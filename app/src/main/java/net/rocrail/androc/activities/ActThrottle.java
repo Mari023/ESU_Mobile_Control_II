@@ -520,7 +520,7 @@ public class ActThrottle extends ActBase
   void setDirSpeed(LEDButton v) {
     //v.ON = m_Loco.Dir;
     if( m_Loco.isDir() )
-      v.setText(""+m_Loco.getSpeed()+" >");
+      v.setText(m_Loco.getSpeed()+" >");
     else
       v.setText("< "+m_Loco.getSpeed());
   }

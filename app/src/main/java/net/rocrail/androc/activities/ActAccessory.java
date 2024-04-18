@@ -250,24 +250,24 @@ public class ActAccessory extends ActBase {
     String type = bt.getText().toString();
     
     bt = (Button)findViewById(R.id.acc1G);
-    bt.setText(""+makeButtonAddr(type, addr, 0, 0)+"G");
+    bt.setText(makeButtonAddr(type, addr, 0, 0)+"G");
     bt = (Button)findViewById(R.id.acc1R);
-    bt.setText(""+makeButtonAddr(type, addr, 0, 1)+"R");
+    bt.setText(makeButtonAddr(type, addr, 0, 1)+"R");
     
     bt = (Button)findViewById(R.id.acc2G);
-    bt.setText(""+makeButtonAddr(type, addr, 1, 0)+"G");
+    bt.setText(makeButtonAddr(type, addr, 1, 0)+"G");
     bt = (Button)findViewById(R.id.acc2R);
-    bt.setText(""+makeButtonAddr(type, addr, 1, 1)+"R");
+    bt.setText(makeButtonAddr(type, addr, 1, 1)+"R");
     
     bt = (Button)findViewById(R.id.acc3G);
-    bt.setText(""+makeButtonAddr(type, addr, 2, 0)+"G");
+    bt.setText(makeButtonAddr(type, addr, 2, 0)+"G");
     bt = (Button)findViewById(R.id.acc3R);
-    bt.setText(""+makeButtonAddr(type, addr, 2, 1)+"R");
+    bt.setText(makeButtonAddr(type, addr, 2, 1)+"R");
     
     bt = (Button)findViewById(R.id.acc4G);
-    bt.setText(""+makeButtonAddr(type, addr, 3, 0)+"G");
+    bt.setText(makeButtonAddr(type, addr, 3, 0)+"G");
     bt = (Button)findViewById(R.id.acc4R);
-    bt.setText(""+makeButtonAddr(type, addr, 3, 1)+"R");
+    bt.setText(makeButtonAddr(type, addr, 3, 1)+"R");
   }
   
   

@@ -119,8 +119,7 @@ public class LocoExpListAdapter extends BaseExpandableListAdapter {
     Iterator<Mobile> it = m_MobileList.iterator();
     while( it.hasNext() ) {
       Mobile mobile = it.next();
-      if( mobile instanceof Loco ) {
-        Loco loco = (Loco)mobile;
+      if(mobile instanceof Loco loco) {
         if( loco.isShow() ) {
           if( m_Category == 1 ) {
             m_Lists[loco.Era].add(loco);
@@ -144,8 +143,7 @@ public class LocoExpListAdapter extends BaseExpandableListAdapter {
           }
         }
       }
-      else if(mobile instanceof Car) {
-        Car car = (Car)mobile;
+      else if(mobile instanceof Car car) {
         if( m_Category == 1 ) {
           m_Lists[car.Era].add(car);
         }
@@ -171,7 +169,7 @@ public class LocoExpListAdapter extends BaseExpandableListAdapter {
 
   @Override
   public long getChildId(int group, int child) {
-    return group * 1000 + child;
+    return group * 1000L + child;
   }
 
   @Override

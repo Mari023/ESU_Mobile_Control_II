@@ -85,7 +85,7 @@ public class ActTurntable  extends ActBase implements OnItemSelectedListener {
 
     // Track spinner
     Spinner s = (Spinner) findViewById(R.id.fyTracks);
-    s.setPrompt(new String("Select Track"));
+    s.setPrompt("Select Track");
 
     ArrayAdapter<String> m_adapterForSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
     m_adapterForSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -97,7 +97,7 @@ public class ActTurntable  extends ActBase implements OnItemSelectedListener {
       Turntable.TTTrack track = it.next();
       
      if ( !track.Description.equals(""))
-       m_adapterForSpinner.add(""+track.Description);
+       m_adapterForSpinner.add(track.Description);
      else
        m_adapterForSpinner.add(""+track.Nr);
     }
@@ -105,7 +105,7 @@ public class ActTurntable  extends ActBase implements OnItemSelectedListener {
     s.setOnItemSelectedListener(this);
 
 
-    updateTitle(getText(R.string.Turntable) + " \'"+m_Turntable.ID+"\'");
+    updateTitle(getText(R.string.Turntable) + " '" +m_Turntable.ID+ "'");
  
   }
   

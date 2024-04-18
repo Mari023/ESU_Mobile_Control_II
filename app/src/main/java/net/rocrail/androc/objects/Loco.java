@@ -71,7 +71,7 @@ public class Loco extends MobileImpl implements Runnable {
     
     for(int i = 1; i < 32; i++) {
       int mask = 1 << (i-1);
-      Function[i] = ( (fx & mask) == mask ) ? true:false; 
+      Function[i] = (fx & mask) == mask;
     }
     updateWithAttributes(atts);
     

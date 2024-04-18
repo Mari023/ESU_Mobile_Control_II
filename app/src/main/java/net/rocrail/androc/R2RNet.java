@@ -28,6 +28,7 @@ import android.util.Log;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Try to get all available Rocrail server client connections by the UDP RRNet protocol.
@@ -64,7 +65,7 @@ public class R2RNet extends Thread {
     try {
       byte[] buf = null;
       String msg = "<netreq req=\"clientconn\"/>";
-      buf = msg.getBytes("UTF-8");
+      buf = msg.getBytes(StandardCharsets.UTF_8);
       
       MulticastSocket socket = new MulticastSocket(Port);
       //socket.setTimeToLive(255);

@@ -50,13 +50,13 @@ public class Output extends Item implements View.OnClickListener {
   public String getImageName(boolean ModPlan) {
     this.ModPlan = ModPlan;
     if (State.equals("on")) {
-      ImageName = String.format("button_on");
+      ImageName = "button_on";
     }
     else if (State.equals("active")) {
-      ImageName = String.format("button_active");
+      ImageName = "button_active";
     }
     else
-      ImageName = String.format("button_off");
+      ImageName = "button_off";
     
     return ImageName;
   }

@@ -66,7 +66,7 @@ public class ActLevel extends ActBase implements OnZoomListener, OnLongClickList
     Bundle extras = getIntent().getExtras();
     if (extras != null) {
       Z = extras.getInt("level", 0);
-      ModPlan = (Z == -1 ? true:false);
+      ModPlan = (Z == -1);
     }
 
     MenuSelection = ActBase.MENU_THROTTLE | ActBase.MENU_MENU | ActBase.MENU_SYSTEM | 
@@ -311,7 +311,7 @@ public class ActLevel extends ActBase implements OnZoomListener, OnLongClickList
       if( level.progressDialog != null ) {
         level.dismissDialog(ActLevel.PROGRESS_DIALOG);
       }
-      System.out.println(""+(!m_RocrailService.m_Model.m_bDonKey?"NO ":"")+"DonKey Set.");
+      System.out.println((!m_RocrailService.m_Model.m_bDonKey?"NO ":"")+"DonKey Set.");
       if( !m_RocrailService.m_Model.m_bDonKey && !m_RocrailService.m_bDidShowDonate ) {
         m_RocrailService.startTimer();
         showDonate();
