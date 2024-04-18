@@ -27,71 +27,63 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class LED extends View implements Runnable {
-  public static final int RED    = 0;
-  public static final int GREEN  = 1;
-  public static final int YELLOW = 2;
-  
-  public boolean ON       = false;
-  public int     LEDColor = RED;
-  public boolean Flash    = false;
-  
-  public LED(Context context) {
-    super(context);
-  }
-  public LED(Context context, AttributeSet attrs) {
-    super(context, attrs);
-    Flash = attrs.getAttributeBooleanValue(null, "flash", false);
-    ON    = attrs.getAttributeBooleanValue(null, "on", false);
-    String color = attrs.getAttributeValue(null, "ledcolor");
-    if( color != null && color.equals("green") )
-      LEDColor = GREEN;
-    else if( color != null && color.equals("yellow") )
-      LEDColor = YELLOW;
-    
-    new Thread(this).start();
-  }
+    public static final int RED = 0;
+    public static final int GREEN = 1;
+    public static final int YELLOW = 2;
 
-  protected void  onDraw  (Canvas canvas) {
-    super.onDraw(canvas);
-    
-    double cx = getWidth();
-    double cy = getHeight();
+    public boolean ON = false;
+    public int LEDColor = RED;
+    public boolean Flash = false;
 
-    Paint paint = new Paint();
-    paint.setAntiAlias(true);
-    
-    double radius = 0;
-    if( cx < cy ) 
-      radius = cx / 3;
-    else
-      radius = cy / 3;
+    public LED(Context context) {
+        super(context);
+    }
 
-    paint.setColor(Color.rgb(70, 70, 70));
-    canvas.drawCircle((float)(cx/2), (float)(cy/2), (float)radius, paint);
-    
-    if( LEDColor == GREEN )
-      paint.setColor(Color.rgb(100, ON?255:150, 100));
-    else if( LEDColor == YELLOW )
-      paint.setColor(Color.rgb(ON?255:150, ON?255:150, 100));
-    else
-      paint.setColor(Color.rgb(ON?255:150, 100, 100));
-    canvas.drawCircle((float)(cx/2), (float)(cy/2), (float)radius-2, paint);
-    
-  }
+    public LED(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        Flash = attrs.getAttributeBooleanValue(null, "flash", false);
+        ON = attrs.getAttributeBooleanValue(null, "on", false);
+        String color = attrs.getAttributeValue(null, "ledcolor");
+        if (color != null && color.equals("green")) LEDColor = GREEN;
+        else if (color != null && color.equals("yellow")) LEDColor = YELLOW;
 
-  @Override
-  public void run() {
-    do {
-      try {Thread.sleep(1000);} catch (InterruptedException e){}
-        if( Flash ) {
-        ON = !ON;
-        LED.this.post(new Runnable() {
-          public void run() {
-            invalidate();
-          }
-        });
-      }
-    }while(true);
-  }
-  
+        new Thread(this).start();
+    }
+
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        double cx = getWidth();
+        double cy = getHeight();
+
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+
+        double radius = 0;
+        if (cx < cy) radius = cx / 3;
+        else radius = cy / 3;
+
+        paint.setColor(Color.rgb(70, 70, 70));
+        canvas.drawCircle((float) (cx / 2), (float) (cy / 2), (float) radius, paint);
+
+        if (LEDColor == GREEN) paint.setColor(Color.rgb(100, ON ? 255 : 150, 100));
+        else if (LEDColor == YELLOW) paint.setColor(Color.rgb(ON ? 255 : 150, ON ? 255 : 150, 100));
+        else paint.setColor(Color.rgb(ON ? 255 : 150, 100, 100));
+        canvas.drawCircle((float) (cx / 2), (float) (cy / 2), (float) radius - 2, paint);
+    }
+
+    @Override
+    public void run() {
+        do {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ignored) {
+            }
+            if (Flash) {
+                ON = !ON;
+                LED.this.post(this::invalidate);
+            }
+        } while (true);
+    }
+
 }
