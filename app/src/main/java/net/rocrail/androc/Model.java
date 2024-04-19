@@ -73,7 +73,6 @@ public class Model {
     public String m_Name = "";
     public String m_RocrailVersion = "";
     public boolean ModPlan = false;
-    public boolean m_bDonKey = false;
     RocrailService rocrailService;
     Turntable m_CurrentTT = null;
     StageBlock m_CurrentSB = null;
@@ -112,7 +111,6 @@ public class Model {
         m_Name = Item.getAttrValue(atts, "name", "plan.xml");
         m_RocrailVersion = atts.getValue("rocrailversion");
         ModPlan = Item.getAttrValue(atts, "modplan", false);
-        m_bDonKey = Item.getAttrValue(atts, "donkey", false);
 
         informListeners(ModelListener.MODELLIST_PLAN_START);
     }
@@ -184,7 +182,7 @@ public class Model {
                 }
             } else {
                 Car l_car = new Car(rocrailService, atts);
-                m_CurrentMobile = car;
+                m_CurrentMobile = null;
                 m_CarList.add(l_car);
                 m_CarMap.put(l_car.getID(), l_car);
             }
@@ -485,7 +483,6 @@ public class Model {
                 listener.modelUpdate(listCode, ID);
             }
         }
-
     }
 
     public void planLoaded() {

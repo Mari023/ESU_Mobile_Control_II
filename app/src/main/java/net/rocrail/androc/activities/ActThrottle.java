@@ -19,7 +19,6 @@
 */
 package net.rocrail.androc.activities;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -73,20 +72,6 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
         super.connectedWithService();
         initView();
         updateTitle();
-        if (!m_RocrailService.m_Model.m_bDonKey && !m_RocrailService.m_bDidShowDonate) {
-            showDonate();
-            m_RocrailService.m_bDidShowDonate = true;
-        }
-    }
-
-    public void showDonate() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Rocrail runs entirely on volunteer labor. However, Rocrail also needs contributions of money. Your continued support is vital for keeping Rocrail available. If you already did donate you can ask a key to disable this on startup dialog: donate@rocrail.net").setCancelable(false).setPositiveButton("OK", (dialog, id) -> {
-            dialog.cancel();
-            ActThrottle.this.finish();
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
     }
 
 
@@ -420,8 +405,7 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
             Intent intent;
             if (m_RocrailService.Prefs.LocoCatList)
                 intent = new Intent(m_Activity, ActLocoExpList.class);
-            else
-                intent = new Intent(m_Activity, ActLocoList.class);
+            else intent = new Intent(m_Activity, ActLocoList.class);
             intent.putExtra("selected", m_iLocoSelected);
             startActivityForResult(intent, 1);
         });
@@ -474,7 +458,6 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
       */
             }
         }
-
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

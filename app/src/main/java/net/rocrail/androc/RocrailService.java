@@ -45,8 +45,6 @@ import java.net.Socket;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class RocrailService extends Service {
     private static final int NOTIFICATION_POWER = 1;
@@ -62,14 +60,11 @@ public class RocrailService extends Service {
     public boolean AutoMode = false;
     public boolean AutoStart = false;
     public boolean Connected = false;
-    public boolean m_bDidShowDonate = false;
     public int ThrottleNr = 1;
     public List<String> MessageList = new ArrayList<>();
     Socket m_Socket = null;
     Connection m_Connection = null;
     MessageListener messageListener = null;
-    TimerTask timerTask = null;
-    Timer timer = new Timer();
 
 
     public RocrailService() {
@@ -85,20 +80,6 @@ public class RocrailService extends Service {
         if (m_DeviceId == null) {
             m_DeviceId = "unknown";
         }
-    }
-
-    public void startTimer() {
-        timerTask = new TimerTask() {
-            public void run() {
-                if (LevelView != null && !m_Model.m_bDonKey) {
-                    System.out.println("shutdown andRoc...");
-                    LevelView.finish();
-                }
-            }
-        };
-
-        System.out.println("scheduling timer for shutdown in 5 minutes...");
-        timer.schedule(timerTask, 5 * 60 * 1000);
     }
 
     @Override

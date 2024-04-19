@@ -21,10 +21,8 @@
 
 package net.rocrail.androc.activities;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -83,19 +81,6 @@ public class ActLevel extends ActBase implements OnZoomListener, OnLongClickList
         if (!(m_RocrailService.m_Model.ModPlan && m_RocrailService.Prefs.Modview)) {
             MenuSelection |= ActBase.MENU_LAYOUT;
         }
-    }
-
-    public void showDonate() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Rocrail runs entirely on volunteer labor. " + "However, Rocrail also needs contributions of money. " + "Your continued support is vital for keeping Rocrail available. " + "If you already did donate you can ask a key to disable this on startup dialog: donate@rocrail.net\n" + "andRoc will shutdown in 5 minutes!").setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-                //System.out.println("***EXIT***");
-                //ActLevel.this.finish();
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
     }
 
 
@@ -386,12 +371,6 @@ public class ActLevel extends ActBase implements OnZoomListener, OnLongClickList
         protected void onPostExecute(Void v) {
             if (level.progressDialog != null) {
                 level.dismissDialog(ActLevel.PROGRESS_DIALOG);
-            }
-            System.out.println((!m_RocrailService.m_Model.m_bDonKey ? "NO " : "") + "DonKey Set.");
-            if (!m_RocrailService.m_Model.m_bDonKey && !m_RocrailService.m_bDidShowDonate) {
-                m_RocrailService.startTimer();
-                showDonate();
-                m_RocrailService.m_bDidShowDonate = true;
             }
             levelView.setLongClickable(true);
             levelView.setOnLongClickListener(ActLevel.this);
