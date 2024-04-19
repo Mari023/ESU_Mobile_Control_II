@@ -28,26 +28,25 @@ import org.xml.sax.Attributes;
 
 public class Route extends Item implements View.OnClickListener {
 
-  public Route(RocrailService rocrailService, Attributes atts) {
-    super(rocrailService, atts);
-    Show    = getAttrValue(atts, "show", false);
-  }
-  
-  public void onClick(View v) {
-    flip();
-  }
+    public Route(RocrailService rocrailService, Attributes atts) {
+        super(rocrailService, atts);
+        Show = getAttrValue(atts, "show", false);
+    }
 
-  
-  public void flip() {
-    m_RocrailService.sendMessage("st", String.format( "<st id=\"%s\" cmd=\"test\"/>", ID ) );
-  }
+    public void onClick(View v) {
+        flip();
+    }
 
-  
-  public String getImageName(boolean ModPlan) {
-    this.ModPlan = ModPlan;
-    int orinr = getOriNr(ModPlan);
-    ImageName = String.format("route_%d", (orinr % 2 == 0 ? 2 : 1));
-    return ImageName;
-  }  
 
+    public void flip() {
+        m_RocrailService.sendMessage("st", String.format("<st id=\"%s\" cmd=\"test\"/>", ID));
+    }
+
+
+    public String getImageName(boolean ModPlan) {
+        this.ModPlan = ModPlan;
+        int orinr = getOriNr(ModPlan);
+        ImageName = String.format("route_%d", (orinr % 2 == 0 ? 2 : 1));
+        return ImageName;
+    }
 }

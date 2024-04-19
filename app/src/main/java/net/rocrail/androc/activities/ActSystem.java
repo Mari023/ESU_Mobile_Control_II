@@ -27,177 +27,156 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.test.R;
+
 import net.rocrail.androc.interfaces.MessageListener;
 import net.rocrail.androc.widgets.LEDButton;
 
-import java.util.Iterator;
-
 public class ActSystem extends ActBase implements MessageListener {
-  
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    MenuSelection = 0;
-    connectWithService();
-  }
-  
-  public void connectedWithService() {
-    super.connectedWithService();
-    initView();
-    m_RocrailService.setMessageListener(this);
-    updateTitle(getText(R.string.System).toString());
-  }
-  
-  protected void onDestroy() {
-    super.onDestroy();
-    m_RocrailService.setMessageListener(null);
-  }
 
-  
-  public void updateMessageList() {
-    try {
-      TextView msgList = (TextView) findViewById(R.id.systemMessages);
-      msgList.setText("");
-      synchronized(m_RocrailService.MessageList) {
-        Iterator<String> it = m_RocrailService.MessageList.iterator();
-        while( it.hasNext()) {
-          msgList.append(it.next()+"\n");
-        }
-      }
-    }
-    catch(Exception e ) {
-      // msgList is no longer valid
-      e.printStackTrace();
-    }
-  }
-  
-  public void initView() {
-    setContentView(R.layout.system);
-
-    updateMessageList();
-    
-    final TextView msgList = (TextView) findViewById(R.id.systemMessages);
-    msgList.setText("");
-    Iterator<String> it = m_RocrailService.MessageList.iterator();
-    while( it.hasNext()) {
-      msgList.append(it.next()+"\n");
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        MenuSelection = 0;
+        connectWithService();
     }
 
-    final LEDButton powerON = (LEDButton) findViewById(R.id.systemPowerON);
-    powerON.ON = m_RocrailService.Power;
-    powerON.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View v) {
-          m_RocrailService.Power = true;
-          LEDButton powerOFF = (LEDButton) findViewById(R.id.systemPowerOFF);
-          powerOFF.ON = !m_RocrailService.Power;
-          powerOFF.invalidate();
-          ((LEDButton)v).ON = m_RocrailService.Power;
-          m_RocrailService.sendMessage("sys", "<sys cmd=\"go\" informall=\"true\"/>");
+    public void connectedWithService() {
+        super.connectedWithService();
+        initView();
+        m_RocrailService.setMessageListener(this);
+        updateTitle(getText(R.string.System).toString());
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        m_RocrailService.setMessageListener(null);
+    }
+
+
+    public void updateMessageList() {
+        try {
+            TextView msgList = (TextView) findViewById(R.id.systemMessages);
+            msgList.setText("");
+            synchronized (m_RocrailService.MessageList) {
+                for (String s : m_RocrailService.MessageList) {
+                    msgList.append(s + "\n");
+                }
+            }
+        } catch (Exception e) {
+            // msgList is no longer valid
+            e.printStackTrace();
         }
-    });
+    }
 
-    final LEDButton powerOFF = (LEDButton) findViewById(R.id.systemPowerOFF);
-    powerOFF.ON = !m_RocrailService.Power;
-    powerOFF.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View v) {
-          m_RocrailService.Power = false;
-          LEDButton powerON = (LEDButton) findViewById(R.id.systemPowerON);
-          powerON.ON = m_RocrailService.Power;
-          powerON.invalidate();
-          ((LEDButton)v).ON = !m_RocrailService.Power;
-          m_RocrailService.sendMessage("sys", "<sys cmd=\"stop\" informall=\"true\"/>");
+    public void initView() {
+        setContentView(R.layout.system);
+
+        updateMessageList();
+
+        final TextView msgList = (TextView) findViewById(R.id.systemMessages);
+        msgList.setText("");
+        for (String s : m_RocrailService.MessageList) {
+            msgList.append(s + "\n");
         }
-    });
-    
-    final Button initField = (Button) findViewById(R.id.systemInitField);
-    initField.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View v) {
-          m_RocrailService.sendMessage("model", "<model cmd=\"initfield\" informall=\"true\"/>");
-        }
-    });
-    
-    final Button eBreak = (Button) findViewById(R.id.systemEmergencyStop);
-    eBreak.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View v) {
-          if( m_RocrailService.Prefs.PowerOff4EBreak )
-            m_RocrailService.sendMessage("sys", "<sys cmd=\"stop\" informall=\"true\"/>");
-          else
-            m_RocrailService.sendMessage("sys", "<sys cmd=\"ebreak\" informall=\"true\"/>");
-        }
-    });
-    
-    final LEDButton autoON = (LEDButton) findViewById(R.id.systemAutoON);
-    autoON.ON = m_RocrailService.AutoMode;
-    autoON.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View v) {
-          m_RocrailService.AutoMode = !m_RocrailService.AutoMode;
-          ((LEDButton)v).ON = m_RocrailService.AutoMode;
-          m_RocrailService.sendMessage("sys", String.format("<auto cmd=\"%s\"/>", m_RocrailService.AutoMode?"on":"off") );
-        }
-    });
 
-    final LEDButton autoStart = (LEDButton) findViewById(R.id.systemAutoStart);
-    autoStart.ON = m_RocrailService.AutoStart;
-    autoStart.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View v) {
-          // TODO: show alert if going from stop to start
-          if(!m_RocrailService.AutoStart) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(ActSystem.this);
-            builder.setMessage(R.string.start_all_locos)
-                   .setCancelable(false)
-                   .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                       public void onClick(DialogInterface dialog, int id) {
-                          m_RocrailService.AutoStart = !m_RocrailService.AutoStart;
-                          m_RocrailService.sendMessage("sys", String.format("<auto cmd=\"%s\"/>", m_RocrailService.AutoStart?"start":"stop") );
-                          LEDButton v = (LEDButton) findViewById(R.id.systemAutoStart);
-                          v.ON = m_RocrailService.AutoStart;
-                       }
-                   })
-                   .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                       public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                       }
-                   });
-            AlertDialog alert = builder.create();
-            alert.show();
-          }
-          else {
-            m_RocrailService.AutoStart = !m_RocrailService.AutoStart;
-            m_RocrailService.sendMessage("sys", String.format("<auto cmd=\"%s\"/>", m_RocrailService.AutoStart?"start":"stop") );
-            ((LEDButton)v).ON = m_RocrailService.AutoStart;
-          }
-          ((LEDButton)v).ON = m_RocrailService.AutoStart;
-        }
-    });
+        final LEDButton powerON = (LEDButton) findViewById(R.id.systemPowerON);
+        powerON.ON = m_RocrailService.Power;
+        powerON.setOnClickListener(v -> {
+            m_RocrailService.Power = true;
+            LEDButton powerOFF = (LEDButton) findViewById(R.id.systemPowerOFF);
+            powerOFF.ON = !m_RocrailService.Power;
+            powerOFF.invalidate();
+            ((LEDButton) v).ON = m_RocrailService.Power;
+            m_RocrailService.sendMessage("sys", "<sys cmd=\"go\" informall=\"true\"/>");
+        });
+
+        final LEDButton powerOFF = (LEDButton) findViewById(R.id.systemPowerOFF);
+        powerOFF.ON = !m_RocrailService.Power;
+        powerOFF.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                m_RocrailService.Power = false;
+                LEDButton powerON = (LEDButton) findViewById(R.id.systemPowerON);
+                powerON.ON = m_RocrailService.Power;
+                powerON.invalidate();
+                ((LEDButton) v).ON = !m_RocrailService.Power;
+                m_RocrailService.sendMessage("sys", "<sys cmd=\"stop\" informall=\"true\"/>");
+            }
+        });
+
+        final Button initField = (Button) findViewById(R.id.systemInitField);
+        initField.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                m_RocrailService.sendMessage("model", "<model cmd=\"initfield\" informall=\"true\"/>");
+            }
+        });
+
+        final Button eBreak = (Button) findViewById(R.id.systemEmergencyStop);
+        eBreak.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (m_RocrailService.Prefs.PowerOff4EBreak)
+                    m_RocrailService.sendMessage("sys", "<sys cmd=\"stop\" informall=\"true\"/>");
+                else
+                    m_RocrailService.sendMessage("sys", "<sys cmd=\"ebreak\" informall=\"true\"/>");
+            }
+        });
+
+        final LEDButton autoON = (LEDButton) findViewById(R.id.systemAutoON);
+        autoON.ON = m_RocrailService.AutoMode;
+        autoON.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                m_RocrailService.AutoMode = !m_RocrailService.AutoMode;
+                ((LEDButton) v).ON = m_RocrailService.AutoMode;
+                m_RocrailService.sendMessage("sys", String.format("<auto cmd=\"%s\"/>", m_RocrailService.AutoMode ? "on" : "off"));
+            }
+        });
+
+        final LEDButton autoStart = (LEDButton) findViewById(R.id.systemAutoStart);
+        autoStart.ON = m_RocrailService.AutoStart;
+        autoStart.setOnClickListener(v -> {
+            // TODO: show alert if going from stop to start
+            if (!m_RocrailService.AutoStart) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ActSystem.this);
+                builder.setMessage(R.string.start_all_locos).setCancelable(false).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        m_RocrailService.AutoStart = !m_RocrailService.AutoStart;
+                        m_RocrailService.sendMessage("sys", String.format("<auto cmd=\"%s\"/>", m_RocrailService.AutoStart ? "start" : "stop"));
+                        LEDButton v = (LEDButton) findViewById(R.id.systemAutoStart);
+                        v.ON = m_RocrailService.AutoStart;
+                    }
+                }).setNegativeButton(R.string.no, (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            } else {
+                m_RocrailService.AutoStart = !m_RocrailService.AutoStart;
+                m_RocrailService.sendMessage("sys", String.format("<auto cmd=\"%s\"/>", m_RocrailService.AutoStart ? "start" : "stop"));
+                ((LEDButton) v).ON = m_RocrailService.AutoStart;
+            }
+            ((LEDButton) v).ON = m_RocrailService.AutoStart;
+        });
 
 
-    
-  }
+    }
 
-  @Override
-  public void newMessages() {
-    // use post method to refresh the message list
-    final TextView msgList = (TextView) findViewById(R.id.systemMessages);
-    if( msgList != null )
-      msgList.post(new UpdateMessages(this));
-
-  }
-
+    @Override
+    public void newMessages() {
+        // use post method to refresh the message list
+        final TextView msgList = (TextView) findViewById(R.id.systemMessages);
+        if (msgList != null) msgList.post(new UpdateMessages(this));
+    }
 }
 
 
 class UpdateMessages implements Runnable {
-  ActSystem system = null;
-  
-  public UpdateMessages(ActSystem system) {
-    this.system = system;
-    
-  }
-  
-  @Override
-  public void run() {
-    system.updateMessageList();
-  }
-  
+    ActSystem system;
+
+    public UpdateMessages(ActSystem system) {
+        this.system = system;
+
+    }
+
+    @Override
+    public void run() {
+        system.updateMessageList();
+    }
 }
 

@@ -24,87 +24,79 @@ import net.rocrail.androc.RocrailService;
 import org.xml.sax.Attributes;
 
 public class Car extends MobileImpl implements Runnable {
-  
+    public Car(RocrailService rocrailService, Attributes atts) {
+        this.rocrailService = rocrailService;
+        ID = atts.getValue("id");
+        PicName = atts.getValue("image");
+        properties = atts;
+        Description = Item.getAttrValue(atts, "desc", "");
+        Roadname = Item.getAttrValue(atts, "roadname", "");
+        Addr = Item.getAttrValue(atts, "addr", 0);
+        Show = Item.getAttrValue(atts, "show", false);
+        Era = Item.getAttrValue(atts, "era", 0);
 
-  public Car( RocrailService rocrailService, Attributes atts) {
-    this.rocrailService = rocrailService;
-    ID = atts.getValue("id");
-    PicName = atts.getValue("image");
-    properties = atts;
-    Description = Item.getAttrValue(atts, "desc","");
-    Roadname    = Item.getAttrValue(atts, "roadname", "");
-    Addr        = Item.getAttrValue(atts, "addr", 0);
-    Show        = Item.getAttrValue(atts, "show", false);
-    Era         = Item.getAttrValue(atts, "era", 0);
+        updateWithAttributes(atts);
 
-    updateWithAttributes(atts);
-
-    if( !this.rocrailService.Prefs.ImagesOnDemand )
-      new Thread(this).start();
-  }
-  
-  @Override
-  public void updateWithAttributes(Attributes atts) {
-    Dir  = Item.getAttrValue(atts, "dir", Dir);
-    Show = Item.getAttrValue(atts, "show", Show);
-    Era  = Item.getAttrValue(atts, "era", Era);
-  }
-  
-  @Override
-  public boolean isAutoStart() {
-    return false;
-  }
-
-  @Override
-  public void flipGo() {
-  }
-
-  @Override
-  public void doRelease() {
-  }
-
-  @Override
-  public int getVMax() {
-    return 100;
-  }
-
-  @Override
-  public void Dispatch() {
-  }
-
-
-  @Override
-  public boolean isHalfAuto() {
-    return false;
-  }
-
-
-  @Override
-  public void setAutoStart(boolean autostart) {
-  }
-
-
-  @Override
-  public void setHalfAuto(boolean halfauto) {
-  }
-
-
-  @Override
-  public void swap() {
-  }
-
-
-  @Override
-  public void run() {
-    try {
-      Thread.sleep(100);
-      Car.this.getBmp(null);
+        if (!this.rocrailService.Prefs.ImagesOnDemand)
+            new Thread(this).start();
     }
-    catch(Exception e) {
-      
-    }
-  }
 
+    @Override
+    public void updateWithAttributes(Attributes atts) {
+        Dir = Item.getAttrValue(atts, "dir", Dir);
+        Show = Item.getAttrValue(atts, "show", Show);
+        Era = Item.getAttrValue(atts, "era", Era);
+    }
+
+    @Override
+    public boolean isAutoStart() {
+        return false;
+    }
+
+    @Override
+    public void setAutoStart(boolean autostart) {
+    }
+
+    @Override
+    public void flipGo() {
+    }
+
+    @Override
+    public void doRelease() {
+    }
+
+    @Override
+    public int getVMax() {
+        return 100;
+    }
+
+    @Override
+    public void Dispatch() {
+    }
+
+    @Override
+    public boolean isHalfAuto() {
+        return false;
+    }
+
+    @Override
+    public void setHalfAuto(boolean halfauto) {
+    }
+
+
+    @Override
+    public void swap() {
+    }
+
+
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(100);
+            Car.this.getBmp(null);
+        } catch (Exception ignored) {
+        }
+    }
 }
 
 

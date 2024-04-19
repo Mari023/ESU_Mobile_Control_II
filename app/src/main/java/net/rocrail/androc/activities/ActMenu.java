@@ -23,97 +23,94 @@ package net.rocrail.androc.activities;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.test.R;
+
 import net.rocrail.androc.interfaces.ServiceListener;
 
-public class ActMenu extends  ListActivity implements ServiceListener {
-  ActBase m_Base = null;
-  String[] m_Items = null;
-  
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    m_Base = new ActBase(this, this);
-    m_Base.MenuSelection = 0;
-    m_Base.connectWithService();
-  }
-  
-  public void connectedWithService() {
-    m_Base.connectedWithService();
-    initView();
-    m_Base.updateTitle(getText(R.string.Menu).toString());
-  }
+public class ActMenu extends ListActivity implements ServiceListener {
+    ActBase m_Base = null;
+    String[] m_Items = null;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        m_Base = new ActBase(this, this);
+        m_Base.MenuSelection = 0;
+        m_Base.connectWithService();
+    }
+
+    public void connectedWithService() {
+        m_Base.connectedWithService();
+        initView();
+        m_Base.updateTitle(getText(R.string.Menu).toString());
+    }
 
 
-  public void initView() {
-    m_Items = new String[6];
-    m_Items[0] = getText(R.string.Info).toString();
-    m_Items[1] = getText(R.string.Routes).toString();
-    m_Items[2] = getText(R.string.Actions).toString();
-    m_Items[3] = getText(R.string.Switches).toString();
-    m_Items[4] = getText(R.string.Outputs).toString();
-    m_Items[5] = getText(R.string.GuestLoco).toString();
-      
-    setListAdapter(new ArrayAdapter<String>(this, R.layout.menuitem, m_Items));
+    public void initView() {
+        m_Items = new String[6];
+        m_Items[0] = getText(R.string.Info).toString();
+        m_Items[1] = getText(R.string.Routes).toString();
+        m_Items[2] = getText(R.string.Actions).toString();
+        m_Items[3] = getText(R.string.Switches).toString();
+        m_Items[4] = getText(R.string.Outputs).toString();
+        m_Items[5] = getText(R.string.GuestLoco).toString();
 
-    ListView lv = getListView();
-    lv.setTextFilterEnabled(true);
+        setListAdapter(new ArrayAdapter<>(this, R.layout.menuitem, m_Items));
 
-    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // When clicked, show a toast with the TextView text
-        Toast.makeText(getApplicationContext(), ((TextView) view).getText(),
-            Toast.LENGTH_SHORT).show();
-        switch( position ) {
-          case 0: {
-            Intent intent = new Intent(ActMenu.this,net.rocrail.androc.activities.ActInfo.class);
-            startActivity(intent);
-          }
-          break;
-          case 1: {
-            Intent intent = new Intent(ActMenu.this,net.rocrail.androc.activities.ActRoutes.class);
-            startActivity(intent);
-          }
-          break;
-          case 2: {
-            Intent intent = new Intent(ActMenu.this,net.rocrail.androc.activities.ActActions.class);
-            startActivity(intent);
-          }
-          break;
-          case 3: {
-            Intent intent = new Intent(ActMenu.this,net.rocrail.androc.activities.ActSwitches.class);
-            startActivity(intent);
-          }
-          break;
-          case 4: {
-            Intent intent = new Intent(ActMenu.this,net.rocrail.androc.activities.ActOutputs.class);
-            startActivity(intent);
-          }
-          break;
-          case 5: {
-            Intent intent = new Intent(ActMenu.this,net.rocrail.androc.activities.ActGuestLoco.class);
-            startActivity(intent);
-            finish();
-          }
-          break;
-        }
-      }
-    });
-  }
+        ListView lv = getListView();
+        lv.setTextFilterEnabled(true);
 
-  public boolean onCreateOptionsMenu(android.view.Menu menu) {
-    return m_Base.onCreateOptionsMenu(menu);
-  }
-  
-  public boolean onOptionsItemSelected(android.view.MenuItem item) {
-    return m_Base.onOptionsItemSelected(item);
-  }
-  
+        lv.setOnItemClickListener((parent, view, position, id) -> {
+            // When clicked, show a toast with the TextView text
+            Toast.makeText(getApplicationContext(), ((TextView) view).getText(),
+                    Toast.LENGTH_SHORT).show();
+            switch (position) {
+                case 0: {
+                    Intent intent = new Intent(ActMenu.this, ActInfo.class);
+                    startActivity(intent);
+                }
+                break;
+                case 1: {
+                    Intent intent = new Intent(ActMenu.this, ActRoutes.class);
+                    startActivity(intent);
+                }
+                break;
+                case 2: {
+                    Intent intent = new Intent(ActMenu.this, ActActions.class);
+                    startActivity(intent);
+                }
+                break;
+                case 3: {
+                    Intent intent = new Intent(ActMenu.this, ActSwitches.class);
+                    startActivity(intent);
+                }
+                break;
+                case 4: {
+                    Intent intent = new Intent(ActMenu.this, ActOutputs.class);
+                    startActivity(intent);
+                }
+                break;
+                case 5: {
+                    Intent intent = new Intent(ActMenu.this, ActGuestLoco.class);
+                    startActivity(intent);
+                    finish();
+                }
+                break;
+            }
+        });
+    }
+
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        return m_Base.onCreateOptionsMenu(menu);
+    }
+
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        return m_Base.onOptionsItemSelected(item);
+    }
+
 }

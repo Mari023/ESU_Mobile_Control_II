@@ -29,52 +29,51 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.test.R;
+
 import net.rocrail.androc.interfaces.ServiceListener;
 
 import java.util.Iterator;
 
-public class ActActions extends ListActivity implements ServiceListener  {
+public class ActActions extends ListActivity implements ServiceListener {
 
-  ActBase m_Base = null;
-  String[] m_Actions = null;
+    ActBase m_Base = null;
+    String[] m_Actions = null;
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    m_Base = new ActBase(this, this);
-    m_Base.MenuSelection = 0; //Base.MENU_THROTTLE | Base.MENU_SYSTEM | Base.MENU_MENU;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        m_Base = new ActBase(this, this);
+        m_Base.MenuSelection = 0; //Base.MENU_THROTTLE | Base.MENU_SYSTEM | Base.MENU_MENU;
 
-    m_Base.connectWithService();
-  }
-  
-  public void connectedWithService() {
-    m_Base.connectedWithService();
-    initView();
-    m_Base.updateTitle("Actions");
-  }
-
-
-  public void initView() {
-    m_Actions = new String[m_Base.m_RocrailService.m_Model.m_ActionList.size()];
-    Iterator<String> it = m_Base.m_RocrailService.m_Model.m_ActionList.iterator();
-    int idx = 0;
-    while( it.hasNext() ) {
-      m_Actions[idx] = it.next();
-      idx++;
+        m_Base.connectWithService();
     }
-    setListAdapter(new ArrayAdapter<String>(this, R.layout.menuitem, m_Actions));
 
-    ListView lv = getListView();
-    lv.setTextFilterEnabled(true);
+    public void connectedWithService() {
+        m_Base.connectedWithService();
+        initView();
+        m_Base.updateTitle("Actions");
+    }
 
-    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // When clicked, show a toast with the TextView text
-        Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
-        // send route command
-        m_Base.m_RocrailService.sendMessage("ac", String.format("<ac id=\"%s\" cmd=\"test\"/>",
-            ((TextView) view).getText() ) );
-      }
-    });
-  }
+
+    public void initView() {
+        m_Actions = new String[m_Base.m_RocrailService.m_Model.m_ActionList.size()];
+        Iterator<String> it = m_Base.m_RocrailService.m_Model.m_ActionList.iterator();
+        int idx = 0;
+        while (it.hasNext()) {
+            m_Actions[idx] = it.next();
+            idx++;
+        }
+        setListAdapter(new ArrayAdapter<>(this, R.layout.menuitem, m_Actions));
+
+        ListView lv = getListView();
+        lv.setTextFilterEnabled(true);
+
+        lv.setOnItemClickListener((parent, view, position, id) -> {
+            // When clicked, show a toast with the TextView text
+            Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+            // send route command
+            m_Base.m_RocrailService.sendMessage("ac", String.format("<ac id=\"%s\" cmd=\"test\"/>",
+                    ((TextView) view).getText()));
+        });
+    }
 }

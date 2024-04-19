@@ -48,8 +48,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.xml.parsers.SAXParser;
-
 public class RocrailService extends Service {
     private static final int NOTIFICATION_POWER = 1;
     private final List<SystemListener> m_Listeners = new ArrayList<>();

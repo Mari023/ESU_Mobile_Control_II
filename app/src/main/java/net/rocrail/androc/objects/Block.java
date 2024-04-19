@@ -28,130 +28,126 @@ import net.rocrail.androc.RocrailService;
 import org.xml.sax.Attributes;
 
 public class Block extends Item implements View.OnClickListener {
-  boolean Small    = false;
-  public String LocoID = "-";
-  public boolean Closed = false;
-  public boolean Accept = false;
-  
-  public Block(RocrailService rocrailService, Attributes atts) {
-    super(rocrailService, atts);
-    Small    = Item.getAttrValue(atts, "smallsymbol", false );
-    LocoID   = Item.getAttrValue(atts, "locid", ID); 
-    Reserved = Item.getAttrValue(atts, "reserved", false); 
-    Entering = Item.getAttrValue(atts, "entering", false); 
-    Accept   = Item.getAttrValue(atts, "acceptident", false); 
-    Text = LocoID;
-    Background = true;
-    updateTextColor();
-  }
-  
-  public boolean isOccupied() {
-    return ((colorName == Block.COLOR_OCCUPIED) || (colorName == Block.COLOR_ENTER));
-  }
-  
-  public void updateTextColor() {
-    if( State.equals("closed") ) {
-      Text = "Closed";
-      colorName = Item.COLOR_CLOSED;
-    }
-    else if( LocoID != null && LocoID.trim().length() > 0 ) {
-      Text = LocoID;
-      if( Reserved ) 
-        colorName = Item.COLOR_RESERVED;
-      else if( Entering ) 
-        colorName = Item.COLOR_ENTER;
-      else 
-        colorName = Item.COLOR_OCCUPIED;
-    }
-    else {
-      Text = ID;
-      if( Accept ) 
-        colorName = Item.COLOR_ACCEPTIDENT;
-      else
-        colorName = Item.COLOR_FREE;
-    }
-  }
- 
-  public String getImageName(boolean ModPlan) {
-    this.ModPlan = ModPlan;
-    int orinr = getOriNr(ModPlan);
+    public String LocoID;
+    public boolean Closed = false;
+    public boolean Accept;
+    boolean Small;
 
-    if (orinr % 2 == 0) {
-      // vertical
-      textVertical = true;
-      cX = 1;
-      cY = 4;
-      if (Small) {
-        cY = 2;
-        ImageName = "block_2_s";
-      } else {
-        ImageName = "block_2";
-      }
-    } else {
-      // horizontal
-      cX = 4;
-      cY = 1;
-      textVertical = false;
-      if (Small) {
-        cX = 2;
-        ImageName = "block_1_s";
-      } else {
-        ImageName = "block_1";
-      }
+    public Block(RocrailService rocrailService, Attributes atts) {
+        super(rocrailService, atts);
+        Small = Item.getAttrValue(atts, "smallsymbol", false);
+        LocoID = Item.getAttrValue(atts, "locid", ID);
+        Reserved = Item.getAttrValue(atts, "reserved", false);
+        Entering = Item.getAttrValue(atts, "entering", false);
+        Accept = Item.getAttrValue(atts, "acceptident", false);
+        Text = LocoID;
+        Background = true;
+        updateTextColor();
     }
-    
-    updateTextColor();
 
-    return ImageName;
-  }
+    public boolean isOccupied() {
+        return ((colorName == Block.COLOR_OCCUPIED) || (colorName == Block.COLOR_ENTER));
+    }
 
-  
-  public void updateWithAttributes(Attributes atts ) {
-    LocoID   = Item.getAttrValue(atts, "locid", LocoID); 
-    Reserved = Item.getAttrValue(atts, "reserved", false); 
-    Entering = Item.getAttrValue(atts, "entering", false); 
-    State    = Item.getAttrValue(atts, "state", State); 
-    Accept   = Item.getAttrValue(atts, "acceptident", Accept); 
-    Closed   = State.equals("closed");
-    updateTextColor();
-    super.updateWithAttributes(atts);
-  }
+    public void updateTextColor() {
+        if (State.equals("closed")) {
+            Text = "Closed";
+            colorName = Item.COLOR_CLOSED;
+        } else if (LocoID != null && !LocoID.trim().isEmpty()) {
+            Text = LocoID;
+            if (Reserved)
+                colorName = Item.COLOR_RESERVED;
+            else if (Entering)
+                colorName = Item.COLOR_ENTER;
+            else
+                colorName = Item.COLOR_OCCUPIED;
+        } else {
+            Text = ID;
+            if (Accept)
+                colorName = Item.COLOR_ACCEPTIDENT;
+            else
+                colorName = Item.COLOR_FREE;
+        }
+    }
+
+    public String getImageName(boolean ModPlan) {
+        this.ModPlan = ModPlan;
+        int orinr = getOriNr(ModPlan);
+
+        if (orinr % 2 == 0) {
+            // vertical
+            textVertical = true;
+            cX = 1;
+            cY = 4;
+            if (Small) {
+                cY = 2;
+                ImageName = "block_2_s";
+            } else {
+                ImageName = "block_2";
+            }
+        } else {
+            // horizontal
+            cX = 4;
+            cY = 1;
+            textVertical = false;
+            if (Small) {
+                cX = 2;
+                ImageName = "block_1_s";
+            } else {
+                ImageName = "block_1";
+            }
+        }
+
+        updateTextColor();
+
+        return ImageName;
+    }
 
 
-  public void OpenClose() {
-    Closed = !Closed;
-    m_RocrailService.sendMessage("bk", String.format( "<bk id=\"%s\" state=\"%s\"/>", 
-        ID, Closed?"closed":"open" ) );
-  }
-  
-  public void AcceptIdent() {
-    m_RocrailService.sendMessage("bk", String.format( "<bk id=\"%s\" acceptident=\"%s\"/>", 
-        ID, "true" ) );
-  }
-  
-  public void onClick(View v) {
-    try {
-      Intent intent = new Intent(activity,net.rocrail.androc.activities.ActBlock.class);
-      intent.putExtra("id", Block.this.ID);
-      activity.startActivity(intent);
+    public void updateWithAttributes(Attributes atts) {
+        LocoID = Item.getAttrValue(atts, "locid", LocoID);
+        Reserved = Item.getAttrValue(atts, "reserved", false);
+        Entering = Item.getAttrValue(atts, "entering", false);
+        State = Item.getAttrValue(atts, "state", State);
+        Accept = Item.getAttrValue(atts, "acceptident", Accept);
+        Closed = State.equals("closed");
+        updateTextColor();
+        super.updateWithAttributes(atts);
     }
-    catch(Exception e) {
-      // invalid activity
+
+
+    public void OpenClose() {
+        Closed = !Closed;
+        m_RocrailService.sendMessage("bk", String.format("<bk id=\"%s\" state=\"%s\"/>",
+                ID, Closed ? "closed" : "open"));
     }
-  }
-  
-  public void propertiesView() {
-    try {
-      if( Block.this.LocoID != null && m_RocrailService.m_Model.getLoco(Block.this.LocoID) != null ) {
-        Intent intent = new Intent(activity,net.rocrail.androc.activities.ActLoco.class);
-        intent.putExtra("id", Block.this.LocoID);
-        intent.putExtra("blockid", Block.this.ID);
-        activity.startActivity(intent);
-      }
+
+    public void AcceptIdent() {
+        m_RocrailService.sendMessage("bk", String.format("<bk id=\"%s\" acceptident=\"%s\"/>",
+                ID, "true"));
     }
-    catch(Exception e) {
-      // invalid activity
+
+    public void onClick(View v) {
+        try {
+            Intent intent = new Intent(activity, net.rocrail.androc.activities.ActBlock.class);
+            intent.putExtra("id", Block.this.ID);
+            activity.startActivity(intent);
+        } catch (Exception e) {
+            // invalid activity
+        }
     }
-  }
+
+    public void propertiesView() {
+        try {
+            if (Block.this.LocoID != null && m_RocrailService.m_Model.getLoco(Block.this.LocoID) != null) {
+                Intent intent = new Intent(activity, net.rocrail.androc.activities.ActLoco.class);
+                intent.putExtra("id", Block.this.LocoID);
+                intent.putExtra("blockid", Block.this.ID);
+                activity.startActivity(intent);
+            }
+        } catch (Exception e) {
+            // invalid activity
+        }
+    }
 
 }

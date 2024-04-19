@@ -38,80 +38,77 @@ Android framework engineer
 
 @SuppressWarnings("deprecation")
 public class LevelCanvas extends AbsoluteLayout {
-  private int currentX;
-  private int currentY;
-  private boolean startMoveInited = false;
-  private boolean firstMove = false;
-  public ZoomButtonsController zoomButtonsController = null;
+    public ZoomButtonsController zoomButtonsController = null;
+    private int currentX;
+    private int currentY;
+    private boolean startMoveInited = false;
+    private boolean firstMove = false;
 
-  public LevelCanvas(Context context, AttributeSet attrs) {
-    super(context, attrs);
-  }
-  
-  @Override 
-  protected void onDetachedFromWindow () {
-    if( zoomButtonsController != null )
-      zoomButtonsController.setVisible(false);
-  }
-  
-  @Override 
-  protected void onWindowVisibilityChanged (int visibility) {
-    if( visibility != View.VISIBLE && zoomButtonsController != null )
-      zoomButtonsController.setVisible(false);
-  }
-  
-
-  @Override 
-  public boolean onTouchEvent(MotionEvent event) {
-    System.out.println("LevelCanvas::onTouchEvent action=" + event.getAction());
-    switch (event.getAction()) {
-    case MotionEvent.ACTION_DOWN:
-      System.out.println("LevelCanvas::DOWN");
-      currentX = (int) event.getRawX();
-      currentY = (int) event.getRawY();
-      startMoveInited = true;
-      firstMove = true;
-      break;
-
-
-    case MotionEvent.ACTION_MOVE:
-      System.out.println("LevelCanvas::MOVE");
-      if (startMoveInited) {
-        int x2 = (int) event.getRawX();
-        int y2 = (int) event.getRawY();
-
-        int xDelta = currentX - x2;
-        int yDelta = currentY - y2;
-        
-        if( !firstMove || (xDelta >= 16 || xDelta <= -16 || yDelta >= 16 || yDelta <= -16) ) {
-          scrollBy(currentX - x2, currentY - y2);
-          int x = getScrollX();
-          int y = getScrollY();
-          if (x < 0 || y < 0)
-            scrollTo(x < 0 ? 0 : x, y < 0 ? 0 : y);
-          currentX = x2;
-          currentY = y2;
-          firstMove = false;
-        }
-      }
-      else {
-        currentX = (int) event.getRawX();
-        currentY = (int) event.getRawY();
-        startMoveInited = true;
-        firstMove = true;
-      }
-      return true;
-
-
-    case MotionEvent.ACTION_UP:
-      System.out.println("LevelCanvas::UP");
-      startMoveInited = false;
-      firstMove = true;
-      break;
-
+    public LevelCanvas(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
-    
-    return false;
-  }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        if (zoomButtonsController != null) zoomButtonsController.setVisible(false);
+    }
+
+    @Override
+    protected void onWindowVisibilityChanged(int visibility) {
+        if (visibility != View.VISIBLE && zoomButtonsController != null)
+            zoomButtonsController.setVisible(false);
+    }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        System.out.println("LevelCanvas::onTouchEvent action=" + event.getAction());
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                System.out.println("LevelCanvas::DOWN");
+                currentX = (int) event.getRawX();
+                currentY = (int) event.getRawY();
+                startMoveInited = true;
+                firstMove = true;
+                break;
+
+
+            case MotionEvent.ACTION_MOVE:
+                System.out.println("LevelCanvas::MOVE");
+                if (startMoveInited) {
+                    int x2 = (int) event.getRawX();
+                    int y2 = (int) event.getRawY();
+
+                    int xDelta = currentX - x2;
+                    int yDelta = currentY - y2;
+
+                    if (!firstMove || (xDelta >= 16 || xDelta <= -16 || yDelta >= 16 || yDelta <= -16)) {
+                        scrollBy(currentX - x2, currentY - y2);
+                        int x = getScrollX();
+                        int y = getScrollY();
+                        if (x < 0 || y < 0) scrollTo(Math.max(x, 0), Math.max(y, 0));
+                        currentX = x2;
+                        currentY = y2;
+                        firstMove = false;
+                    }
+                } else {
+                    currentX = (int) event.getRawX();
+                    currentY = (int) event.getRawY();
+                    startMoveInited = true;
+                    firstMove = true;
+                }
+                return true;
+
+
+            case MotionEvent.ACTION_UP:
+                System.out.println("LevelCanvas::UP");
+                startMoveInited = false;
+                firstMove = true;
+                break;
+
+        }
+
+        return false;
+    }
 
 }

@@ -20,5 +20,5 @@
 package net.rocrail.androc.interfaces;
 
 public interface PoMListener {
-  void ReadResponse(int addr, int cv, int value);
+    void ReadResponse(int addr, int cv, int value);
 }

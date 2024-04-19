@@ -20,8 +20,10 @@
 package net.rocrail.androc.interfaces;
 
 public interface SystemListener {
-  String EVENT_DISCONNECTED = "disconnected";
-  String EVENT_SHUTDOWN     = "shutdown";
-  void SystemShutdown();
-  void SystemDisconnected();
+    String EVENT_DISCONNECTED = "disconnected";
+    String EVENT_SHUTDOWN = "shutdown";
+
+    void SystemShutdown();
+
+    void SystemDisconnected();
 }

@@ -20,5 +20,5 @@
 package net.rocrail.androc.interfaces;
 
 public interface MessageListener {
-  void newMessages();
+    void newMessages();
 }

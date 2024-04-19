@@ -21,6 +21,6 @@
 package net.rocrail.androc.interfaces;
 
 public interface ServiceListener {
-  void connectedWithService();
+    void connectedWithService();
 
 }

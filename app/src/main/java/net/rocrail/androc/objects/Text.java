@@ -33,130 +33,117 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 public class Text extends Item implements View.OnClickListener {
-  int m_cX = 0;
-  int m_cY = 0;
-  protected Bitmap TextBmp = null;
+    protected Bitmap TextBmp = null;
+    int m_cX;
+    int m_cY;
 
-  public Text(RocrailService rocrailService, Attributes atts) {
-    super(rocrailService, atts);
-    Text = Item.getAttrValue(atts, "text", Text );
-    cX = Item.getAttrValue(atts, "cx", 3 );
-    m_cX = cX;
-    m_cY = cY;
-  }
-  
-  public void updateTextColor() {
-  }
-  
-  public void Draw( Canvas canvas) {
-    if( !imageRequested )
-      update4Text();
-    else {
-      if( getBmp() != null ) {
-        try {
-          imageView.setImageBitmap(getBmp());
-        }
-        catch( Exception e ) {
-          // invalid imageView 
-        }
-      }
-    }
-  }
-  
-  public String getImageName(boolean ModPlan) {
-    this.ModPlan = ModPlan;
-    int orinr = getOriNr(ModPlan);
-
-    if (orinr % 2 == 0) {
-      // vertical
-      textVertical = true;
-      cX = m_cY;
-      cY = m_cX;
-    }
-    else {
-      textVertical = false;
-      cX = m_cX;
-      cY = m_cY;
+    public Text(RocrailService rocrailService, Attributes atts) {
+        super(rocrailService, atts);
+        Text = Item.getAttrValue(atts, "text", Text);
+        cX = Item.getAttrValue(atts, "cx", 3);
+        m_cX = cX;
+        m_cY = cY;
     }
 
-    if( Text.endsWith(".png") ) {
-      ImageName = Text.substring(0, Text.indexOf(".png"));
-      return ImageName;
+    public void updateTextColor() {
     }
-    return null;
-  }
 
-  public void updateWithAttributes(Attributes atts ) {
-    Text = Item.getAttrValue(atts, "text", Text); 
-    imageRequested = false;
-    updateTextColor();
-    super.updateWithAttributes(atts);
-  }
-
-  
-  public void setPicData(String filename, String data) {
-    if( data != null && data.length() > 0 ) {
-      // convert from HEXA to Bitmap
-      byte[] rawdata = MobileImpl.strToByte(data);
-      System.out.println("text image: " + filename);
-      File dir = new File("/sdcard/androc/");
-      if( !dir.exists() )
-        dir.mkdirs();
-      
-      File file = null;
-      file = new File("/sdcard/androc/" + filename );
-      
-      if( file != null ) {
-        try {
-          FileOutputStream fos = new FileOutputStream(file);
-          fos.write(rawdata);
-          fos.close();
-        }
-        catch(Exception e) {
-          e.printStackTrace();
-        }
-  
-        Bitmap bmp = BitmapFactory.decodeByteArray(rawdata, 0, rawdata.length);
-        TextBmp = bmp;
-        HideText = true;
-        if( imageView != null ) {
-          System.out.println("setting text image...");
-          imageView.post(new UpdateTextImage(this));
-        }
+    public void Draw(Canvas canvas) {
+        if (!imageRequested) update4Text();
         else {
-          System.out.println("no text imageview...");
+            if (getBmp() != null) {
+                try {
+                    imageView.setImageBitmap(getBmp());
+                } catch (Exception e) {
+                    // invalid imageView
+                }
+            }
         }
-      }
     }
-    else {
-      System.out.println("no raw data for text "+ID);
-    }
-  }
-  
-  
-  public Bitmap getBmp() {
-    return TextBmp;
-  }
 
+    public String getImageName(boolean ModPlan) {
+        this.ModPlan = ModPlan;
+        int orinr = getOriNr(ModPlan);
+
+        if (orinr % 2 == 0) {
+            // vertical
+            textVertical = true;
+            cX = m_cY;
+            cY = m_cX;
+        } else {
+            textVertical = false;
+            cX = m_cX;
+            cY = m_cY;
+        }
+
+        if (Text.endsWith(".png")) {
+            ImageName = Text.substring(0, Text.indexOf(".png"));
+            return ImageName;
+        }
+        return null;
+    }
+
+    public void updateWithAttributes(Attributes atts) {
+        Text = Item.getAttrValue(atts, "text", Text);
+        imageRequested = false;
+        updateTextColor();
+        super.updateWithAttributes(atts);
+    }
+
+
+    public void setPicData(String filename, String data) {
+        if (data != null && !data.isEmpty()) {
+            // convert from HEXA to Bitmap
+            byte[] rawdata = MobileImpl.strToByte(data);
+            System.out.println("text image: " + filename);
+            File dir = new File("/sdcard/androc/");
+            if (!dir.exists()) dir.mkdirs();
+
+            File file = new File("/sdcard/androc/" + filename);
+
+            try {
+                FileOutputStream fos = new FileOutputStream(file);
+                fos.write(rawdata);
+                fos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            TextBmp = BitmapFactory.decodeByteArray(rawdata, 0, rawdata.length);
+            HideText = true;
+            if (imageView != null) {
+                System.out.println("setting text image...");
+                imageView.post(new UpdateTextImage(this));
+            } else {
+                System.out.println("no text imageview...");
+            }
+        } else {
+            System.out.println("no raw data for text " + ID);
+        }
+    }
+
+
+    public Bitmap getBmp() {
+        return TextBmp;
+    }
 }
 
 
 class UpdateTextImage implements Runnable {
-  Text text = null;
-  
-  public UpdateTextImage( Text text ) {
-    this.text = text;
-  }
-  @Override
-  public void run() {
-    if( text.getBmp() != null ) {
-      try {
-        text.imageView.setImageBitmap(text.getBmp());
-      }
-      catch( Exception e ) {
-        // invalid imageView 
-      }
+    Text text;
+
+    public UpdateTextImage(Text text) {
+        this.text = text;
     }
-  }
-  
+
+    @Override
+    public void run() {
+        if (text.getBmp() != null) {
+            try {
+                text.imageView.setImageBitmap(text.getBmp());
+            } catch (Exception e) {
+                // invalid imageView
+            }
+        }
+    }
 }

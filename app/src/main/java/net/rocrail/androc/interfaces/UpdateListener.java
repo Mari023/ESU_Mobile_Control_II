@@ -20,6 +20,7 @@
 package net.rocrail.androc.interfaces;
 
 public interface UpdateListener {
-  boolean update4Route(String routeID, boolean locked);
-  boolean update4Block(String blockID, boolean occ);
+    boolean update4Route(String routeID, boolean locked);
+
+    boolean update4Block(String blockID, boolean occ);
 }

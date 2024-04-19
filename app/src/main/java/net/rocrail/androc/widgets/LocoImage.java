@@ -24,10 +24,10 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 public class LocoImage extends ImageView {
-  public String ID = null;
+    public String ID = null;
 
-  public LocoImage(Context context, AttributeSet attrs) {
-    super(context, attrs);
-  }
+    public LocoImage(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
 }

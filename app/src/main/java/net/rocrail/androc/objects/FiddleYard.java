@@ -31,127 +31,111 @@ import net.rocrail.androc.RocrailService;
 
 import org.xml.sax.Attributes;
 
-public class FiddleYard extends Item  {
-  public int NrTracks = 12;
-  int Occupied = 0;
-  String LocoID = "-";
-  public boolean Closed = false;
+public class FiddleYard extends Item {
+    public int NrTracks;
+    public boolean Closed = false;
+    int Occupied = 0;
+    String LocoID;
 
-  public FiddleYard(RocrailService rocrailService, Attributes atts) {
-    super(rocrailService, atts);
-    NrTracks = Item.getAttrValue(atts, "nrtracks", 12 );
-    LocoID   = Item.getAttrValue(atts, "locid", ID); 
-  }
-  
-  
-  public void updateTextColor() {
-    if( State.equals("closed") ) {
-      Text = "Closed";
-      colorName = Item.COLOR_CLOSED;
+    public FiddleYard(RocrailService rocrailService, Attributes atts) {
+        super(rocrailService, atts);
+        NrTracks = Item.getAttrValue(atts, "nrtracks", 12);
+        LocoID = Item.getAttrValue(atts, "locid", ID);
     }
-    else if( LocoID != null && LocoID.trim().length() > 0 ) {
-      Text = LocoID;
-      if( Reserved ) 
-        colorName = Item.COLOR_RESERVED;
-      else if( Entering ) 
-        colorName = Item.COLOR_ENTER;
-      else 
-        colorName = Item.COLOR_OCCUPIED;
-    }
-    else {
-      Text = ID;
-      colorName = Item.COLOR_FREE;
-    }
-  }
-
-  
-  
-  public String getImageName(boolean ModPlan) {
-    this.ModPlan = ModPlan;
-    String ori = (ModPlan ? Mod_Ori:Ori);
-    if( ori.equals("west") || ori.equals("east") ) {
-      cX = NrTracks;
-      cY = 1;
-      textVertical = false;
-    }
-    else {
-      cX = 1;
-      cY = NrTracks;
-      textVertical = true;
-    }
-    updateTextColor();
-    return null;
-  }
-  
-  
-  public void updateWithAttributes(Attributes atts ) {
-    LocoID   = Item.getAttrValue(atts, "locid", ID); 
-    State    = Item.getAttrValue(atts, "state", State); 
-    Closed   = State.equals("closed");
-
-    updateTextColor();
-    super.updateWithAttributes(atts);
-  }
 
 
-  
-  @Override
-  public void Draw( Canvas canvas ) {
-    Paint paint = new Paint();
-    
-    paint.setAntiAlias(true);
-    paint.setColor(Color.BLACK);
-
-    if( Occupied == 1 ) {
-      //(255,200,200)
-      paint.setColor(Color.RED);
-      paint.setStyle(Paint.Style.FILL);
-    }
-    else if( Occupied == 2 ) {
-      //(255,255,200)
-      paint.setColor(Color.YELLOW);
-      paint.setStyle(Paint.Style.FILL);
-    }
-    else {
-      paint.setStyle(Paint.Style.STROKE);
+    public void updateTextColor() {
+        if (State.equals("closed")) {
+            Text = "Closed";
+            colorName = Item.COLOR_CLOSED;
+        } else if (LocoID != null && !LocoID.trim().isEmpty()) {
+            Text = LocoID;
+            if (Reserved) colorName = Item.COLOR_RESERVED;
+            else if (Entering) colorName = Item.COLOR_ENTER;
+            else colorName = Item.COLOR_OCCUPIED;
+        } else {
+            Text = ID;
+            colorName = Item.COLOR_FREE;
+        }
     }
 
-    paint.setStrokeWidth(1);
-    
-    //if( Ori.equals("west") || Ori.equals("east") ) {
-    if( !textVertical ) {
-      RectF rect = new RectF(1,3, (m_RocrailService.Prefs.Size * NrTracks) - 1, (int)((m_RocrailService.Prefs.Size/8.0)*7.0));
-      canvas.drawRoundRect(rect, m_RocrailService.Prefs.Size/4, m_RocrailService.Prefs.Size/4, paint);
-    }
-    else {
-      RectF rect = new RectF(3,1, (int)((m_RocrailService.Prefs.Size/8.0)*7.0), (m_RocrailService.Prefs.Size * NrTracks) - 1);
-      canvas.drawRoundRect(rect, m_RocrailService.Prefs.Size/4, m_RocrailService.Prefs.Size/4, paint);
+
+    public String getImageName(boolean ModPlan) {
+        this.ModPlan = ModPlan;
+        String ori = (ModPlan ? Mod_Ori : Ori);
+        if (ori.equals("west") || ori.equals("east")) {
+            cX = NrTracks;
+            cY = 1;
+            textVertical = false;
+        } else {
+            cX = 1;
+            cY = NrTracks;
+            textVertical = true;
+        }
+        updateTextColor();
+        return null;
     }
 
-    
-  }
 
-  public void onClick(View v) {
-    propertiesView();
-  }
-  
-  public void OpenClose() {
-    Closed = !Closed;
-    m_RocrailService.sendMessage("seltab", String.format( "<seltab id=\"%s\" state=\"%s\"/>", 
-        ID, Closed?"closed":"open" ) );
-  }
-  
-  public void propertiesView() {
-    try {
-      Intent intent = new Intent(activity,net.rocrail.androc.activities.ActFiddleYard.class);
-      intent.putExtra("id", FiddleYard.this.ID);
-      activity.startActivity(intent);
-    }
-    catch(Exception e) {
-      // invalid activity
-    }
-  }
+    public void updateWithAttributes(Attributes atts) {
+        LocoID = Item.getAttrValue(atts, "locid", ID);
+        State = Item.getAttrValue(atts, "state", State);
+        Closed = State.equals("closed");
 
+        updateTextColor();
+        super.updateWithAttributes(atts);
+    }
+
+
+    @Override
+    public void Draw(Canvas canvas) {
+        Paint paint = new Paint();
+
+        paint.setAntiAlias(true);
+        paint.setColor(Color.BLACK);
+
+        if (Occupied == 1) {
+            //(255,200,200)
+            paint.setColor(Color.RED);
+            paint.setStyle(Paint.Style.FILL);
+        } else if (Occupied == 2) {
+            //(255,255,200)
+            paint.setColor(Color.YELLOW);
+            paint.setStyle(Paint.Style.FILL);
+        } else {
+            paint.setStyle(Paint.Style.STROKE);
+        }
+
+        paint.setStrokeWidth(1);
+
+        //if( Ori.equals("west") || Ori.equals("east") ) {
+        RectF rect;
+        if (!textVertical) {
+            rect = new RectF(1, 3, (m_RocrailService.Prefs.Size * NrTracks) - 1, (int) ((m_RocrailService.Prefs.Size / 8.0) * 7.0));
+        } else {
+            rect = new RectF(3, 1, (int) ((m_RocrailService.Prefs.Size / 8.0) * 7.0), (m_RocrailService.Prefs.Size * NrTracks) - 1);
+        }
+        canvas.drawRoundRect(rect, m_RocrailService.Prefs.Size / 4, m_RocrailService.Prefs.Size / 4, paint);
+    }
+
+    public void onClick(View v) {
+        propertiesView();
+    }
+
+    public void OpenClose() {
+        Closed = !Closed;
+        m_RocrailService.sendMessage("seltab", String.format("<seltab id=\"%s\" state=\"%s\"/>", ID, Closed ? "closed" : "open"));
+    }
+
+    public void propertiesView() {
+        try {
+            Intent intent = new Intent(activity, net.rocrail.androc.activities.ActFiddleYard.class);
+            intent.putExtra("id", FiddleYard.this.ID);
+            activity.startActivity(intent);
+        } catch (Exception e) {
+            // invalid activity
+        }
+    }
 
 
 }

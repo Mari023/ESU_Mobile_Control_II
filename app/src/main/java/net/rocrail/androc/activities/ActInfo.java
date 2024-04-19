@@ -28,51 +28,50 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.test.R;
+
 import net.rocrail.androc.interfaces.ServiceListener;
 
 public class ActInfo extends ListActivity implements ServiceListener {
-  ActBase m_Base = null;
-  String[] m_Items = null;
-  
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    m_Base = new ActBase(this, this);
-    m_Base.MenuSelection = 0;
-    m_Base.connectWithService();
-  }
-  
-  public void connectedWithService() {
-    m_Base.connectedWithService();
-    initView();
-    m_Base.updateTitle();
-  }
+    ActBase m_Base = null;
+    String[] m_Items = null;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        m_Base = new ActBase(this, this);
+        m_Base.MenuSelection = 0;
+        m_Base.connectWithService();
+    }
+
+    public void connectedWithService() {
+        m_Base.connectedWithService();
+        initView();
+        m_Base.updateTitle();
+    }
 
 
-  public void initView() {
-    int versionCode = 0; 
-    String versionName = "?"; 
-    PackageInfo pinfo;
-    try {
-      pinfo = getPackageManager().getPackageInfo 
-      (this.getPackageName(), 0);
-      versionCode = pinfo.versionCode; 
-      versionName = pinfo.versionName; 
-    } catch (NameNotFoundException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } 
+    public void initView() {
+        String versionName = "?";
+        PackageInfo pinfo;
+        try {
+            pinfo = getPackageManager().getPackageInfo
+                    (this.getPackageName(), 0);
+            versionName = pinfo.versionName;
+        } catch (NameNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-    m_Items = new String[5];
-    m_Items[0] = "TM and Copyright 2010-2014 Rob Versluis\nhttp://www.rocrail.net";
-    m_Items[1] = getText(R.string.License) + ": GNU GENERAL PUBLIC LICENSE";
-    m_Items[2] = "andRoc " + getText(R.string.Version) + ": "+versionName;
-    m_Items[3] = getText(R.string.ThrottleID) + ": "+m_Base.m_RocrailService.getDeviceName();
-    m_Items[4] = "Rocrail " + getText(R.string.Version) + ": " + m_Base.m_RocrailService.m_Model.m_RocrailVersion;
-      
-    setListAdapter(new ArrayAdapter<String>(this, R.layout.menuitem, m_Items));
+        m_Items = new String[5];
+        m_Items[0] = "TM and Copyright 2010-2014 Rob Versluis\nhttp://www.rocrail.net";
+        m_Items[1] = getText(R.string.License) + ": GNU GENERAL PUBLIC LICENSE";
+        m_Items[2] = "andRoc " + getText(R.string.Version) + ": " + versionName;
+        m_Items[3] = getText(R.string.ThrottleID) + ": " + m_Base.m_RocrailService.getDeviceName();
+        m_Items[4] = "Rocrail " + getText(R.string.Version) + ": " + m_Base.m_RocrailService.m_Model.m_RocrailVersion;
 
-    ListView lv = getListView();
-    lv.setTextFilterEnabled(true);
-  }
+        setListAdapter(new ArrayAdapter<>(this, R.layout.menuitem, m_Items));
+
+        ListView lv = getListView();
+        lv.setTextFilterEnabled(true);
+    }
 }

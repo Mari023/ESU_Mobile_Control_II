@@ -27,56 +27,49 @@ import net.rocrail.androc.RocrailService;
 import org.xml.sax.Attributes;
 
 public class Sensor extends Item implements View.OnClickListener {
-  Boolean Curve = false;
-  Boolean Shortcut = false;
+    Boolean Curve;
+    Boolean Shortcut;
 
-  public Sensor(RocrailService rocrailService, Attributes atts) {
-    super(rocrailService, atts);
-    Curve = Item.getAttrValue(atts, "curve", false );
-    Shortcut = Item.getAttrValue(atts, "shortcut", false );
-  }
-  
-  public void updateWithAttributes(Attributes atts ) {
-    Curve = Item.getAttrValue(atts, "curve", Curve );
-    Shortcut = Item.getAttrValue(atts, "shortcut", false );
-    super.updateWithAttributes(atts);
-  }
-  
-  public String getImageName(boolean ModPlan) {
-    this.ModPlan = ModPlan;
-    int orinr = getOriNr(ModPlan);
-    String prefix = "";
-
-    if( BlockID.length() > 0 ) {
-      Block bk = m_RocrailService.m_Model.m_BlockMap.get(BlockID);
-      if( bk != null)
-        Occupied = bk.isOccupied();
+    public Sensor(RocrailService rocrailService, Attributes atts) {
+        super(rocrailService, atts);
+        Curve = Item.getAttrValue(atts, "curve", false);
+        Shortcut = Item.getAttrValue(atts, "shortcut", false);
     }
 
-    String suffix = "";
-    if( RouteLocked )
-      suffix = "_route";
-    if( Occupied )
-      suffix = "_occ";
-    
-
-    if (Curve)
-      prefix = "c";
-    else
-      orinr = (orinr % 2 == 0) ? 2 : 1;
-
-    if (State.equals("true")) {
-      ImageName = String.format("%ssensor%s_on_%d%s", prefix, suffix, orinr, Shortcut?"sc":"");
-    } else {
-      ImageName = String.format("%ssensor%s_off_%d%s", prefix, suffix, orinr, Shortcut?"sc":"");
+    public void updateWithAttributes(Attributes atts) {
+        Curve = Item.getAttrValue(atts, "curve", Curve);
+        Shortcut = Item.getAttrValue(atts, "shortcut", false);
+        super.updateWithAttributes(atts);
     }
 
-    return ImageName;
-  }
+    public String getImageName(boolean ModPlan) {
+        this.ModPlan = ModPlan;
+        int orinr = getOriNr(ModPlan);
+        String prefix = "";
 
-  public void onClick(View v) {
-    m_RocrailService.sendMessage("fb", String.format( "<fb id=\"%s\" state=\"%s\"/>", ID, State.equals("true")?"false":"true" ) );
-  }
+        if (!BlockID.isEmpty()) {
+            Block bk = m_RocrailService.m_Model.m_BlockMap.get(BlockID);
+            if (bk != null) Occupied = bk.isOccupied();
+        }
+
+        String suffix = "";
+        if (RouteLocked) suffix = "_route";
+        if (Occupied) suffix = "_occ";
 
 
+        if (Curve) prefix = "c";
+        else orinr = (orinr % 2 == 0) ? 2 : 1;
+
+        if (State.equals("true")) {
+            ImageName = String.format("%ssensor%s_on_%d%s", prefix, suffix, orinr, Shortcut ? "sc" : "");
+        } else {
+            ImageName = String.format("%ssensor%s_off_%d%s", prefix, suffix, orinr, Shortcut ? "sc" : "");
+        }
+
+        return ImageName;
+    }
+
+    public void onClick(View v) {
+        m_RocrailService.sendMessage("fb", String.format("<fb id=\"%s\" state=\"%s\"/>", ID, State.equals("true") ? "false" : "true"));
+    }
 }

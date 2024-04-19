@@ -20,18 +20,20 @@
 package net.rocrail.androc.interfaces;
 
 public interface ModelListener {
-  int MODELLIST_PLAN_START = 100;
-  int MODELLIST_PLAN = 0;
-  int MODELLIST_LC = 1;
-  int MODELLIST_TK = 2;
-  int MODELLIST_BK = 3;
-  int MODELLIST_FB = 4;
-  int MODELLIST_ST = 5;
-  int MODELLIST_SC = 6;
-  int MODELLIST_SW = 7;
-  int MODELLIST_SG = 8;
-  int MODELLIST_CO = 9;
-  int MODELLIST_TX = 10;
-  void modelListLoaded(int MODELLIST);
-  void modelUpdate(int MODELLIST, String ID);
+    int MODELLIST_PLAN_START = 100;
+    int MODELLIST_PLAN = 0;
+    int MODELLIST_LC = 1;
+    int MODELLIST_TK = 2;
+    int MODELLIST_BK = 3;
+    int MODELLIST_FB = 4;
+    int MODELLIST_ST = 5;
+    int MODELLIST_SC = 6;
+    int MODELLIST_SW = 7;
+    int MODELLIST_SG = 8;
+    int MODELLIST_CO = 9;
+    int MODELLIST_TX = 10;
+
+    void modelListLoaded(int MODELLIST);
+
+    void modelUpdate(int MODELLIST, String ID);
 }

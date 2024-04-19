@@ -27,108 +27,99 @@ import org.xml.sax.helpers.DefaultHandler;
 
 
 class XmlHandler extends DefaultHandler {
-  RocrailService rocrailService = null;
-  int m_iXmlSize = 0;
-  Model m_Model = null;
-  boolean m_bParsingPlan = false;
-  
-  public XmlHandler(RocrailService rocrailService, Model model) {
-    this.rocrailService = rocrailService;
-    m_Model = model;
-  }
-  
-  public int getXmlSize() {
-    int size = m_iXmlSize;
-    // reset size: read once
-    m_iXmlSize = 0;
-    return size;
-  }
-  
-  
-  public void startDocument () {
-  
-  }
-  
-  public void endDocument () {
-    
-  }
+    RocrailService rocrailService;
+    int m_iXmlSize = 0;
+    Model m_Model;
+    boolean m_bParsingPlan = false;
 
-  public void startElement (String uri, String localName, String qName, Attributes atts) {
-    if( localName.equals("xmlh") ) {
-      // xmlh handling
-      return;
+    public XmlHandler(RocrailService rocrailService, Model model) {
+        this.rocrailService = rocrailService;
+        m_Model = model;
     }
-    
-    if( localName.equals("xml") ) {
-      // xml handling
-      String val = atts.getValue("size");
-      m_iXmlSize = Integer.parseInt(val);
-      return;
+
+    public int getXmlSize() {
+        int size = m_iXmlSize;
+        // reset size: read once
+        m_iXmlSize = 0;
+        return size;
     }
-    
-    if( localName.equals("datareq") ) {
-      // loco handling
-      String id = atts.getValue("id");
-      System.out.println("datareq: "+id);
-      Mobile loco = m_Model.getLoco(id);
-      if( loco == null )
-        loco = m_Model.getCar(id);
-      
-      if( loco != null ) {
-        System.out.println("set picture data: "+id);
-        String data = atts.getValue("data");
-        String function = atts.getValue("function");
-        String filename = atts.getValue("filename");
-        int nr = 0;
-        try {
-          nr = Integer.parseInt(function);
-        } catch(Exception e) {}
-        loco.setPicData(filename, data, nr);
-      }
-      else {
-        Text text = m_Model.getText(id);
-        if( text != null ) {
-          System.out.println("set text picture data: "+id);
-          String data = atts.getValue("data");
-          String filename = atts.getValue("filename");
-          text.setPicData(filename, data);
+
+
+    public void startDocument() {
+
+    }
+
+    public void endDocument() {
+
+    }
+
+    public void startElement(String uri, String localName, String qName, Attributes atts) {
+        if (localName.equals("xmlh")) {
+            // xmlh handling
+            return;
         }
-        else 
-          System.out.println("datareq ID ["+id+"] not found...");
-      }
-      return;
-    }
-    
-    if(!m_bParsingPlan && localName.equals("plan")) {
-      m_bParsingPlan = true;
-      m_Model.setup(atts);
-      return;
-    }
-    
-    if( m_bParsingPlan ) {
-      m_Model.addObject(localName, atts);
-    }
-    else {
-      if( localName.equals("state") || localName.equals("auto") || 
-          localName.equals("sys") || localName.equals("exception") || localName.equals("program") ) {
-        rocrailService.event(localName, atts);
-      }
-      else {
-        m_Model.updateItem(localName, atts);
-      }
-      
-    }
-    
-  }
 
-  public void endElement (String uri, String localName, String qName) {
-    if( localName.equals("plan") ) {
-      m_bParsingPlan = false;
-      m_Model.planLoaded();
+        if (localName.equals("xml")) {
+            // xml handling
+            String val = atts.getValue("size");
+            m_iXmlSize = Integer.parseInt(val);
+            return;
+        }
+
+        if (localName.equals("datareq")) {
+            // loco handling
+            String id = atts.getValue("id");
+            System.out.println("datareq: " + id);
+            Mobile loco = m_Model.getLoco(id);
+            if (loco == null) loco = m_Model.getCar(id);
+
+            if (loco != null) {
+                System.out.println("set picture data: " + id);
+                String data = atts.getValue("data");
+                String function = atts.getValue("function");
+                String filename = atts.getValue("filename");
+                int nr = 0;
+                try {
+                    nr = Integer.parseInt(function);
+                } catch (Exception ignored) {
+                }
+                loco.setPicData(filename, data, nr);
+            } else {
+                Text text = m_Model.getText(id);
+                if (text != null) {
+                    System.out.println("set text picture data: " + id);
+                    String data = atts.getValue("data");
+                    String filename = atts.getValue("filename");
+                    text.setPicData(filename, data);
+                } else System.out.println("datareq ID [" + id + "] not found...");
+            }
+            return;
+        }
+
+        if (!m_bParsingPlan && localName.equals("plan")) {
+            m_bParsingPlan = true;
+            m_Model.setup(atts);
+            return;
+        }
+
+        if (m_bParsingPlan) {
+            m_Model.addObject(localName, atts);
+        } else {
+            if (localName.equals("state") || localName.equals("auto") || localName.equals("sys") || localName.equals("exception") || localName.equals("program")) {
+                rocrailService.event(localName, atts);
+            } else {
+                m_Model.updateItem(localName, atts);
+            }
+        }
     }
-    else if( m_bParsingPlan ) {
-      // signal end of list
-      m_Model.listLoaded(localName);
+
+    public void endElement(String uri, String localName, String qName) {
+        if (localName.equals("plan")) {
+            m_bParsingPlan = false;
+            m_Model.planLoaded();
+        } else if (m_bParsingPlan) {
+            // signal end of list
+            m_Model.listLoaded(localName);
+        }
     }
-  }
 }

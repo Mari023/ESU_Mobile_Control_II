@@ -27,40 +27,36 @@ import net.rocrail.androc.RocrailService;
 import org.xml.sax.Attributes;
 
 public class Output extends Item implements View.OnClickListener {
-  public boolean toggle = false;
+    public boolean toggle;
 
-  public Output(RocrailService rocrailService, Attributes atts) {
-    super(rocrailService, atts);
-    toggle = Item.getAttrValue(atts, "toggleswitch", false );
-  }
-
-  public void onClick(View v) {
-    flip();
-  }
-
-  public void onClickUp(View v) {
-    if( !toggle )
-      flip();
-  }
-
-  public void flip() {
-    m_RocrailService.sendMessage("co", String.format( "<co id=\"%s\" cmd=\"flip\"/>", ID ) );
-  }
-
-  public String getImageName(boolean ModPlan) {
-    this.ModPlan = ModPlan;
-    if (State.equals("on")) {
-      ImageName = "button_on";
+    public Output(RocrailService rocrailService, Attributes atts) {
+        super(rocrailService, atts);
+        toggle = Item.getAttrValue(atts, "toggleswitch", false);
     }
-    else if (State.equals("active")) {
-      ImageName = "button_active";
-    }
-    else
-      ImageName = "button_off";
-    
-    return ImageName;
-  }
 
-  
+    public void onClick(View v) {
+        flip();
+    }
+
+    public void onClickUp(View v) {
+        if (!toggle) flip();
+    }
+
+    public void flip() {
+        m_RocrailService.sendMessage("co", String.format("<co id=\"%s\" cmd=\"flip\"/>", ID));
+    }
+
+    public String getImageName(boolean ModPlan) {
+        this.ModPlan = ModPlan;
+        if (State.equals("on")) {
+            ImageName = "button_on";
+        } else if (State.equals("active")) {
+            ImageName = "button_active";
+        } else ImageName = "button_off";
+
+        return ImageName;
+    }
+
+
 }
 

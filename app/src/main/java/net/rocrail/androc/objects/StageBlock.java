@@ -29,130 +29,120 @@ import org.xml.sax.Attributes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 public class StageBlock extends Block {
-  String ExitState = "";
-  String LocoID    = ""; 
-  boolean Reserved = false; 
-  boolean Entering = false;
-  public boolean ExitClosed = false;
-  
-  public List<SBSection> Sections = new ArrayList<SBSection>();
-  public HashMap<String,SBSection> SectionMap = new HashMap<String,SBSection>();
+    public boolean ExitClosed;
+    public List<SBSection> Sections = new ArrayList<>();
+    public HashMap<String, SBSection> SectionMap = new HashMap<>();
+    String ExitState;
+    String LocoID;
+    boolean Reserved;
+    boolean Entering;
 
-  public StageBlock(RocrailService rocrailService, Attributes atts) {
-    super(rocrailService, atts);
-    ExitState = Item.getAttrValue(atts, "exitstate", "open"); 
-    LocoID    = Item.getAttrValue(atts, "locid", ""); 
-    Reserved  = Item.getAttrValue(atts, "reserved", false); 
-    Entering  = Item.getAttrValue(atts, "entering", false); 
-    Text = ID;
-    Background = true;
-    State      = Item.getAttrValue(atts, "state", State); 
-    Closed     = State.equals("closed");
-    ExitClosed = ExitState.equals("closed");
-  }
-
-  public void updateWithAttributes(Attributes atts ) {
-    ExitState  = Item.getAttrValue(atts, "exitstate", ExitState); 
-    LocoID     = Item.getAttrValue(atts, "locid", ""); 
-    Reserved   = Item.getAttrValue(atts, "reserved", false); 
-    Entering   = Item.getAttrValue(atts, "entering", false);
-    State      = Item.getAttrValue(atts, "state", State); 
-    Closed     = State.equals("closed");
-    ExitClosed = ExitState.equals("closed");
-    updateTextColor();
-    super.updateWithAttributes(atts);
-  }
-
-  public void updateTextColor() {
-    if( State.equals("closed") ) {
-      Text = "Closed";
-      colorName = Item.COLOR_CLOSED;
+    public StageBlock(RocrailService rocrailService, Attributes atts) {
+        super(rocrailService, atts);
+        ExitState = Item.getAttrValue(atts, "exitstate", "open");
+        LocoID = Item.getAttrValue(atts, "locid", "");
+        Reserved = Item.getAttrValue(atts, "reserved", false);
+        Entering = Item.getAttrValue(atts, "entering", false);
+        Text = ID;
+        Background = true;
+        State = Item.getAttrValue(atts, "state", State);
+        Closed = State.equals("closed");
+        ExitClosed = ExitState.equals("closed");
     }
-    else if( LocoID != null && LocoID.trim().length() > 0 ) {
-      Text = LocoID;
-      if( Reserved ) 
-        colorName = Item.COLOR_RESERVED;
-      else if( Entering ) 
-        colorName = Item.COLOR_ENTER;
-      else 
-        colorName = Item.COLOR_OCCUPIED;
+
+    public void updateWithAttributes(Attributes atts) {
+        ExitState = Item.getAttrValue(atts, "exitstate", ExitState);
+        LocoID = Item.getAttrValue(atts, "locid", "");
+        Reserved = Item.getAttrValue(atts, "reserved", false);
+        Entering = Item.getAttrValue(atts, "entering", false);
+        State = Item.getAttrValue(atts, "state", State);
+        Closed = State.equals("closed");
+        ExitClosed = ExitState.equals("closed");
+        updateTextColor();
+        super.updateWithAttributes(atts);
     }
-    else {
-      int cnt = 0;
-      if( Sections != null ) {
-        Iterator<SBSection> it = Sections.iterator();
-        while( it.hasNext() ) {
-          SBSection section = it.next();
-          if( section.LcID.length() > 0 )
-            cnt++;
+
+    public void updateTextColor() {
+        if (State.equals("closed")) {
+            Text = "Closed";
+            colorName = Item.COLOR_CLOSED;
+        } else if (LocoID != null && !LocoID.trim().isEmpty()) {
+            Text = LocoID;
+            if (Reserved)
+                colorName = Item.COLOR_RESERVED;
+            else if (Entering)
+                colorName = Item.COLOR_ENTER;
+            else
+                colorName = Item.COLOR_OCCUPIED;
+        } else {
+            int cnt = 0;
+            if (Sections != null) {
+                for (SBSection section : Sections) {
+                    if (!section.LcID.isEmpty())
+                        cnt++;
+                }
+                Text = ID + "[" + cnt + "] " + (ExitState.equals("closed") ? "<" : "");
+                colorName = Item.COLOR_FREE;
+            }
         }
-        Text = ID + "[" + cnt + "] " + (ExitState.equals("closed")?"<":"");
-        colorName = Item.COLOR_FREE;
-      }
     }
-  }
- 
 
-  public String getImageName(boolean ModPlan) {
-    this.ModPlan = ModPlan;
-    int orinr = getOriNr(ModPlan);
 
-    if (orinr % 2 == 0) {
-      // vertical
-      textVertical = true;
-      cX = 1;
-      cY = 4;
-    } else {
-      // horizontal
-      cX = 4;
-      cY = 1;
-      textVertical = false;
+    public String getImageName(boolean ModPlan) {
+        this.ModPlan = ModPlan;
+        int orinr = getOriNr(ModPlan);
+
+        if (orinr % 2 == 0) {
+            // vertical
+            textVertical = true;
+            cX = 1;
+            cY = 4;
+        } else {
+            // horizontal
+            cX = 4;
+            cY = 1;
+            textVertical = false;
+        }
+        ImageName = "stageblock_" + orinr;
+
+        updateTextColor();
+
+        return ImageName;
     }
-    ImageName = "stageblock_"+orinr;
-    
-    updateTextColor();
 
-    return ImageName;
-  }
-
-  public void addSection(Attributes atts ) {
-    SBSection section = new SBSection();
-    section.ID = Item.getAttrValue(atts, "id", "" );
-    section.LcID = Item.getAttrValue(atts, "lcid", "" );
-    Sections.add(section);
-    if( section.ID != null && section.ID.length() > 0 )
-      SectionMap.put(section.ID, section);
-  }
-
-  public void updateSection(Attributes atts ) {
-    SBSection section = SectionMap.get(Item.getAttrValue(atts, "id", "" ));
-    if( section != null ) {
-      section.LcID = Item.getAttrValue(atts, "lcid", "" );
-      updateTextColor();
+    public void addSection(Attributes atts) {
+        SBSection section = new SBSection();
+        section.ID = Item.getAttrValue(atts, "id", "");
+        section.LcID = Item.getAttrValue(atts, "lcid", "");
+        Sections.add(section);
+        if (section.ID != null && !section.ID.isEmpty())
+            SectionMap.put(section.ID, section);
     }
-  }
 
-  public void onClick(View v) {
-    try {
-      Intent intent = new Intent(activity,net.rocrail.androc.activities.ActStage.class);
-      intent.putExtra("id", StageBlock.this.ID);
-      activity.startActivity(intent);
+    public void updateSection(Attributes atts) {
+        SBSection section = SectionMap.get(Item.getAttrValue(atts, "id", ""));
+        if (section != null) {
+            section.LcID = Item.getAttrValue(atts, "lcid", "");
+            updateTextColor();
+        }
     }
-    catch(Exception e) {
-      // invalid activity
-    }
-  }
-  
 
-  
-  public class SBSection {
-    public String ID = "";
-    public String LcID = "";
-  }
-  
-  
+    public void onClick(View v) {
+        try {
+            Intent intent = new Intent(activity, net.rocrail.androc.activities.ActStage.class);
+            intent.putExtra("id", StageBlock.this.ID);
+            activity.startActivity(intent);
+        } catch (Exception e) {
+            // invalid activity
+        }
+    }
+
+
+    public static class SBSection {
+        public String ID = "";
+        public String LcID = "";
+    }
 }

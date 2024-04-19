@@ -25,82 +25,57 @@ import net.rocrail.androc.RocrailService;
 import org.xml.sax.Attributes;
 
 
-
-
 public class Track extends Item {
 
-  public Track(RocrailService rocrailService, Attributes atts) {
-    super(rocrailService, atts);
-    // TODO Auto-generated constructor stub
-  }
-  
-  public void updateWithAttributes(Attributes atts ) {
-    super.updateWithAttributes(atts);
-  }
-  
-  public String getImageName(boolean ModPlan) {
-    this.ModPlan = ModPlan;
-    int orinr = getOriNr(ModPlan);
-
-    if( BlockID.length() > 0 ) {
-      Block bk = m_RocrailService.m_Model.m_BlockMap.get(BlockID);
-      if( bk != null)
-        Occupied = bk.isOccupied();
-      else {
-        Sensor fb = m_RocrailService.m_Model.m_SensorMap.get(BlockID);
-        if( fb != null)
-          Occupied = fb.State.equals("true");
-      }
+    public Track(RocrailService rocrailService, Attributes atts) {
+        super(rocrailService, atts);
     }
 
-    String suffix = "";
-    if( RouteLocked )
-      suffix = "_route";
-    if( Occupied )
-      suffix = "_occ";
-    
-    if (Type.equals("curve")) {
-      ImageName = String.format("curve%s_%d", suffix, orinr);
-    } 
-    else if (Type.equals("buffer") || Type.equals("connector") ) {
-      // symbol naming fix (see rocrail/impl/pclient.c line 250)
-      if (orinr == 1)
-        orinr = 3;
-      else if (orinr == 3)
-        orinr = 1;
-      ImageName = String.format("%s%s_%d", Type, suffix, orinr);
-    } 
-    else if( Type.equals("concurveright") ) {
-      if (orinr == 2)
-        orinr = 4;
-      else if (orinr == 4)
-        orinr = 2;
-      ImageName = String.format("connector_curve_right%s_%d", suffix, orinr);
-    } 
-    else if( Type.equals("concurveleft") ) {
-      if (orinr == 2)
-        orinr = 4;
-      else if (orinr == 4)
-        orinr = 2;
-      ImageName = String.format("connector_curve_left%s_%d", suffix, orinr);
-    } 
-    else if( Type.equals("dir") ) {
-      // symbol naming fix (see rocrail/impl/pclient.c line 250)
-      if (orinr == 1)
-        orinr = 3;
-      else if (orinr == 3)
-        orinr = 1;
-      ImageName = String.format("%s%s_%d", Type, suffix, orinr);
-    } 
-    else if( Type.equals("dirall") ) {
-      ImageName = String.format("%s%s_%d", Type, suffix, (orinr % 2 == 0 ? 2 : 1));
-    } 
-    else {
-      ImageName = String.format("track%s_%d", suffix, (orinr % 2 == 0 ? 2 : 1));
+    public void updateWithAttributes(Attributes atts) {
+        super.updateWithAttributes(atts);
     }
 
-    //System.out.println("ID="+ID+", ImageName="+ImageName);
-    return ImageName;
-  }
+    public String getImageName(boolean ModPlan) {
+        this.ModPlan = ModPlan;
+        int orinr = getOriNr(ModPlan);
 
+        if (!BlockID.isEmpty()) {
+            Block bk = m_RocrailService.m_Model.m_BlockMap.get(BlockID);
+            if (bk != null) Occupied = bk.isOccupied();
+            else {
+                Sensor fb = m_RocrailService.m_Model.m_SensorMap.get(BlockID);
+                if (fb != null) Occupied = fb.State.equals("true");
+            }
+        }
+
+        String suffix = "";
+        if (RouteLocked) suffix = "_route";
+        if (Occupied) suffix = "_occ";
+
+        switch (Type) {
+            case "curve" -> ImageName = String.format("curve%s_%d", suffix, orinr);
+            case "buffer", "connector", "dir" -> {
+                // symbol naming fix (see rocrail/impl/pclient.c line 250)
+                if (orinr == 1) orinr = 3;
+                else if (orinr == 3) orinr = 1;
+                ImageName = String.format("%s%s_%d", Type, suffix, orinr);
+            }
+            case "concurveright" -> {
+                if (orinr == 2) orinr = 4;
+                else if (orinr == 4) orinr = 2;
+                ImageName = String.format("connector_curve_right%s_%d", suffix, orinr);
+            }
+            case "concurveleft" -> {
+                if (orinr == 2) orinr = 4;
+                else if (orinr == 4) orinr = 2;
+                ImageName = String.format("connector_curve_left%s_%d", suffix, orinr);
+            }
+            case "dirall" ->
+                    ImageName = String.format("%s%s_%d", Type, suffix, (orinr % 2 == 0 ? 2 : 1));
+            default -> ImageName = String.format("track%s_%d", suffix, (orinr % 2 == 0 ? 2 : 1));
+        }
+
+        //System.out.println("ID="+ID+", ImageName="+ImageName);
+        return ImageName;
+    }
 }
