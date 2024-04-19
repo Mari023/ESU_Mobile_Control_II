@@ -101,7 +101,7 @@ public class Connection extends Thread {
                   hdr = hdr.substring(hdr.indexOf("<?xml"));
                   hdr = hdr.trim();
                   // parse the header
-                  saxparser.parse(new ByteArrayInputStream(hdr.getBytes(StandardCharsets.UTF_8)), xmlhandler);
+                  saxparser.parse(new ByteArrayInputStream(hdr.getBytes(Charset.forName("UTF-8"))), xmlhandler);
                   xmlSize = xmlhandler.getXmlSize();
                   // reset header string and signal reading data
                   hdr = "";
@@ -133,10 +133,10 @@ public class Connection extends Thread {
               // all bytes are read
               if( read == xmlSize ) {
                 // create the xml string from the byte with utf-8 encoding
-                String xml = new String(buffer, StandardCharsets.UTF_8).trim();
+                String xml = new String(buffer, Charset.forName("UTF-8")).trim();
                 // parse the xml
                 if( xml != null && xml.length() > 0 ) {
-                  ByteArrayInputStream bai = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8));
+                  ByteArrayInputStream bai = new ByteArrayInputStream(xml.getBytes(Charset.forName("UTF-8")));
                   saxparser.parse(bai, xmlhandler);
                 }
                 // reset for next header

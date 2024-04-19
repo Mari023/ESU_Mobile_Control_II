@@ -65,7 +65,7 @@ public class R2RNet extends Thread {
     try {
       byte[] buf = null;
       String msg = "<netreq req=\"clientconn\"/>";
-      buf = msg.getBytes(StandardCharsets.UTF_8);
+      buf = msg.getBytes(Charset.forName("UTF-8"));
       
       MulticastSocket socket = new MulticastSocket(Port);
       //socket.setTimeToLive(255);
