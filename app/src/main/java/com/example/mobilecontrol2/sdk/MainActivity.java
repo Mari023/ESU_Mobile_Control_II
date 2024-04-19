@@ -105,22 +105,19 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Listener for the LED Buttons.
      */
-    private final View.OnClickListener mOnLedButtonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (v.getId() == R.id.red_on) {
-                MobileControl2.setLedState(MobileControl2.LED_RED, true);
-            } else if (v.getId() == R.id.red_off) {
-                MobileControl2.setLedState(MobileControl2.LED_RED, false);
-            } else if (v.getId() == R.id.red_flash) {
-                MobileControl2.setLedState(MobileControl2.LED_RED, 250, 250);
-            } else if (v.getId() == R.id.green_on) {
-                MobileControl2.setLedState(MobileControl2.LED_GREEN, true);
-            } else if (v.getId() == R.id.green_off) {
-                MobileControl2.setLedState(MobileControl2.LED_GREEN, false);
-            } else if (v.getId() == R.id.green_flash) {
-                MobileControl2.setLedState(MobileControl2.LED_GREEN, 250, 250);
-            }
+    private final View.OnClickListener mOnLedButtonClickListener = v -> {
+        if (v.getId() == R.id.red_on) {
+            MobileControl2.setLedState(MobileControl2.LED_RED, true);
+        } else if (v.getId() == R.id.red_off) {
+            MobileControl2.setLedState(MobileControl2.LED_RED, false);
+        } else if (v.getId() == R.id.red_flash) {
+            MobileControl2.setLedState(MobileControl2.LED_RED, 250, 250);
+        } else if (v.getId() == R.id.green_on) {
+            MobileControl2.setLedState(MobileControl2.LED_GREEN, true);
+        } else if (v.getId() == R.id.green_off) {
+            MobileControl2.setLedState(MobileControl2.LED_GREEN, false);
+        } else if (v.getId() == R.id.green_flash) {
+            MobileControl2.setLedState(MobileControl2.LED_GREEN, 250, 250);
         }
     };
 

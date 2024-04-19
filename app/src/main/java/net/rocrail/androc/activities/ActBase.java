@@ -54,8 +54,8 @@ public class ActBase extends Activity implements ServiceListener {
     public int MenuSelection = 0;
     public boolean Finish = false;
     public RocrailService m_RocrailService = null;
-    Activity m_Activity = null;
-    ServiceListener m_Listener = null;
+    Activity m_Activity;
+    ServiceListener m_Listener;
     RocrailService.RocrailLocalBinder m_RocrailServiceBinder = null;
 
 
@@ -69,8 +69,6 @@ public class ActBase extends Activity implements ServiceListener {
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            // TODO Auto-generated method stub
-
         }
     };
 
@@ -167,16 +165,12 @@ public class ActBase extends Activity implements ServiceListener {
                 accessoryView();
                 yield true;
             }
-            case MENU_LOCOSETUP -> {
+            case MENU_LOCOSETUP, MENU_POM -> {
                 locosetupView();
                 yield true;
             }
             case MENU_ZOOM -> {
                 zoomLevel();
-                yield true;
-            }
-            case MENU_POM -> {
-                locosetupView();
                 yield true;
             }
             default -> false;
