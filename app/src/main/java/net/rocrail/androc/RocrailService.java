@@ -46,6 +46,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.esu.mobilecontrol2.sdk.MobileControl2;
+
 public class RocrailService extends Service {
     private static final int NOTIFICATION_POWER = 1;
     private final List<SystemListener> m_Listeners = new ArrayList<>();
@@ -233,6 +235,15 @@ public class RocrailService extends Service {
             }
 
             Power = l_Power;
+
+            //set LED based on power
+            if (Power) {
+                MobileControl2.setLedState(MobileControl2.LED_GREEN, true);
+                MobileControl2.setLedState(MobileControl2.LED_RED, false);
+            } else {
+                MobileControl2.setLedState(MobileControl2.LED_GREEN, false);
+                MobileControl2.setLedState(MobileControl2.LED_RED, true);
+            }
             return;
         }
         if (itemtype.equals("auto")) {

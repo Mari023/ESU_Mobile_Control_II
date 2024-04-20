@@ -29,6 +29,8 @@ import com.example.test.R;
 import net.rocrail.androc.interfaces.MessageListener;
 import net.rocrail.androc.widgets.LEDButton;
 
+import eu.esu.mobilecontrol2.sdk.MobileControl2;
+
 public class ActSystem extends ActBase implements MessageListener {
 
     @Override
@@ -106,8 +108,11 @@ public class ActSystem extends ActBase implements MessageListener {
         eBreak.setOnClickListener(v -> {
             if (m_RocrailService.Prefs.PowerOff4EBreak)
                 m_RocrailService.sendMessage("sys", "<sys cmd=\"stop\" informall=\"true\"/>");
-            else
+            else {
                 m_RocrailService.sendMessage("sys", "<sys cmd=\"ebreak\" informall=\"true\"/>");
+                MobileControl2.setLedState(MobileControl2.LED_GREEN, true);
+                MobileControl2.setLedState(MobileControl2.LED_RED, false);
+            }
         });
 
         final LEDButton autoON = (LEDButton) findViewById(R.id.systemAutoON);
