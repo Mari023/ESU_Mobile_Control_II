@@ -92,22 +92,6 @@ public class Controller {
             throttleServiceBound = false;
         }
     };
-    private boolean stopButtonServiceBound;
-    private final ServiceConnection stopButtonConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            final Message register = Message.obtain(null, MSG_REGISTER_CLIENT);
-            register.replyTo = receiver;
-            sendMessage(register);
-
-            stopButtonServiceBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            stopButtonServiceBound = false;
-        }
-    };
     private final WeakReference<Context> context;
     private static Controller INSTANCE;
     private int mLastPosition;
@@ -125,7 +109,6 @@ public class Controller {
         this.context = new WeakReference<>(context);
         receiver = new Messenger(new IncomingMessageHandler(new WeakReference<>(this)));
         context.bindService(THROTTLE_INTENT, throttleConnection, Context.BIND_AUTO_CREATE);
-        context.bindService(STOP_BUTTON_INTENT, stopButtonConnection, Context.BIND_AUTO_CREATE);
 
         if (INSTANCE != null) INSTANCE.destroy();
         INSTANCE = this;
@@ -139,14 +122,6 @@ public class Controller {
 
             Context context = this.context.get();
             if (context != null) context.unbindService(throttleConnection);
-        }
-        if (stopButtonServiceBound) {
-            final Message message = Message.obtain(null, MSG_UNREGISTER_CLIENT);
-            message.replyTo = receiver;
-            sendMessage(message);
-
-            Context context = this.context.get();
-            if (context != null) context.unbindService(stopButtonConnection);
         }
     }
 
