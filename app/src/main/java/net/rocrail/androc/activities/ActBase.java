@@ -37,6 +37,9 @@ import com.example.test.R;
 import net.rocrail.androc.RocrailService;
 import net.rocrail.androc.interfaces.ServiceListener;
 
+import eu.esu.mobilecontrol2.sdk.MobileControl2;
+import eu.esu.mobilecontrol2.sdk.ThrottleFragment;
+
 public class ActBase extends Activity implements ServiceListener {
 
     //final static int MENU_CONNECT  = 0x0001;
@@ -57,8 +60,6 @@ public class ActBase extends Activity implements ServiceListener {
     Activity m_Activity;
     ServiceListener m_Listener;
     RocrailService.RocrailLocalBinder m_RocrailServiceBinder = null;
-
-
     protected ServiceConnection RocrailServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder binder) {
@@ -247,7 +248,21 @@ public class ActBase extends Activity implements ServiceListener {
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // TODO Auto-generated method stub
-        return super.onKeyDown(keyCode, event);
+        return switch (keyCode) {
+            case ThrottleFragment.KEYCODE_THROTTLE_WAKEUP ->
+                // Ignore the wake up key. You must return true here to avoid further input key handling.
+                    true;
+            case MobileControl2.KEYCODE_TOP_LEFT, MobileControl2.KEYCODE_BOTTOM_LEFT, MobileControl2.KEYCODE_BOTTOM_RIGHT ->
+                    true;
+            case MobileControl2.KEYCODE_TOP_RIGHT -> {
+                if (m_RocrailService.Power && !m_RocrailService.EBrake) { //e-break
+                    m_RocrailService.EBrake();
+                } else { //turn back on
+                    m_RocrailService.sendMessage("sys", "<sys cmd=\"go\" informall=\"true\"/>");
+                }
+                yield true;
+            }
+            default -> super.onKeyDown(keyCode, event);
+        };
     }
 }

@@ -59,6 +59,7 @@ public class RocrailService extends Service {
     public Mobile SelectedLoco = null;
     public ActLevel LevelView = null;
     public boolean Power = false;
+    public boolean EBrake = false;
     public boolean AutoMode = false;
     public boolean AutoStart = false;
     public boolean Connected = false;
@@ -236,8 +237,9 @@ public class RocrailService extends Service {
 
             Power = l_Power;
 
-            //set LED based on power
+            //set LED based on power and reset EBrake
             if (Power) {
+                EBrake = false;
                 MobileControl2.setLedState(MobileControl2.LED_GREEN, true);
                 MobileControl2.setLedState(MobileControl2.LED_RED, false);
             } else {
@@ -267,6 +269,17 @@ public class RocrailService extends Service {
 
     public synchronized void setMessageListener(MessageListener listener) {
         messageListener = listener;
+    }
+
+    public void EBrake() {
+        EBrake = true;
+        if (Prefs.PowerOff4EBreak)
+            sendMessage("sys", "<sys cmd=\"stop\" informall=\"true\"/>");
+        else {
+            sendMessage("sys", "<sys cmd=\"ebreak\" informall=\"true\"/>");
+            MobileControl2.setLedState(MobileControl2.LED_GREEN, true);
+            MobileControl2.setLedState(MobileControl2.LED_RED, true);
+        }
     }
 
     public class RocrailLocalBinder extends Binder {
