@@ -49,7 +49,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.StringTokenizer;
 
+import eu.esu.mobilecontrol2.sdk.Controller;
 import eu.esu.mobilecontrol2.sdk.MobileControl2;
+import eu.esu.mobilecontrol2.sdk.ThrottleScale;
 
 public class ActThrottle extends ActBase implements ModelListener, net.rocrail.android.widgets.SliderListener, OnLongClickListener {
     final static int FNGROUPSIZE = 6;
@@ -59,6 +61,8 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
     boolean quitShowed = false;
     List<Mobile> m_MobileList = new ArrayList<>();
     private Mobile m_Loco = null;
+    private Controller controller;
+    private ThrottleScale throttleScale;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,44 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
         //MenuSelection = ActBase.MENU_MENU | ActBase.MENU_LAYOUT | ActBase.MENU_SYSTEM | ActBase.MENU_LOCO | ActBase.MENU_PREFERENCES | ActBase.MENU_ACCESSORY;
         MenuSelection = ActBase.MENU_SYSTEM | ActBase.MENU_LOCO | ActBase.MENU_PREFERENCES | ActBase.MENU_POM;
 
+        controller = new Controller(getApplicationContext());
+        controller.setListener(new Controller.Listener() {
+            @Override
+            public void onButtonDown() {
+                if (m_Loco != null) {
+                    quitShowed = false;
+                    m_Loco.flipDir();
+                    ((Slider) findViewById(R.id.Speed)).setV(m_Loco.getSpeed());
+                    setDirSpeed((LEDButton) findViewById(R.id.throttleDirection), false);
+                }
+            }
+
+            @Override
+            public void onButtonUp() {
+            }
+
+            @Override
+            public void onPositionChanged(int position) {
+                if (m_Loco != null && throttleScale != null) {
+                    m_Loco.setSpeed(throttleScale.positionToStep(position), true);
+                    ((Slider) findViewById(R.id.Speed)).setV(m_Loco.getSpeed());
+                    setDirSpeed((LEDButton) findViewById(R.id.throttleDirection), false);
+                }
+            }
+
+            @Override
+            public void onStopButtonDown() {
+                if (!m_RocrailService.Power || m_RocrailService.EBrake) {
+                    m_RocrailService.sendMessage("sys", "<sys cmd=\"go\" informall=\"true\"/>");
+                } else {
+                    m_RocrailService.sendMessage("sys", "<sys cmd=\"stop\" informall=\"true\"/>");
+                }
+            }
+
+            @Override
+            public void onStopButtonUp() {
+            }
+        });
         connectWithService();
     }
 
@@ -395,9 +437,8 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
                 m_Loco.flipDir();
                 //((LEDButton)v).ON = m_Loco.Dir;
                 v.invalidate();
-                Slider mSeekBar1 = (Slider) findViewById(R.id.Speed);
-                mSeekBar1.setV(m_Loco.getSpeed());
-                setDirSpeed((LEDButton) v);
+                ((Slider) findViewById(R.id.Speed)).setV(m_Loco.getSpeed());
+                setDirSpeed((LEDButton) v, true);
             }
         });
 
@@ -422,14 +463,14 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
             }
             return true;
         });
-
-
     }
 
-    void setDirSpeed(LEDButton v) {
+    void setDirSpeed(LEDButton v, boolean moveThrottle) {
         //v.ON = m_Loco.Dir;
         if (m_Loco.isDir()) v.setText(m_Loco.getSpeed() + " >");
         else v.setText("< " + m_Loco.getSpeed());
+        if (controller != null && moveThrottle)
+            controller.moveThrottle(throttleScale.stepToPosition(m_Loco.getSpeed()));
     }
 
     void setConsist() {
@@ -495,6 +536,7 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
 
     public void locoSelected() {
         if (m_Loco != null) {
+            throttleScale = new ThrottleScale(10, m_Loco.getVMax() + 1);
             m_RocrailService.SelectedLoco = m_Loco;
 
             m_RocrailService.Prefs.saveLoco(m_Loco.getID(), m_RocrailService.ThrottleNr);
@@ -524,7 +566,7 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
             mSeekBar.setButtonView(m_RocrailService.Prefs.ButtonView);
             mSeekBar.setDelta(m_RocrailService.Prefs.UseAllSpeedSteps ? 1 : m_RocrailService.Prefs.VDelta);
             LEDButton mDir = (LEDButton) findViewById(R.id.throttleDirection);
-            setDirSpeed(mDir);
+            setDirSpeed(mDir, true);
 
 
         } else {
@@ -559,7 +601,7 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
                         Slider mSeekBar = (Slider) findViewById(R.id.Speed);
                         if (!mSeekBar.isPressed()) mSeekBar.setV(m_Loco.getSpeed());
                         LEDButton mDir = (LEDButton) findViewById(R.id.throttleDirection);
-                        setDirSpeed(mDir);
+                        setDirSpeed(mDir, true);
                     }
                 });
             }
@@ -572,7 +614,7 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
         if (m_Loco != null) {
             m_Loco.setSpeed(V, m_RocrailService.Prefs.UseAllSpeedSteps);
             LEDButton mDir = (LEDButton) findViewById(R.id.throttleDirection);
-            setDirSpeed(mDir);
+            setDirSpeed(mDir, true);
         }
     }
 

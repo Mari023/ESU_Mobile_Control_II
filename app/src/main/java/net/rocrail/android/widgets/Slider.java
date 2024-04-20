@@ -45,7 +45,7 @@ public class Slider extends View implements Runnable {
     int VDelta = 1;
 
 
-    List<SliderListener> m_Listeners = new ArrayList<SliderListener>();
+    List<SliderListener> m_Listeners = new ArrayList<>();
 
     public Slider(Context context) {
         super(context);
