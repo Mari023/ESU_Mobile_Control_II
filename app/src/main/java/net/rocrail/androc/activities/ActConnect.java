@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -41,6 +42,8 @@ import com.example.test.R;
 import net.rocrail.androc.interfaces.ModelListener;
 import net.rocrail.androc.interfaces.SystemListener;
 import net.rocrail.androc.objects.RRConnection;
+
+import eu.esu.mobilecontrol2.sdk.MobileControl2;
 
 public class ActConnect extends ActBase implements ModelListener, SystemListener, OnItemSelectedListener {
     static final int PROGRESS_DIALOG = 0;
@@ -254,6 +257,14 @@ public class ActConnect extends ActBase implements ModelListener, SystemListener
         super.onPause();
         //if( RocrailServiceConnection != null)
         //unbindService(RocrailServiceConnection);
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == MobileControl2.KEYCODE_BOTTOM_RIGHT) {
+            ((Button) findViewById(R.id.ButtonConnect)).performClick();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
 

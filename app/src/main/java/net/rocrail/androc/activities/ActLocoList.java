@@ -34,7 +34,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class ActLocoList extends ListActivity implements ServiceListener {
+public class ActLocoList extends ListActivity implements ServiceListener {//FIXME Buttons don't work here
     ActBase m_Base = null;
     List<Mobile> m_LocoList = new ArrayList<>();
     LocoAdapter m_Adapter = null;

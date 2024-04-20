@@ -1,6 +1,7 @@
 package net.rocrail.androc.activities;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.ExpandableListView;
 
 import com.example.test.R;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import eu.esu.mobilecontrol2.sdk.MobileControl2;
 
 
 public class ActLocoExpList extends ActBase {
@@ -64,5 +67,11 @@ public class ActLocoExpList extends ActBase {
         m_ListView.setAdapter(m_Adapter);
 
         setResult(-1);
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == MobileControl2.KEYCODE_BOTTOM_RIGHT)
+            return true;
+        return super.onKeyDown(keyCode, event);
     }
 }

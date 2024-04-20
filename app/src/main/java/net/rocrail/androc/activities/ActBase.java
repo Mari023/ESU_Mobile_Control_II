@@ -252,7 +252,7 @@ public class ActBase extends Activity implements ServiceListener {
             case ThrottleFragment.KEYCODE_THROTTLE_WAKEUP ->
                 // Ignore the wake up key. You must return true here to avoid further input key handling.
                     true;
-            case MobileControl2.KEYCODE_TOP_LEFT, MobileControl2.KEYCODE_BOTTOM_LEFT, MobileControl2.KEYCODE_BOTTOM_RIGHT ->
+            case MobileControl2.KEYCODE_TOP_LEFT, MobileControl2.KEYCODE_BOTTOM_LEFT ->
                     true;
             case MobileControl2.KEYCODE_TOP_RIGHT -> {
                 if (m_RocrailService.Power && !m_RocrailService.EBrake) { //e-break
@@ -260,6 +260,10 @@ public class ActBase extends Activity implements ServiceListener {
                 } else { //turn back on
                     m_RocrailService.sendMessage("sys", "<sys cmd=\"go\" informall=\"true\"/>");
                 }
+                yield true;
+            }
+            case MobileControl2.KEYCODE_BOTTOM_RIGHT -> {
+                throttleView();
                 yield true;
             }
             default -> super.onKeyDown(keyCode, event);

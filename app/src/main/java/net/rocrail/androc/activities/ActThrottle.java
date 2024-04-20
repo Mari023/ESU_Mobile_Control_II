@@ -25,6 +25,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -47,6 +48,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringTokenizer;
+
+import eu.esu.mobilecontrol2.sdk.MobileControl2;
 
 public class ActThrottle extends ActBase implements ModelListener, net.rocrail.android.widgets.SliderListener, OnLongClickListener {
     final static int FNGROUPSIZE = 6;
@@ -577,9 +580,7 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
     public boolean onLongClick(View view) {
         if (view.getId() == R.id.throttleFn) {
             Toast.makeText(getApplicationContext(), R.string.EmergencyStop, Toast.LENGTH_SHORT).show();
-            if (m_RocrailService.Prefs.PowerOff4EBreak)
-                m_RocrailService.sendMessage("sys", "<sys cmd=\"stop\"  informall=\"true\"/>");
-            else m_RocrailService.sendMessage("sys", "<sys cmd=\"ebreak\" informall=\"true\"/>");
+            m_RocrailService.EBrake();
             return true;
         }
         if (view.getId() == R.id.throttleLights) {
@@ -652,7 +653,6 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
                         m_Loco = master;
                         locoSelected();
                     }
-
                 }
             }
             return true;
@@ -665,5 +665,36 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
         super.onPause();
         //if( RocrailServiceConnection != null)
         //unbindService(RocrailServiceConnection);
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return switch (keyCode) {
+            case MobileControl2.KEYCODE_TOP_LEFT -> {
+                LEDButton Lights = (LEDButton) findViewById(R.id.throttleLights);
+                if (m_Loco != null) {
+                    m_Loco.flipLights();
+                    Lights.ON = m_Loco.isLights();
+                }
+                yield true;
+            }
+            case MobileControl2.KEYCODE_BOTTOM_LEFT -> {
+                LEDButton f1 = (LEDButton) findViewById(R.id.throttleF1);
+                if (m_Loco != null) {
+                    m_Loco.flipFunction(1);
+                    f1.ON = m_Loco.isFunction(1);
+                }
+                yield true;
+            }
+            case MobileControl2.KEYCODE_BOTTOM_RIGHT -> {
+                Intent intent;
+                if (m_RocrailService.Prefs.LocoCatList)
+                    intent = new Intent(m_Activity, ActLocoExpList.class);
+                else intent = new Intent(m_Activity, ActLocoList.class);
+                intent.putExtra("selected", m_iLocoSelected);
+                startActivityForResult(intent, 1);
+                yield true;
+            }
+            default -> super.onKeyDown(keyCode, event);
+        };
     }
 }
