@@ -255,10 +255,8 @@ public class ActBase extends Activity implements ServiceListener {
             case MobileControl2.KEYCODE_TOP_LEFT, MobileControl2.KEYCODE_BOTTOM_LEFT ->
                     true;
             case MobileControl2.KEYCODE_TOP_RIGHT -> {
-                if (m_RocrailService.Power && !m_RocrailService.EBrake) { //e-break
+                if (m_RocrailService.Power) { //e-break
                     m_RocrailService.EBrake();
-                } else { //turn back on
-                    m_RocrailService.sendMessage("sys", "<sys cmd=\"go\" informall=\"true\"/>");
                 }
                 yield true;
             }
