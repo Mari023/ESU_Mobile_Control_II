@@ -58,7 +58,6 @@ public class ActInfo extends ListActivity implements ServiceListener {
                     (this.getPackageName(), 0);
             versionName = pinfo.versionName;
         } catch (NameNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

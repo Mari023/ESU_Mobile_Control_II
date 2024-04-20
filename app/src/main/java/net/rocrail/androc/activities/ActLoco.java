@@ -258,14 +258,10 @@ public class ActLoco extends ActBase implements OnItemSelectedListener, OnSeekBa
 
     @Override
     public void onNothingSelected(AdapterView<?> arg0) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override

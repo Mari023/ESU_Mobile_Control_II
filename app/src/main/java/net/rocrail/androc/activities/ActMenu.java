@@ -32,7 +32,7 @@ import com.example.test.R;
 
 import net.rocrail.androc.interfaces.ServiceListener;
 
-public class ActMenu extends ListActivity implements ServiceListener {
+public class ActMenu extends ListActivity implements ServiceListener {//FIXME Buttons don't work here
     ActBase m_Base = null;
     String[] m_Items = null;
 
@@ -112,5 +112,4 @@ public class ActMenu extends ListActivity implements ServiceListener {
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         return m_Base.onOptionsItemSelected(item);
     }
-
 }

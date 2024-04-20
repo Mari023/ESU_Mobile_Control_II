@@ -95,29 +95,24 @@ public class Item implements View.OnClickListener, View.OnLongClickListener, Upd
 
         if (cX < 1) cX = 1;
         if (cY < 1) cY = 1;
-
     }
 
     public static String getAttrValue(Attributes atts, String key, String defval) {
-        if (atts.getValue(key) == null)
-            return defval;
+        if (atts.getValue(key) == null) return defval;
         return atts.getValue(key);
     }
 
     public static int getAttrValue(Attributes atts, String key, int defval) {
-        if (atts.getValue(key) == null || atts.getValue(key).isEmpty())
-            return defval;
+        if (atts.getValue(key) == null || atts.getValue(key).isEmpty()) return defval;
         return Integer.parseInt(atts.getValue(key));
     }
 
     public static boolean getAttrValue(Attributes atts, String key, boolean defval) {
         String val = atts.getValue(key);
-        if (val == null || val.isEmpty())
-            return defval;
+        if (val == null || val.isEmpty()) return defval;
         if (val.equals("false") || val.equals("true"))
             return Boolean.parseBoolean(atts.getValue(key));
-        else
-            return defval;
+        else return defval;
     }
 
     public static boolean hasAttribute(Attributes atts, String key) {
@@ -131,7 +126,6 @@ public class Item implements View.OnClickListener, View.OnLongClickListener, Upd
     }
 
     public void Draw(Canvas canvas) {
-
     }
 
     void __updateWithAttributes(Attributes atts) {
@@ -150,7 +144,7 @@ public class Item implements View.OnClickListener, View.OnLongClickListener, Upd
             if (imageView != null && imageView.isShown()) {
                 imageView.post(new UpdateImage(this));
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             // Probably not a valid ImageView...
         }
     }
@@ -170,7 +164,7 @@ public class Item implements View.OnClickListener, View.OnLongClickListener, Upd
                 if (imageView != null && imageView.isShown()) {
                     imageView.post(new UpdateImage(this));
                 }
-            } catch (Exception e) {
+            } catch (Exception ignored) {
                 // Probably not a valid ImageView...
             }
             return true;
@@ -190,7 +184,7 @@ public class Item implements View.OnClickListener, View.OnLongClickListener, Upd
                 } else {
                     System.out.println("item " + ID + " does not show");
                 }
-            } catch (Exception e) {
+            } catch (Exception ignored) {
                 // Probably not a valid ImageView...
             }
             return true;
@@ -206,50 +200,38 @@ public class Item implements View.OnClickListener, View.OnLongClickListener, Upd
             } else {
                 System.out.println("item " + ID + " does not show");
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             // Probably not a valid ImageView...
         }
     }
 
     public int getOriNr(boolean ModPlan) {
         if (ModPlan) {
-            if (Mod_Ori.equals("north"))
-                return 2;
-            if (Mod_Ori.equals("east"))
-                return 3;
-            if (Mod_Ori.equals("south"))
-                return 4;
+            if (Mod_Ori.equals("north")) return 2;
+            if (Mod_Ori.equals("east")) return 3;
+            if (Mod_Ori.equals("south")) return 4;
             return 1;
         }
 
-        if (Ori.equals("north"))
-            return 2;
-        if (Ori.equals("east"))
-            return 3;
-        if (Ori.equals("south"))
-            return 4;
+        if (Ori.equals("north")) return 2;
+        if (Ori.equals("east")) return 3;
+        if (Ori.equals("south")) return 4;
         return 1;
     }
 
 
     @Override
     public void onClick(View view) {
-        // TODO Auto-generated method stub
-
     }
 
     public void onClickUp(View view) {
-        // TODO Auto-generated method stub
-
     }
 
     public void propertiesView() {
-
     }
 
     @Override
     public boolean onLongClick(View arg0) {
-        // TODO Auto-generated method stub
         return false;
     }
 
@@ -281,8 +263,7 @@ class UpdateImage implements Runnable {
                 } else if (!item.imageRequested) {
                     item.imageRequested = true;
                     System.out.println("requesting image " + item.getImageName(item.ModPlan) + ".png");
-                    item.m_RocrailService.sendMessage("datareq",
-                            String.format("<datareq id=\"%s\" filename=\"%s\"/>", item.ID, item.getImageName(item.ModPlan) + ".png"));
+                    item.m_RocrailService.sendMessage("datareq", String.format("<datareq id=\"%s\" filename=\"%s\"/>", item.ID, item.getImageName(item.ModPlan) + ".png"));
                 }
             }
         }
