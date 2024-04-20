@@ -469,7 +469,7 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
         //v.ON = m_Loco.Dir;
         if (m_Loco.isDir()) v.setText(m_Loco.getSpeed() + " >");
         else v.setText("< " + m_Loco.getSpeed());
-        if (controller != null && moveThrottle)
+        if (controller != null && moveThrottle && throttleScale.positionToStep(controller.getLastPosition()) != m_Loco.getSpeed())
             controller.moveThrottle(throttleScale.stepToPosition(m_Loco.getSpeed()));
     }
 
