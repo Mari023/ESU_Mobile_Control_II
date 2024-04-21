@@ -232,7 +232,6 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
         LEDButton Go = (LEDButton) findViewById(R.id.throttleGo);
         LEDButton Release = (LEDButton) findViewById(R.id.throttleRelease);
         LEDButton Direction = (LEDButton) findViewById(R.id.throttleDirection);
-        LEDButton Lights = (LEDButton) findViewById(R.id.throttleLights);
 
         if (m_Loco != null) {
             f1.ON = m_Loco.isFunction(1 + m_iFunctionGroup * FNGROUPSIZE);
@@ -244,7 +243,7 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
             //Direction.ON = m_Loco.Dir;
             Go.setEnabled(m_RocrailService.AutoMode);
             Go.ON = m_Loco.isAutoStart();
-            Lights.ON = m_Loco.isLights();
+            f0.ON = m_Loco.isLights();
             Release.ON = false;
             f1.invalidate();
             f2.invalidate();
@@ -253,7 +252,7 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
             f5.invalidate();
             f6.invalidate();
             Go.invalidate();
-            Lights.invalidate();
+            f0.invalidate();
             Release.invalidate();
             Direction.invalidate();
         }
@@ -267,7 +266,7 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
         LocoID = m_RocrailService.Prefs.getLocoID(m_RocrailService.ThrottleNr);
         setContentView(R.layout.throttle);
 
-        getWindow().setLayout((m_RocrailService.Prefs.SmallThrottle ? m_RocrailService.Prefs.ThrottleWidth : LayoutParams.WRAP_CONTENT), (m_RocrailService.Prefs.SmallThrottle ? m_RocrailService.Prefs.ThrottleHeight : LayoutParams.FILL_PARENT));
+        getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
 
         Iterator<Mobile> it = m_RocrailService.m_Model.m_LocoMap.values().iterator();
         while (it.hasNext()) {
@@ -563,7 +562,6 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
             Slider mSeekBar = (Slider) findViewById(R.id.Speed);
             mSeekBar.setRange(m_Loco.getVMax());
             mSeekBar.setV(m_Loco.getSpeed());
-            mSeekBar.setButtonView(m_RocrailService.Prefs.ButtonView);
             mSeekBar.setDelta(m_RocrailService.Prefs.UseAllSpeedSteps ? 1 : m_RocrailService.Prefs.VDelta);
             LEDButton mDir = (LEDButton) findViewById(R.id.throttleDirection);
             setDirSpeed(mDir, true);
@@ -576,7 +574,6 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
             image.setImageResource(R.drawable.noimg);
             Slider mSeekBar = (Slider) findViewById(R.id.Speed);
             mSeekBar.setRange(100);
-            mSeekBar.setButtonView(m_RocrailService.Prefs.ButtonView);
             mSeekBar.setDelta(m_RocrailService.Prefs.UseAllSpeedSteps ? 1 : m_RocrailService.Prefs.VDelta);
             mSeekBar.setV(0);
             LEDButton mDir = (LEDButton) findViewById(R.id.throttleDirection);
@@ -598,8 +595,7 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
                 bar.post(() -> {
                     ActThrottle.this.updateFunctions();
                     if (m_RocrailService.Prefs.SyncSpeed) {
-                        Slider mSeekBar = (Slider) findViewById(R.id.Speed);
-                        if (!mSeekBar.isPressed()) mSeekBar.setV(m_Loco.getSpeed());
+                        if (!bar.isPressed()) bar.setV(m_Loco.getSpeed());
                         LEDButton mDir = (LEDButton) findViewById(R.id.throttleDirection);
                         setDirSpeed(mDir, true);
                     }

@@ -23,7 +23,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -33,12 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Slider extends View implements Runnable {
-    boolean asButton = false;
-    boolean Vertical = false;
     double V = 0.0;
     double Range = 100.0;
     boolean isDown = false;
-    boolean isDownTrig = false;
     boolean isMin = false;
     boolean downHandled = false;
     int sleep = 1000;
@@ -53,7 +49,6 @@ public class Slider extends View implements Runnable {
 
     public Slider(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Vertical = attrs.getAttributeBooleanValue(null, "vertical", false);
         new Thread(this).start();
     }
 
@@ -66,10 +61,6 @@ public class Slider extends View implements Runnable {
         for (SliderListener listener : m_Listeners) {
             listener.onSliderChange(this, (int) realV);
         }
-    }
-
-    public void setButtonView(boolean asButton) {
-        this.asButton = asButton;
     }
 
     public void setRange(float range) {
@@ -100,126 +91,45 @@ public class Slider extends View implements Runnable {
         paint.setAntiAlias(true);
         paint.setColor(Color.rgb(170, 170, 170));
 
-        if (asButton) {
-            paint.setStrokeWidth(2);
-            Path p = new Path();
-            p.moveTo((float) xu, (float) yu);
-            p.lineTo((float) xu * 4, (float) yu);
-            p.lineTo((float) (xu * 2.5), (float) yu * 9);
-            p.lineTo((float) xu, (float) yu);
-            paint.setColor(Color.rgb(200, 200, 200));
-            paint.setStyle(Paint.Style.STROKE);
-            canvas.drawPath(p, paint);
+        RectF rect = new RectF();
+        double y1 = 4.5 * yu;
+        double x1 = .75 * xu;
+        double y2 = 5.5 * yu;
+        double x2 = 9.25 * xu;
+        rect.left = (float) x1;
+        rect.right = (float) x2;
+        rect.top = (float) y1;
+        rect.bottom = (float) y2;
+        canvas.drawRoundRect(rect, (float) yu / 3, (float) yu / 3, paint);
 
-            p = new Path();
-            p.moveTo((float) xu, (float) yu);
-            p.lineTo((float) xu * 4, (float) yu);
-            p.lineTo((float) (xu * 2.5), (float) yu * 9);
-            p.lineTo((float) xu, (float) yu);
-            paint.setColor(Color.rgb(170, (int) (180 + ((100 - V) / 3.3)), 170));
-            paint.setStyle(Paint.Style.FILL);
-            canvas.drawPath(p, paint);
+        float x = (float) (.75 * xu + (V * xu * 8.5) / 100.0);
 
-            p = new Path();
-            p.moveTo((float) xu * 6, (float) yu * 9);
-            p.lineTo((float) xu * 9, (float) yu * 9);
-            p.lineTo((float) (xu * 7.5), (float) yu);
-            p.lineTo((float) xu * 6, (float) yu * 9);
-            paint.setColor(Color.rgb(200, 200, 200));
-            paint.setStyle(Paint.Style.STROKE);
-            canvas.drawPath(p, paint);
+        rect.left = (float) (x - .75 * xu);
+        rect.right = (float) (x + .75 * xu);
+        rect.top = (float) yu * 1;
+        rect.bottom = (float) yu * 9;
 
-            p = new Path();
-            p.moveTo((float) xu * 6, (float) yu * 9);
-            p.lineTo((float) xu * 9, (float) yu * 9);
-            p.lineTo((float) (xu * 7.5), (float) yu);
-            p.lineTo((float) xu * 6, (float) yu * 9);
-            paint.setColor(Color.rgb((int) (180 + V / 3.3), 170, 170));
-            paint.setStyle(Paint.Style.FILL);
-            canvas.drawPath(p, paint);
+        paint.setColor(Color.rgb(70, 70, 70));
+        canvas.drawRoundRect(rect, (float) yu / 2, (float) yu / 2, paint);
+
+        rect.left = (float) (x - .75 * xu) + 2;
+        rect.right = (float) (x + .75 * xu) - 2;
+        rect.top = (float) yu * 1 + 2;
+        rect.bottom = (float) yu * 9 - 2;
+
+        int v = (int) V;
+        paint.setColor(Color.rgb(v + 120, 120, 120));
+        canvas.drawRoundRect(rect, (float) yu / 2, (float) yu / 2, paint);
+        paint.setColor(Color.rgb(100, 100, 100));
 
 
-        } else if (Vertical) {
-            RectF rect = new RectF();
-            double x1 = 4.5 * xu;
-            double y1 = .75 * yu;
-            double x2 = 5.5 * xu;
-            double y2 = 9.25 * yu;
-            rect.left = (float) x1;
-            rect.right = (float) x2;
-            rect.top = (float) y1;
-            rect.bottom = (float) y2;
-            canvas.drawRoundRect(rect, (float) xu / 3, (float) xu / 3, paint);
-
-            float y = (float) (y2 - ((V * yu * 8.5) / 100.0));
-
-            rect.left = (float) xu * 1;
-            rect.right = (float) xu * 9;
-            rect.top = (float) (y - .75 * yu);
-            rect.bottom = (float) (y + .75 * yu);
-
-            paint.setColor(Color.rgb(70, 70, 70));
-            canvas.drawRoundRect(rect, (float) xu / 2, (float) xu / 2, paint);
-
-            rect.left = (float) xu * 1 + 2;
-            rect.right = (float) xu * 9 - 2;
-            rect.top = (float) (y - .75 * yu) + 2;
-            rect.bottom = (float) (y + .75 * yu) - 2;
-
-            int v = (int) V;
-            paint.setColor(Color.rgb(v + 120, 120, 120));
-            canvas.drawRoundRect(rect, (float) xu / 2, (float) xu / 2, paint);
-            paint.setColor(Color.rgb(100, 100, 100));
-
-            float lx1 = (float) (xu * 1.2);
-            float lx2 = (float) (xu * 8.6);
-            float ly1 = (float) ((1.5 * yu) / 5);
-            canvas.drawLine(lx1, (float) ((y - .75 * yu) + ly1 * 1), lx2, (float) ((y - .75 * yu) + ly1 * 1), paint);
-            canvas.drawLine(lx1, (float) ((y - .75 * yu) + ly1 * 2), lx2, (float) ((y - .75 * yu) + ly1 * 2), paint);
-            canvas.drawLine(lx1, (float) ((y - .75 * yu) + ly1 * 3), lx2, (float) ((y - .75 * yu) + ly1 * 3), paint);
-            canvas.drawLine(lx1, (float) ((y - .75 * yu) + ly1 * 4), lx2, (float) ((y - .75 * yu) + ly1 * 4), paint);
-
-        } else {
-            RectF rect = new RectF();
-            double y1 = 4.5 * yu;
-            double x1 = .75 * xu;
-            double y2 = 5.5 * yu;
-            double x2 = 9.25 * xu;
-            rect.left = (float) x1;
-            rect.right = (float) x2;
-            rect.top = (float) y1;
-            rect.bottom = (float) y2;
-            canvas.drawRoundRect(rect, (float) yu / 3, (float) yu / 3, paint);
-
-            float x = (float) (.75 * xu + (V * xu * 8.5) / 100.0);
-
-            rect.left = (float) (x - .75 * xu);
-            rect.right = (float) (x + .75 * xu);
-            rect.top = (float) yu * 1;
-            rect.bottom = (float) yu * 9;
-
-            paint.setColor(Color.rgb(70, 70, 70));
-            canvas.drawRoundRect(rect, (float) yu / 2, (float) yu / 2, paint);
-
-            rect.left = (float) (x - .75 * xu) + 2;
-            rect.right = (float) (x + .75 * xu) - 2;
-            rect.top = (float) yu * 1 + 2;
-            rect.bottom = (float) yu * 9 - 2;
-
-            int v = (int) V;
-            paint.setColor(Color.rgb(v + 120, 120, 120));
-            canvas.drawRoundRect(rect, (float) yu / 2, (float) yu / 2, paint);
-            paint.setColor(Color.rgb(100, 100, 100));
-
-
-            float ly1 = (float) (yu * 1.2);
-            float ly2 = (float) (yu * 8.6);
-            float lx1 = (float) ((1.5 * xu) / 5);
-            canvas.drawLine((float) ((x - .75 * xu) + lx1 * 1), ly1, (float) ((x - .75 * xu) + lx1 * 1), ly2, paint);
-            canvas.drawLine((float) ((x - .75 * xu) + lx1 * 2), ly1, (float) ((x - .75 * xu) + lx1 * 2), ly2, paint);
-            canvas.drawLine((float) ((x - .75 * xu) + lx1 * 3), ly1, (float) ((x - .75 * xu) + lx1 * 3), ly2, paint);
-            canvas.drawLine((float) ((x - .75 * xu) + lx1 * 4), ly1, (float) ((x - .75 * xu) + lx1 * 4), ly2, paint);
-        }
+        float ly1 = (float) (yu * 1.2);
+        float ly2 = (float) (yu * 8.6);
+        float lx1 = (float) ((1.5 * xu) / 5);
+        canvas.drawLine((float) ((x - .75 * xu) + lx1 * 1), ly1, (float) ((x - .75 * xu) + lx1 * 1), ly2, paint);
+        canvas.drawLine((float) ((x - .75 * xu) + lx1 * 2), ly1, (float) ((x - .75 * xu) + lx1 * 2), ly2, paint);
+        canvas.drawLine((float) ((x - .75 * xu) + lx1 * 3), ly1, (float) ((x - .75 * xu) + lx1 * 3), ly2, paint);
+        canvas.drawLine((float) ((x - .75 * xu) + lx1 * 4), ly1, (float) ((x - .75 * xu) + lx1 * 4), ly2, paint);
 
     }
 
@@ -234,44 +144,13 @@ public class Slider extends View implements Runnable {
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-        if (asButton) {
-            double cx = getWidth();
-            double xu = cx / 10.0;
-            double x = event.getX();
+        double cx = getWidth();
+        double xu = cx / 10.0;
 
-            if (event.getAction() == MotionEvent.ACTION_DOWN) isDown = true;
-            isMin = (x < xu * 5);
-
-            if (isDown && !isDownTrig) {
-                isDownTrig = true;
-                sleep = 100;
-            }
-
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                isDown = false;
-                if (downHandled) downHandled = false;
-                else adjustV();
-
-                isDownTrig = false;
-                sleep = 100;
-            }
-        } else if (Vertical) {
-            double cy = getHeight();
-            double yu = cy / 10.0;
-
-            double y = event.getY();
-            if (y < .75 * yu) y = .75 * yu;
-            if (y > 9.25 * yu) y = 9.25 * yu;
-            V = 100 - (100 * ((y - (.75 * yu)) / (8.5 * yu)));
-        } else {
-            double cx = getWidth();
-            double xu = cx / 10.0;
-
-            double x = event.getX();
-            if (x < .75 * xu) x = .75 * xu;
-            if (x > 9.25 * xu) x = 9.25 * xu;
-            V = 100 * ((x - (.75 * xu)) / (8.5 * xu));
-        }
+        double x = event.getX();
+        if (x < .75 * xu) x = .75 * xu;
+        if (x > 9.25 * xu) x = 9.25 * xu;
+        V = 100 * ((x - (.75 * xu)) / (8.5 * xu));
 
         invalidate();
         informListeners();

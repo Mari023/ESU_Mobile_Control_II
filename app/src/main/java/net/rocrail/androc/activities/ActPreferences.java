@@ -54,8 +54,6 @@ public class ActPreferences extends ActBase implements OnItemSelectedListener {
         cb.setChecked(m_RocrailService.Prefs.KeepScreenOn);
         cb = (CheckBox) findViewById(R.id.prefModview);
         cb.setChecked(m_RocrailService.Prefs.Modview);
-        cb = (CheckBox) findViewById(R.id.prefSmallThrottle);
-        cb.setChecked(m_RocrailService.Prefs.SmallThrottle);
         cb = (CheckBox) findViewById(R.id.prefImagesOnDemand);
         cb.setChecked(m_RocrailService.Prefs.ImagesOnDemand);
         cb = (CheckBox) findViewById(R.id.prefSortByAddr);
@@ -68,10 +66,6 @@ public class ActPreferences extends ActBase implements OnItemSelectedListener {
         cb.setChecked(m_RocrailService.Prefs.UseAllSpeedSteps);
         cb = (CheckBox) findViewById(R.id.prefSyncSpeed);
         cb.setChecked(m_RocrailService.Prefs.SyncSpeed);
-        cb = (CheckBox) findViewById(R.id.prefZoom);
-        cb.setChecked(m_RocrailService.Prefs.Zoom);
-        cb = (CheckBox) findViewById(R.id.prefButtonView);
-        cb.setChecked(m_RocrailService.Prefs.ButtonView);
         Button b = (Button) findViewById(R.id.prefClearRecent);
         b.setEnabled(!m_RocrailService.Prefs.Recent.isEmpty());
         b.setOnClickListener(v -> {
@@ -86,11 +80,6 @@ public class ActPreferences extends ActBase implements OnItemSelectedListener {
 
         et = (EditText) findViewById(R.id.prefVDelta);
         et.setText("" + m_RocrailService.Prefs.VDelta);
-
-        et = (EditText) findViewById(R.id.prefThrottleWidth);
-        et.setText("" + m_RocrailService.Prefs.ThrottleWidth);
-        et = (EditText) findViewById(R.id.prefThrottleHeight);
-        et.setText("" + m_RocrailService.Prefs.ThrottleHeight);
 
         Spinner color = (Spinner) findViewById(R.id.BackgroundColor);
 
@@ -133,8 +122,6 @@ public class ActPreferences extends ActBase implements OnItemSelectedListener {
         m_RocrailService.Prefs.KeepScreenOn = cb.isChecked();
         cb = (CheckBox) findViewById(R.id.prefModview);
         m_RocrailService.Prefs.Modview = cb.isChecked();
-        cb = (CheckBox) findViewById(R.id.prefSmallThrottle);
-        m_RocrailService.Prefs.SmallThrottle = cb.isChecked();
         cb = (CheckBox) findViewById(R.id.prefImagesOnDemand);
         m_RocrailService.Prefs.ImagesOnDemand = cb.isChecked();
         cb = (CheckBox) findViewById(R.id.prefSortByAddr);
@@ -147,10 +134,6 @@ public class ActPreferences extends ActBase implements OnItemSelectedListener {
         m_RocrailService.Prefs.UseAllSpeedSteps = cb.isChecked();
         cb = (CheckBox) findViewById(R.id.prefSyncSpeed);
         m_RocrailService.Prefs.SyncSpeed = cb.isChecked();
-        cb = (CheckBox) findViewById(R.id.prefZoom);
-        m_RocrailService.Prefs.Zoom = cb.isChecked();
-        cb = (CheckBox) findViewById(R.id.prefButtonView);
-        m_RocrailService.Prefs.ButtonView = cb.isChecked();
 
         EditText et = (EditText) findViewById(R.id.prefR2RHost);
         m_RocrailService.Prefs.RRHost = et.getText().toString();
@@ -159,11 +142,6 @@ public class ActPreferences extends ActBase implements OnItemSelectedListener {
 
         et = (EditText) findViewById(R.id.prefVDelta);
         m_RocrailService.Prefs.VDelta = Integer.parseInt(et.getText().toString());
-
-        et = (EditText) findViewById(R.id.prefThrottleWidth);
-        m_RocrailService.Prefs.ThrottleWidth = Integer.parseInt(et.getText().toString());
-        et = (EditText) findViewById(R.id.prefThrottleHeight);
-        m_RocrailService.Prefs.ThrottleHeight = Integer.parseInt(et.getText().toString());
 
         Spinner color = (Spinner) findViewById(R.id.BackgroundColor);
         if (m_RocrailService.Prefs.Color != color.getSelectedItemPosition()) {

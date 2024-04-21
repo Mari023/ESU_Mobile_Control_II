@@ -46,7 +46,6 @@ public class Preferences {
     public static final String PREFS_CVNR = "cvnr";
     public static final String PREFS_MODVIEW = "modview";
     public static final String PREFS_SIZE = "size";
-    public static final String PREFS_SMALLTHROTTLE = "smallthrottle";
     public static final String PREFS_IMAGESONDEMAND = "imagesondemand";
     public static final String PREFS_SORTBYADDR = "sortbyaddr";
     public static final String PREFS_POWEROFF4EBREAK = "poweroff4ebreak";
@@ -55,11 +54,7 @@ public class Preferences {
     public static final String PREFS_CATEGORY = "category";
     public static final String PREFS_USEALLSPEEDSTEPS = "useallspeedsteps";
     public static final String PREFS_SYNCSPEED = "syncspeed";
-    public static final String PREFS_ZOOM = "zoom";
-    public static final String PREFS_BUTTONVIEW = "buttonview";
     public static final String PREFS_VDELTA = "vdelta";
-    public static final String PREFS_THROTTLEWIDTH = "throttlewidth";
-    public static final String PREFS_THROTTLEHEIGHT = "throttleheight";
 
     public static final String ACCTYPE_MADA = "M";
     public static final String ACCTYPE_FADA = "F";
@@ -73,7 +68,6 @@ public class Preferences {
     public int RRPort = 1234;
     public boolean Monitoring = false;
     public boolean KeepScreenOn = false;
-    public boolean SmallThrottle = true;
     public boolean ImagesOnDemand = false;
     public boolean SortByAddr = false;
     public boolean LocoCatList = true;
@@ -82,8 +76,6 @@ public class Preferences {
     public boolean PowerOff4EBreak = false;
     public boolean UseAllSpeedSteps = false;
     public boolean SyncSpeed = true;
-    public boolean Zoom = true;
-    public boolean ButtonView = false;
     public String LocoID = "";
     public String LocoID2 = "";
     public String LocoID3 = "";
@@ -97,8 +89,6 @@ public class Preferences {
     public int Size = 32;
     public int Color = 0;
     public int VDelta = 5;
-    public int ThrottleWidth = 300;
-    public int ThrottleHeight = 380;
     public List<RRConnection> conList = null;
     RocrailService rocrailService;
     boolean Initialized = false;
@@ -136,18 +126,13 @@ public class Preferences {
         PowerOff4EBreak = settings.getBoolean(PREFS_POWEROFF4EBREAK, PowerOff4EBreak);
         UseAllSpeedSteps = settings.getBoolean(PREFS_USEALLSPEEDSTEPS, UseAllSpeedSteps);
         SyncSpeed = settings.getBoolean(PREFS_SYNCSPEED, SyncSpeed);
-        Zoom = settings.getBoolean(PREFS_ZOOM, Zoom);
         Size = settings.getInt(PREFS_SIZE, Size);
-        SmallThrottle = settings.getBoolean(PREFS_SMALLTHROTTLE, SmallThrottle);
         ImagesOnDemand = settings.getBoolean(PREFS_IMAGESONDEMAND, ImagesOnDemand);
         SortByAddr = settings.getBoolean(PREFS_SORTBYADDR, SortByAddr);
         LocoCatList = settings.getBoolean(PREFS_LOCOCATLIST, LocoCatList);
         Category = settings.getInt(PREFS_CATEGORY, Category);
         Color = settings.getInt(PREFS_COLOR, Color);
-        ButtonView = settings.getBoolean(PREFS_BUTTONVIEW, ButtonView);
         VDelta = settings.getInt(PREFS_VDELTA, VDelta);
-        ThrottleWidth = settings.getInt(PREFS_THROTTLEWIDTH, ThrottleWidth);
-        ThrottleHeight = settings.getInt(PREFS_THROTTLEHEIGHT, ThrottleHeight);
 
         conList = RRConnection.parse(Recent);
 
@@ -233,7 +218,6 @@ public class Preferences {
         editor.putInt(PREFS_RRNETPORT, RRPort);
         editor.putBoolean(PREFS_MODVIEW, Modview);
         editor.putInt(PREFS_SIZE, Size);
-        editor.putBoolean(PREFS_SMALLTHROTTLE, SmallThrottle);
         editor.putBoolean(PREFS_IMAGESONDEMAND, ImagesOnDemand);
         editor.putBoolean(PREFS_SORTBYADDR, SortByAddr);
         editor.putBoolean(PREFS_LOCOCATLIST, LocoCatList);
@@ -241,12 +225,8 @@ public class Preferences {
         editor.putBoolean(PREFS_POWEROFF4EBREAK, PowerOff4EBreak);
         editor.putBoolean(PREFS_USEALLSPEEDSTEPS, UseAllSpeedSteps);
         editor.putBoolean(PREFS_SYNCSPEED, SyncSpeed);
-        editor.putBoolean(PREFS_ZOOM, Zoom);
         editor.putInt(PREFS_COLOR, Color);
-        editor.putBoolean(PREFS_BUTTONVIEW, ButtonView);
         editor.putInt(PREFS_VDELTA, VDelta);
-        editor.putInt(PREFS_THROTTLEWIDTH, ThrottleWidth);
-        editor.putInt(PREFS_THROTTLEHEIGHT, ThrottleHeight);
         editor.commit();
     }
 

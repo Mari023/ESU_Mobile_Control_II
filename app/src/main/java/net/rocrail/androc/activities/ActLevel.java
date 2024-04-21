@@ -256,7 +256,7 @@ public class ActLevel extends ActBase implements OnZoomListener, OnLongClickList
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (m_RocrailService.Prefs.Zoom && levelView.zoomButtonsController == null) {
+        if (levelView.zoomButtonsController == null) {
             levelView.zoomButtonsController = new ZoomButtonsController(getWindow().getDecorView());
             levelView.zoomButtonsController.setOnZoomListener(this);
             levelView.zoomButtonsController.setZoomInEnabled(m_RocrailService.Prefs.Size < 64);
@@ -264,7 +264,7 @@ public class ActLevel extends ActBase implements OnZoomListener, OnLongClickList
         }
         if (event.getAction() == MotionEvent.ACTION_UP) {
             System.out.println("uptime=" + SystemClock.uptimeMillis() + " downtime=" + event.getDownTime());
-            if (m_RocrailService.Prefs.Zoom && (SystemClock.uptimeMillis() - event.getDownTime()) > 1000 && levelView.zoomButtonsController != null) {
+            if ((SystemClock.uptimeMillis() - event.getDownTime()) > 1000 && levelView.zoomButtonsController != null) {
                 levelView.zoomButtonsController.setVisible(true);
                 levelView.zoomButtonsController.setFocusable(true);
                 levelView.zoomButtonsController.getZoomControls().setFocusable(true);
