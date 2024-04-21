@@ -84,8 +84,6 @@ public class Slider extends View implements Runnable {
         double xu = cx / 10.0;
         double yu = cy / 10.0;
 
-        System.out.println("slider size (" + cx + "," + cy + ")");
-
 
         Paint paint = new Paint();
         paint.setAntiAlias(true);
