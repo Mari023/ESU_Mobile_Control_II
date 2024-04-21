@@ -205,6 +205,7 @@ public abstract class MobileImpl implements Mobile {
                 }
             }
         }
+        if (IconName.isEmpty()) return null;
 
         Bitmap bmp = null;
 
