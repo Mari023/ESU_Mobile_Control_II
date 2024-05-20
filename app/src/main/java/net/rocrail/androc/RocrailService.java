@@ -26,6 +26,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
 
@@ -55,7 +56,6 @@ public class RocrailService extends Service {
     private final IBinder rocrailBinder = new RocrailLocalBinder();
     public Preferences Prefs = null;
     public Model m_Model = null;
-    public String m_DeviceId = "andRoc";
     public Mobile SelectedLoco = null;
     public ActLevel LevelView = null;
     public boolean Power = false;
@@ -78,11 +78,6 @@ public class RocrailService extends Service {
         m_Model = new Model(this);
         Prefs = new Preferences(this);
         Prefs.restore();
-
-        m_DeviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        if (m_DeviceId == null) {
-            m_DeviceId = "unknown";
-        }
     }
 
     @Override
@@ -154,7 +149,7 @@ public class RocrailService extends Service {
     }
 
     public String getDeviceName() {
-        return m_DeviceId;
+        return Build.DEVICE;
     }
 
     public synchronized void sendMessage(String name, String msg) {
