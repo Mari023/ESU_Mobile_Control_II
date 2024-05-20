@@ -41,46 +41,32 @@ public class ActFiddleYard extends ActBase implements OnItemSelectedListener {
 
         if (m_FiddleYard == null) return;
 
-        final LEDButton fyNext = (LEDButton) findViewById(R.id.fyNext);
+        final LEDButton fyNext = findViewById(R.id.fyNext);
         fyNext.ON = false;
-        fyNext.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                m_RocrailService.sendMessage("seltab", String.format("<seltab id=\"%s\" cmd=\"next\"/>", m_FiddleYard.ID));
-            }
-        });
+        fyNext.setOnClickListener(v -> m_RocrailService.sendMessage("seltab", String.format("<seltab id=\"%s\" cmd=\"next\"/>", m_FiddleYard.ID)));
 
-        final LEDButton fyPrev = (LEDButton) findViewById(R.id.fyPrev);
+        final LEDButton fyPrev = findViewById(R.id.fyPrev);
         fyPrev.ON = false;
-        fyPrev.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                m_RocrailService.sendMessage("seltab", String.format("<seltab id=\"%s\" cmd=\"prev\"/>", m_FiddleYard.ID));
-            }
-        });
+        fyPrev.setOnClickListener(v -> m_RocrailService.sendMessage("seltab", String.format("<seltab id=\"%s\" cmd=\"prev\"/>", m_FiddleYard.ID)));
 
-        final Button fyTrack = (Button) findViewById(R.id.fyGotoTrack);
-        fyTrack.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                m_RocrailService.sendMessage("seltab", String.format("<seltab id=\"%s\" cmd=\"%s\"/>", m_FiddleYard.ID, GotoTrack));
-            }
-        });
+        final Button fyTrack = findViewById(R.id.fyGotoTrack);
+        fyTrack.setOnClickListener(v -> m_RocrailService.sendMessage("seltab", String.format("<seltab id=\"%s\" cmd=\"%s\"/>", m_FiddleYard.ID, GotoTrack)));
 
 
-        final LEDButton fyOpen = (LEDButton) findViewById(R.id.fyOpen);
+        final LEDButton fyOpen = findViewById(R.id.fyOpen);
         fyOpen.ON = m_FiddleYard.Closed;
-        fyOpen.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                m_FiddleYard.OpenClose();
-                ((LEDButton) v).ON = !m_FiddleYard.Closed;
-                v.invalidate();
-            }
+        fyOpen.setOnClickListener(v -> {
+            m_FiddleYard.OpenClose();
+            ((LEDButton) v).ON = !m_FiddleYard.Closed;
+            v.invalidate();
         });
 
 
         // Track spinner
-        Spinner s = (Spinner) findViewById(R.id.fyTracks);
+        Spinner s = findViewById(R.id.fyTracks);
         s.setPrompt("Select Track");
 
-        ArrayAdapter<String> m_adapterForSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> m_adapterForSpinner = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         m_adapterForSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s.setAdapter(m_adapterForSpinner);
 

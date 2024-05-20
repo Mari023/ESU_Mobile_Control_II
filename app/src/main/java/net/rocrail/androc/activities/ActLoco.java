@@ -62,7 +62,7 @@ public class ActLoco extends ActBase implements OnItemSelectedListener, OnSeekBa
 
 
     void updateLoco() {
-        LocoImage image = (LocoImage) findViewById(R.id.locoImage);
+        LocoImage image = findViewById(R.id.locoImage);
 
         image.ID = m_Loco.getID();
 
@@ -95,22 +95,22 @@ public class ActLoco extends ActBase implements OnItemSelectedListener, OnSeekBa
             if (block != null) BlockID = block.ID;
         }
 
-        TextView addr = (TextView) findViewById(R.id.locoAddress);
+        TextView addr = findViewById(R.id.locoAddress);
         addr.setText(getText(R.string.Address) + ": " + m_Loco.getAddr() + "/" + m_Loco.getSteps());
 
-        TextView runtime = (TextView) findViewById(R.id.locoRuntime);
+        TextView runtime = findViewById(R.id.locoRuntime);
         int hours = (int) (m_Loco.getRunTime() / 3600);
         int mins = (int) ((m_Loco.getRunTime() - hours * 3600) / 60);
         int secs = (int) (m_Loco.getRunTime() % 60);
         runtime.setText(getText(R.string.Runtime) + ": " + String.format("%d:%02d.%02d", hours, mins, secs));
 
-        TextView desc = (TextView) findViewById(R.id.locoDesc);
+        TextView desc = findViewById(R.id.locoDesc);
         desc.setText(getText(R.string.Description) + ": " + m_Loco.getDescription());
-        TextView road = (TextView) findViewById(R.id.locoRoadname);
+        TextView road = findViewById(R.id.locoRoadname);
         road.setText(getText(R.string.Roadname) + ": " + m_Loco.getRoadname());
 
         updateLoco();
-        LocoImage image = (LocoImage) findViewById(R.id.locoImage);
+        LocoImage image = findViewById(R.id.locoImage);
 
         image.setOnClickListener(v -> {
             //finish();
@@ -121,7 +121,7 @@ public class ActLoco extends ActBase implements OnItemSelectedListener, OnSeekBa
             }
         });
 
-        final LEDButton autoStart = (LEDButton) findViewById(R.id.locoStart);
+        final LEDButton autoStart = findViewById(R.id.locoStart);
         autoStart.setEnabled(m_RocrailService.AutoMode);
         autoStart.setLongClickable(true);
         autoStart.ON = m_Loco.isAutoStart();
@@ -147,7 +147,7 @@ public class ActLoco extends ActBase implements OnItemSelectedListener, OnSeekBa
         });
 
 
-        final LEDButton halfAuto = (LEDButton) findViewById(R.id.locoHalfAuto);
+        final LEDButton halfAuto = findViewById(R.id.locoHalfAuto);
         halfAuto.ON = m_Loco.isHalfAuto();
         halfAuto.setOnClickListener(v -> {
             m_Loco.setHalfAuto(!m_Loco.isHalfAuto());
@@ -155,7 +155,7 @@ public class ActLoco extends ActBase implements OnItemSelectedListener, OnSeekBa
         });
 
 
-        final Button setInBlock = (Button) findViewById(R.id.locoSetInBlock);
+        final Button setInBlock = findViewById(R.id.locoSetInBlock);
         setInBlock.setOnClickListener(v -> {
             if (BlockID != null) {
                 m_RocrailService.sendMessage("lc", String.format("<lc id=\"%s\" cmd=\"block\" blockid=\"%s\"/>", m_Loco.getID(), BlockID));
@@ -164,7 +164,7 @@ public class ActLoco extends ActBase implements OnItemSelectedListener, OnSeekBa
         });
 
 
-        final LEDButton swapLoco = (LEDButton) findViewById(R.id.locoSwap);
+        final LEDButton swapLoco = findViewById(R.id.locoSwap);
         swapLoco.ON = m_Loco.isPlacing();
         swapLoco.setOnClickListener(v -> {
             m_Loco.setPlacing(!m_Loco.isPlacing());
@@ -175,10 +175,10 @@ public class ActLoco extends ActBase implements OnItemSelectedListener, OnSeekBa
 
 
         // Block spinner
-        Spinner s = (Spinner) findViewById(R.id.locoBlocks);
+        Spinner s = findViewById(R.id.locoBlocks);
         s.setPrompt(getText(R.string.SelectBlock));
 
-        ArrayAdapter<String> m_adapterForSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> m_adapterForSpinner = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         m_adapterForSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s.setAdapter(m_adapterForSpinner);
 
@@ -205,7 +205,7 @@ public class ActLoco extends ActBase implements OnItemSelectedListener, OnSeekBa
 
 
         // Schedule spinner
-        s = (Spinner) findViewById(R.id.locoSchedules);
+        s = findViewById(R.id.locoSchedules);
         s.setPrompt(getText(R.string.SelectSchedule));
 
         m_adapterForSpinner = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
@@ -230,11 +230,11 @@ public class ActLoco extends ActBase implements OnItemSelectedListener, OnSeekBa
     protected void onResume() {
         super.onResume();
         if (m_Loco != null) {
-            final LEDButton autoStart = (LEDButton) findViewById(R.id.locoStart);
+            final LEDButton autoStart = findViewById(R.id.locoStart);
             autoStart.setEnabled(m_RocrailService.AutoMode);
             autoStart.ON = m_Loco.isAutoStart();
 
-            final LEDButton halfAuto = (LEDButton) findViewById(R.id.locoHalfAuto);
+            final LEDButton halfAuto = findViewById(R.id.locoHalfAuto);
             halfAuto.ON = m_Loco.isHalfAuto();
         }
     }
@@ -242,13 +242,13 @@ public class ActLoco extends ActBase implements OnItemSelectedListener, OnSeekBa
 
     @Override
     public void onItemSelected(AdapterView<?> adview, View view, int position, long longID) {
-        Spinner bk = (Spinner) findViewById(R.id.locoBlocks);
-        Spinner sc = (Spinner) findViewById(R.id.locoSchedules);
+        Spinner bk = findViewById(R.id.locoBlocks);
+        Spinner sc = findViewById(R.id.locoSchedules);
         String id = (String) adview.getSelectedItem();
         if (bk == adview) {
             BlockID = id.equals(getText(R.string.BlockList).toString()) ? null : id;
             ScheduleID = null;
-            Button setInBlock = (Button) findViewById(R.id.locoSetInBlock);
+            Button setInBlock = findViewById(R.id.locoSetInBlock);
             setInBlock.setEnabled(BlockID != null);
         } else if (sc == adview) {
             ScheduleID = id.equals(getText(R.string.ScheduleList).toString()) ? null : id;

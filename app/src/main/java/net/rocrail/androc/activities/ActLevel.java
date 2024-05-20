@@ -28,12 +28,10 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.AbsoluteLayout.LayoutParams;
-import android.widget.Toast;
 import android.widget.ZoomButtonsController;
 import android.widget.ZoomButtonsController.OnZoomListener;
 
@@ -55,7 +53,6 @@ public class ActLevel extends ActBase implements OnZoomListener, OnLongClickList
     int Z = 0;
     ProgressDialog progressDialog = null;
     LevelCanvas levelView = null;
-    boolean quitShowed = false;
     List<ZLevel> zlevelList = new ArrayList<>();
 
     @Override
@@ -91,7 +88,7 @@ public class ActLevel extends ActBase implements OnZoomListener, OnLongClickList
 
 
     public void setBackgroundColor() {
-        levelView = (LevelCanvas) findViewById(R.id.levelView);
+        levelView = findViewById(R.id.levelView);
         switch (m_RocrailService.Prefs.Color) {
             case 1:
                 levelView.setBackgroundColor(0xFFCCCCCC);
@@ -108,7 +105,7 @@ public class ActLevel extends ActBase implements OnZoomListener, OnLongClickList
     public void initView() {
         setContentView(R.layout.level);
 
-        levelView = (LevelCanvas) findViewById(R.id.levelView);
+        levelView = findViewById(R.id.levelView);
         levelView.setPadding(0, 0, 0, 0);
 
         setBackgroundColor();
@@ -123,11 +120,6 @@ public class ActLevel extends ActBase implements OnZoomListener, OnLongClickList
         }
 
         new LevelTask().execute(this);
-    
-/*    
-    plansize = CGSizeMake(ITEMSIZE*cx, ITEMSIZE*cy); 
-    scrollView.contentSize = plansize;
-*/
     }
 
 

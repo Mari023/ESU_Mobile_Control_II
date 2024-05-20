@@ -84,10 +84,10 @@ public class LocoAdapter extends ArrayAdapter<String> {
 
             holder = new ViewHolder();
 
-            holder.text = (TextView) row.findViewById(R.id.locoRowText);
-            holder.addr = (TextView) row.findViewById(R.id.locoRowAddr);
-            holder.icon = (ImageView) row.findViewById(R.id.locoRowImage);
-            holder.dir = (ImageView) row.findViewById(R.id.locoRowDir);
+            holder.text = row.findViewById(R.id.locoRowText);
+            holder.addr = row.findViewById(R.id.locoRowAddr);
+            holder.icon = row.findViewById(R.id.locoRowImage);
+            holder.dir = row.findViewById(R.id.locoRowDir);
             //holder.icon.setClickable(true);
             holder.icon.setFocusable(false);
             row.setTag(holder);

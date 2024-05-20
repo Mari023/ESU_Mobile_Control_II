@@ -37,33 +37,27 @@ public class ActStage extends ActBase {
 
         updateTitle("Stage '" + m_Stage.ID + "'");
 
-        final Button OpenEnter = (Button) findViewById(R.id.stageEnter);
+        final Button OpenEnter = findViewById(R.id.stageEnter);
         OpenEnter.setText(m_Stage.Closed ? getText(R.string.OpenEnter) : getText(R.string.CloseEnter));
-        OpenEnter.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                m_RocrailService.sendMessage("sb",
-                        String.format("<sb id=\"%s\" state=\"%s\"/>", m_Stage.ID, (m_Stage.Closed ? "open" : "closed")));
-                finish();
-            }
+        OpenEnter.setOnClickListener(v -> {
+            m_RocrailService.sendMessage("sb",
+                    String.format("<sb id=\"%s\" state=\"%s\"/>", m_Stage.ID, (m_Stage.Closed ? "open" : "closed")));
+            finish();
         });
 
-        final Button OpenExit = (Button) findViewById(R.id.stageExit);
+        final Button OpenExit = findViewById(R.id.stageExit);
         OpenExit.setText(m_Stage.ExitClosed ? getText(R.string.OpenExit) : getText(R.string.CloseExit));
-        OpenExit.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                m_RocrailService.sendMessage("sb",
-                        String.format("<sb id=\"%s\" exitstate=\"%s\"/>", m_Stage.ID, (m_Stage.ExitClosed ? "open" : "closed")));
-                finish();
-            }
+        OpenExit.setOnClickListener(v -> {
+            m_RocrailService.sendMessage("sb",
+                    String.format("<sb id=\"%s\" exitstate=\"%s\"/>", m_Stage.ID, (m_Stage.ExitClosed ? "open" : "closed")));
+            finish();
         });
 
-        final Button Compress = (Button) findViewById(R.id.stageCompress);
-        Compress.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                m_RocrailService.sendMessage("sb",
-                        String.format("<sb id=\"%s\" cnd=\"compress\"/>", m_Stage.ID));
-                finish();
-            }
+        final Button Compress = findViewById(R.id.stageCompress);
+        Compress.setOnClickListener(v -> {
+            m_RocrailService.sendMessage("sb",
+                    String.format("<sb id=\"%s\" cnd=\"compress\"/>", m_Stage.ID));
+            finish();
         });
 
 

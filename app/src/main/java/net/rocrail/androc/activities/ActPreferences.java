@@ -48,40 +48,40 @@ public class ActPreferences extends ActBase implements OnItemSelectedListener {
 
     public void initView() {
         setContentView(R.layout.preferences);
-        CheckBox cb = (CheckBox) findViewById(R.id.prefMonitoring);
+        CheckBox cb = findViewById(R.id.prefMonitoring);
         cb.setChecked(m_RocrailService.Prefs.Monitoring);
-        cb = (CheckBox) findViewById(R.id.prefKeepScreenOn);
+        cb = findViewById(R.id.prefKeepScreenOn);
         cb.setChecked(m_RocrailService.Prefs.KeepScreenOn);
-        cb = (CheckBox) findViewById(R.id.prefModview);
+        cb = findViewById(R.id.prefModview);
         cb.setChecked(m_RocrailService.Prefs.Modview);
-        cb = (CheckBox) findViewById(R.id.prefImagesOnDemand);
+        cb = findViewById(R.id.prefImagesOnDemand);
         cb.setChecked(m_RocrailService.Prefs.ImagesOnDemand);
-        cb = (CheckBox) findViewById(R.id.prefSortByAddr);
+        cb = findViewById(R.id.prefSortByAddr);
         cb.setChecked(m_RocrailService.Prefs.SortByAddr);
-        cb = (CheckBox) findViewById(R.id.prefLocoCatList);
+        cb = findViewById(R.id.prefLocoCatList);
         cb.setChecked(m_RocrailService.Prefs.LocoCatList);
-        cb = (CheckBox) findViewById(R.id.prefPowerOff4EBreak);
+        cb = findViewById(R.id.prefPowerOff4EBreak);
         cb.setChecked(m_RocrailService.Prefs.PowerOff4EBreak);
-        cb = (CheckBox) findViewById(R.id.prefUseAllSpeedSteps);
+        cb = findViewById(R.id.prefUseAllSpeedSteps);
         cb.setChecked(m_RocrailService.Prefs.UseAllSpeedSteps);
-        cb = (CheckBox) findViewById(R.id.prefSyncSpeed);
+        cb = findViewById(R.id.prefSyncSpeed);
         cb.setChecked(m_RocrailService.Prefs.SyncSpeed);
-        Button b = (Button) findViewById(R.id.prefClearRecent);
+        Button b = findViewById(R.id.prefClearRecent);
         b.setEnabled(!m_RocrailService.Prefs.Recent.isEmpty());
         b.setOnClickListener(v -> {
             m_RocrailService.Prefs.Recent = "";
             v.setEnabled(false);
         });
 
-        EditText et = (EditText) findViewById(R.id.prefR2RHost);
+        EditText et = findViewById(R.id.prefR2RHost);
         et.setText(m_RocrailService.Prefs.RRHost);
-        et = (EditText) findViewById(R.id.prefR2RPort);
+        et = findViewById(R.id.prefR2RPort);
         et.setText("" + m_RocrailService.Prefs.RRPort);
 
-        et = (EditText) findViewById(R.id.prefVDelta);
+        et = findViewById(R.id.prefVDelta);
         et.setText("" + m_RocrailService.Prefs.VDelta);
 
-        Spinner color = (Spinner) findViewById(R.id.BackgroundColor);
+        Spinner color = findViewById(R.id.BackgroundColor);
 
         color.setPrompt(getString(R.string.SelectColor));
 
@@ -97,7 +97,7 @@ public class ActPreferences extends ActBase implements OnItemSelectedListener {
         color.setSelection(m_RocrailService.Prefs.Color);
 
 
-        Spinner category = (Spinner) findViewById(R.id.prefCategory);
+        Spinner category = findViewById(R.id.prefCategory);
 
         color.setPrompt(getString(R.string.SelectColor));
 
@@ -116,34 +116,34 @@ public class ActPreferences extends ActBase implements OnItemSelectedListener {
     }
 
     void savePrefs() {
-        CheckBox cb = (CheckBox) findViewById(R.id.prefMonitoring);
+        CheckBox cb = findViewById(R.id.prefMonitoring);
         m_RocrailService.Prefs.Monitoring = cb.isChecked();
-        cb = (CheckBox) findViewById(R.id.prefKeepScreenOn);
+        cb = findViewById(R.id.prefKeepScreenOn);
         m_RocrailService.Prefs.KeepScreenOn = cb.isChecked();
-        cb = (CheckBox) findViewById(R.id.prefModview);
+        cb = findViewById(R.id.prefModview);
         m_RocrailService.Prefs.Modview = cb.isChecked();
-        cb = (CheckBox) findViewById(R.id.prefImagesOnDemand);
+        cb = findViewById(R.id.prefImagesOnDemand);
         m_RocrailService.Prefs.ImagesOnDemand = cb.isChecked();
-        cb = (CheckBox) findViewById(R.id.prefSortByAddr);
+        cb = findViewById(R.id.prefSortByAddr);
         m_RocrailService.Prefs.SortByAddr = cb.isChecked();
-        cb = (CheckBox) findViewById(R.id.prefLocoCatList);
+        cb = findViewById(R.id.prefLocoCatList);
         m_RocrailService.Prefs.LocoCatList = cb.isChecked();
-        cb = (CheckBox) findViewById(R.id.prefPowerOff4EBreak);
+        cb = findViewById(R.id.prefPowerOff4EBreak);
         m_RocrailService.Prefs.PowerOff4EBreak = cb.isChecked();
-        cb = (CheckBox) findViewById(R.id.prefUseAllSpeedSteps);
+        cb = findViewById(R.id.prefUseAllSpeedSteps);
         m_RocrailService.Prefs.UseAllSpeedSteps = cb.isChecked();
-        cb = (CheckBox) findViewById(R.id.prefSyncSpeed);
+        cb = findViewById(R.id.prefSyncSpeed);
         m_RocrailService.Prefs.SyncSpeed = cb.isChecked();
 
-        EditText et = (EditText) findViewById(R.id.prefR2RHost);
+        EditText et = findViewById(R.id.prefR2RHost);
         m_RocrailService.Prefs.RRHost = et.getText().toString();
-        et = (EditText) findViewById(R.id.prefR2RPort);
+        et = findViewById(R.id.prefR2RPort);
         m_RocrailService.Prefs.RRPort = Integer.parseInt(et.getText().toString());
 
-        et = (EditText) findViewById(R.id.prefVDelta);
+        et = findViewById(R.id.prefVDelta);
         m_RocrailService.Prefs.VDelta = Integer.parseInt(et.getText().toString());
 
-        Spinner color = (Spinner) findViewById(R.id.BackgroundColor);
+        Spinner color = findViewById(R.id.BackgroundColor);
         if (m_RocrailService.Prefs.Color != color.getSelectedItemPosition()) {
             m_RocrailService.Prefs.Color = color.getSelectedItemPosition();
             // Inform level view.
@@ -152,7 +152,7 @@ public class ActPreferences extends ActBase implements OnItemSelectedListener {
             }
         }
 
-        Spinner category = (Spinner) findViewById(R.id.prefCategory);
+        Spinner category = findViewById(R.id.prefCategory);
         m_RocrailService.Prefs.Category = category.getSelectedItemPosition();
 
         m_RocrailService.Prefs.save();

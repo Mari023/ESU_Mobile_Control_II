@@ -59,7 +59,7 @@ public class LED extends View implements Runnable {
         Paint paint = new Paint();
         paint.setAntiAlias(true);
 
-        double radius = 0;
+        double radius;
         if (cx < cy) radius = cx / 3;
         else radius = cy / 3;
 
@@ -85,5 +85,4 @@ public class LED extends View implements Runnable {
             }
         } while (true);
     }
-
 }

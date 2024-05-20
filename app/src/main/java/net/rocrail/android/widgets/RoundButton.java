@@ -59,7 +59,7 @@ public class RoundButton extends View {
         Paint paint = new Paint();
         paint.setAntiAlias(true);
 
-        double radius = 0;
+        double radius;
         if (cx < cy) radius = cx / 2.5;
         else radius = cy / 2.5;
 

@@ -45,10 +45,10 @@ public class ActAccessory extends ActBase {
     public void initView() {
         setContentView(R.layout.accessory);
 
-        EditText et = (EditText) findViewById(R.id.accAddress);
+        EditText et = findViewById(R.id.accAddress);
         et.setText("" + m_RocrailService.Prefs.AccNr);
 
-        Button bt = (Button) findViewById(R.id.accAddressing);
+        Button bt = findViewById(R.id.accAddressing);
         bt.setText(m_RocrailService.Prefs.AccType);
         bt.requestFocus();
 
@@ -67,9 +67,9 @@ public class ActAccessory extends ActBase {
         });
 
 
-        bt = (Button) findViewById(R.id.accM);
+        bt = findViewById(R.id.accM);
         bt.setOnClickListener(v -> {
-            EditText et1 = (EditText) findViewById(R.id.accAddress);
+            EditText et1 = findViewById(R.id.accAddress);
             int addr = Integer.parseInt(et1.getText().toString());
             if (addr > 1) {
                 addr -= getGroupSize();
@@ -79,9 +79,9 @@ public class ActAccessory extends ActBase {
             }
         });
 
-        bt = (Button) findViewById(R.id.accMM);
+        bt = findViewById(R.id.accMM);
         bt.setOnClickListener(v -> {
-            EditText et12 = (EditText) findViewById(R.id.accAddress);
+            EditText et12 = findViewById(R.id.accAddress);
             int addr = Integer.parseInt(et12.getText().toString());
             if (addr > 1) {
                 addr -= getGroupSize() * 4;
@@ -91,9 +91,9 @@ public class ActAccessory extends ActBase {
             }
         });
 
-        bt = (Button) findViewById(R.id.accP);
+        bt = findViewById(R.id.accP);
         bt.setOnClickListener(v -> {
-            EditText et13 = (EditText) findViewById(R.id.accAddress);
+            EditText et13 = findViewById(R.id.accAddress);
             int addr = Integer.parseInt(et13.getText().toString());
             if (addr < 64 * 1024) {
                 addr += getGroupSize();
@@ -103,9 +103,9 @@ public class ActAccessory extends ActBase {
             }
         });
 
-        bt = (Button) findViewById(R.id.accPP);
+        bt = findViewById(R.id.accPP);
         bt.setOnClickListener(v -> {
-            EditText et14 = (EditText) findViewById(R.id.accAddress);
+            EditText et14 = findViewById(R.id.accAddress);
             int addr = Integer.parseInt(et14.getText().toString());
             if (addr < 64 * 1024) {
                 addr += getGroupSize() * 4;
@@ -115,34 +115,34 @@ public class ActAccessory extends ActBase {
             }
         });
 
-        bt = (Button) findViewById(R.id.acc1G);
+        bt = findViewById(R.id.acc1G);
         bt.setOnClickListener(v -> switchCmd(0, 0));
-        bt = (Button) findViewById(R.id.acc1R);
+        bt = findViewById(R.id.acc1R);
         bt.setOnClickListener(v -> switchCmd(0, 1));
 
-        bt = (Button) findViewById(R.id.acc2G);
+        bt = findViewById(R.id.acc2G);
         bt.setOnClickListener(v -> switchCmd(1, 0));
-        bt = (Button) findViewById(R.id.acc2R);
+        bt = findViewById(R.id.acc2R);
         bt.setOnClickListener(v -> switchCmd(1, 1));
 
-        bt = (Button) findViewById(R.id.acc3G);
+        bt = findViewById(R.id.acc3G);
         bt.setOnClickListener(v -> switchCmd(2, 0));
-        bt = (Button) findViewById(R.id.acc3R);
+        bt = findViewById(R.id.acc3R);
         bt.setOnClickListener(v -> switchCmd(2, 1));
 
-        bt = (Button) findViewById(R.id.acc4G);
+        bt = findViewById(R.id.acc4G);
         bt.setOnClickListener(v -> switchCmd(3, 0));
-        bt = (Button) findViewById(R.id.acc4R);
+        bt = findViewById(R.id.acc4R);
         bt.setOnClickListener(v -> switchCmd(3, 1));
     }
 
 
     void switchCmd(int row, int col) {
         // send the command
-        Button bt = (Button) findViewById(R.id.accAddressing);
+        Button bt = findViewById(R.id.accAddressing);
         String type = bt.getText().toString();
 
-        EditText et = (EditText) findViewById(R.id.accAddress);
+        EditText et = findViewById(R.id.accAddress);
         int addr = Integer.parseInt(et.getText().toString());
         int port = row + 1;
 
@@ -164,12 +164,9 @@ public class ActAccessory extends ActBase {
 
 
     int getGroupSize() {
-        Button bt = (Button) findViewById(R.id.accAddressing);
+        Button bt = findViewById(R.id.accAddressing);
         String type = bt.getText().toString();
-        return switch (type) {
-            case Preferences.ACCTYPE_FADA -> 8;
-            default -> 1;
-        };
+        return type.equals(Preferences.ACCTYPE_FADA) ? 8 : 1;
     }
 
     int makeButtonAddr(String type, int addr, int row, int col) {
@@ -182,29 +179,29 @@ public class ActAccessory extends ActBase {
     }
 
     void updateAddress() {
-        EditText et = (EditText) findViewById(R.id.accAddress);
+        EditText et = findViewById(R.id.accAddress);
         int addr = Integer.parseInt(et.getText().toString());
-        Button bt = (Button) findViewById(R.id.accAddressing);
+        Button bt = findViewById(R.id.accAddressing);
         String type = bt.getText().toString();
 
-        bt = (Button) findViewById(R.id.acc1G);
+        bt = findViewById(R.id.acc1G);
         bt.setText(makeButtonAddr(type, addr, 0, 0) + "G");
-        bt = (Button) findViewById(R.id.acc1R);
+        bt = findViewById(R.id.acc1R);
         bt.setText(makeButtonAddr(type, addr, 0, 1) + "R");
 
-        bt = (Button) findViewById(R.id.acc2G);
+        bt = findViewById(R.id.acc2G);
         bt.setText(makeButtonAddr(type, addr, 1, 0) + "G");
-        bt = (Button) findViewById(R.id.acc2R);
+        bt = findViewById(R.id.acc2R);
         bt.setText(makeButtonAddr(type, addr, 1, 1) + "R");
 
-        bt = (Button) findViewById(R.id.acc3G);
+        bt = findViewById(R.id.acc3G);
         bt.setText(makeButtonAddr(type, addr, 2, 0) + "G");
-        bt = (Button) findViewById(R.id.acc3R);
+        bt = findViewById(R.id.acc3R);
         bt.setText(makeButtonAddr(type, addr, 2, 1) + "R");
 
-        bt = (Button) findViewById(R.id.acc4G);
+        bt = findViewById(R.id.acc4G);
         bt.setText(makeButtonAddr(type, addr, 3, 0) + "G");
-        bt = (Button) findViewById(R.id.acc4R);
+        bt = findViewById(R.id.acc4R);
         bt.setText(makeButtonAddr(type, addr, 3, 1) + "R");
     }
 
@@ -212,8 +209,8 @@ public class ActAccessory extends ActBase {
     @Override
     protected void onPause() {
         super.onPause();
-        EditText et = (EditText) findViewById(R.id.accAddress);
-        Button bt = (Button) findViewById(R.id.accAddressing);
+        EditText et = findViewById(R.id.accAddress);
+        Button bt = findViewById(R.id.accAddressing);
 
         m_RocrailService.Prefs.saveAccessory(bt.getText().toString(), Integer.parseInt(et.getText().toString()));
     }

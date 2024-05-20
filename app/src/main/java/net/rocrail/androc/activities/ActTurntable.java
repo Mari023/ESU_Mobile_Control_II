@@ -41,18 +41,18 @@ public class ActTurntable extends ActBase implements OnItemSelectedListener {
 
         if (m_Turntable == null) return;
 
-        final LEDButton fyNext = (LEDButton) findViewById(R.id.fyNext);
+        final LEDButton fyNext = findViewById(R.id.fyNext);
         fyNext.ON = false;
         fyNext.setOnClickListener(v -> m_RocrailService.sendMessage("tt", String.format("<tt id=\"%s\" cmd=\"next\"/>", m_Turntable.ID)));
 
-        final LEDButton fyPrev = (LEDButton) findViewById(R.id.fyPrev);
+        final LEDButton fyPrev = findViewById(R.id.fyPrev);
         fyPrev.ON = false;
         fyPrev.setOnClickListener(v -> m_RocrailService.sendMessage("tt", String.format("<tt id=\"%s\" cmd=\"prev\"/>", m_Turntable.ID)));
 
-        final Button fyTrack = (Button) findViewById(R.id.fyGotoTrack);
+        final Button fyTrack = findViewById(R.id.fyGotoTrack);
         fyTrack.setOnClickListener(v -> m_RocrailService.sendMessage("tt", String.format("<tt id=\"%s\" cmd=\"%s\"/>", m_Turntable.ID, GotoTrack)));
 
-        final LEDButton fyOpen = (LEDButton) findViewById(R.id.fyOpen);
+        final LEDButton fyOpen = findViewById(R.id.fyOpen);
         fyOpen.ON = m_Turntable.Closed;
         fyOpen.setMinWidth(200);
         fyOpen.setOnClickListener(v -> {
@@ -64,7 +64,7 @@ public class ActTurntable extends ActBase implements OnItemSelectedListener {
 
 
         // Track spinner
-        Spinner s = (Spinner) findViewById(R.id.fyTracks);
+        Spinner s = findViewById(R.id.fyTracks);
         s.setPrompt("Select Track");
 
         ArrayAdapter<String> m_adapterForSpinner = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
@@ -86,7 +86,7 @@ public class ActTurntable extends ActBase implements OnItemSelectedListener {
 
     @Override
     public void onItemSelected(AdapterView<?> arg0, View view, int position, long longid) {
-        Spinner s = (Spinner) findViewById(R.id.fyTracks);
+        Spinner s = findViewById(R.id.fyTracks);
         String trackNr = (String) s.getSelectedItem();
         try {
             GotoTrack = Integer.parseInt(trackNr);

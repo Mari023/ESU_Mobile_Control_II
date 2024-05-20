@@ -1,7 +1,6 @@
 package net.rocrail.androc.activities;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -28,16 +27,16 @@ public class ActGuestLoco extends ActBase {
         setContentView(R.layout.guestloco);
         setTitle(R.string.GuestLoco);
 
-        Button AddMember = (Button) findViewById(R.id.guestAdd);
+        Button AddMember = findViewById(R.id.guestAdd);
         AddMember.setOnClickListener(v -> {
-            EditText et = (EditText) findViewById(R.id.guestAddress);
-            EditText id = (EditText) findViewById(R.id.guestShortID);
-            RadioButton step14 = (RadioButton) findViewById(R.id.Speedsteps14);
-            RadioButton step28 = (RadioButton) findViewById(R.id.Speedsteps28);
-            RadioButton step128 = (RadioButton) findViewById(R.id.Speedsteps128);
+            EditText et = findViewById(R.id.guestAddress);
+            EditText id = findViewById(R.id.guestShortID);
+            RadioButton step14 = findViewById(R.id.Speedsteps14);
+            RadioButton step28 = findViewById(R.id.Speedsteps28);
+            RadioButton step128 = findViewById(R.id.Speedsteps128);
 
-            RadioButton dcc = (RadioButton) findViewById(R.id.ProtocolDCC);
-            RadioButton mm = (RadioButton) findViewById(R.id.ProtocolMM);
+            RadioButton dcc = findViewById(R.id.ProtocolDCC);
+            RadioButton mm = findViewById(R.id.ProtocolMM);
 
             int addr = Integer.parseInt(et.getText().toString());
 

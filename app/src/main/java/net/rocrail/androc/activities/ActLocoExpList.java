@@ -36,7 +36,7 @@ public class ActLocoExpList extends ActBase {
 
     public void initView() {
         setContentView(R.layout.locoexplist);
-        m_ListView = (ExpandableListView) findViewById(R.id.locoExpList);
+        m_ListView = findViewById(R.id.locoExpList);
 
         Iterator<Mobile> it = m_RocrailService.m_Model.m_LocoMap.values().iterator();
         while (it.hasNext()) {

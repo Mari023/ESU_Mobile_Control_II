@@ -60,10 +60,10 @@ public class ActBlock extends ActBase implements OnItemSelectedListener {
     }
 
     void updateLoco() {
-        TextView text = (TextView) findViewById(R.id.blockID);
+        TextView text = findViewById(R.id.blockID);
         text.setText(m_Block.ID + ": " + (LocoID == null ? "-" : LocoID));
 
-        LocoImage image = (LocoImage) findViewById(R.id.blockLocoImage);
+        LocoImage image = findViewById(R.id.blockLocoImage);
 
         if (LocoID == null) {
             image.setImageResource(R.drawable.noimg);
@@ -75,14 +75,14 @@ public class ActBlock extends ActBase implements OnItemSelectedListener {
         image.ID = LocoID;
 
         if (lc != null) {
-            TextView ID = (TextView) findViewById(R.id.LocoBlockID);
+            TextView ID = findViewById(R.id.LocoBlockID);
             ID.setText(lc.getID());
-            TextView Desc = (TextView) findViewById(R.id.LocoBlockDesc);
+            TextView Desc = findViewById(R.id.LocoBlockDesc);
             Desc.setText(lc.getDescription());
         } else {
-            TextView ID = (TextView) findViewById(R.id.LocoBlockID);
+            TextView ID = findViewById(R.id.LocoBlockID);
             ID.setText("");
-            TextView Desc = (TextView) findViewById(R.id.LocoBlockDesc);
+            TextView Desc = findViewById(R.id.LocoBlockDesc);
             Desc.setText("");
         }
 
@@ -128,10 +128,10 @@ public class ActBlock extends ActBase implements OnItemSelectedListener {
 
 
         updateLoco();
-        LocoImage image = (LocoImage) findViewById(R.id.blockLocoImage);
+        LocoImage image = findViewById(R.id.blockLocoImage);
         image.setLongClickable(true);
         image.setOnClickListener(v -> {
-            Intent intent = null;
+            Intent intent;
             if (m_RocrailService.Prefs.LocoCatList)
                 intent = new Intent(m_Activity, ActLocoExpList.class);
             else intent = new Intent(m_Activity, ActLocoList.class);
@@ -151,7 +151,7 @@ public class ActBlock extends ActBase implements OnItemSelectedListener {
         });
 
 
-        final Button Loco = (Button) findViewById(R.id.blockLoco);
+        final Button Loco = findViewById(R.id.blockLoco);
         Loco.setOnClickListener(v -> {
             if (m_Block.LocoID != null) {
                 Intent intent = new Intent(m_Activity, ActLoco.class);
@@ -163,7 +163,7 @@ public class ActBlock extends ActBase implements OnItemSelectedListener {
         });
 
 
-        final Button Dispatch = (Button) findViewById(R.id.blockDispatch);
+        final Button Dispatch = findViewById(R.id.blockDispatch);
         Dispatch.setOnClickListener(v -> {
             if (m_Block.LocoID != null) {
                 Loco lc = m_RocrailService.m_Model.getLoco(m_Block.LocoID);
@@ -173,14 +173,14 @@ public class ActBlock extends ActBase implements OnItemSelectedListener {
         });
 
 
-        final Button Free = (Button) findViewById(R.id.blockFree);
+        final Button Free = findViewById(R.id.blockFree);
         Free.setOnClickListener(v -> {
             m_RocrailService.sendMessage("bk", String.format("<bk id=\"%s\" cmd=\"loc\" locid=\"\"/>", m_Block.ID));
             finish();
         });
 
 
-        final LEDButton openBlock = (LEDButton) findViewById(R.id.blockOpen);
+        final LEDButton openBlock = findViewById(R.id.blockOpen);
         openBlock.ON = !m_Block.Closed;
         openBlock.setText(m_Block.Closed ? getText(R.string.OpenBlock) : getText(R.string.CloseBlock));
         openBlock.setOnClickListener(v -> {
@@ -190,7 +190,7 @@ public class ActBlock extends ActBase implements OnItemSelectedListener {
             finish();
         });
 
-        final Button acceptIdentBlock = (Button) findViewById(R.id.blockAcceptIdent);
+        final Button acceptIdentBlock = findViewById(R.id.blockAcceptIdent);
         acceptIdentBlock.setText(getText(R.string.AcceptIdent));
         acceptIdentBlock.setOnClickListener(v -> {
             m_Block.AcceptIdent();

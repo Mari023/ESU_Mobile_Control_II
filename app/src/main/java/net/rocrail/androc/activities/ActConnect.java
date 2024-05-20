@@ -54,16 +54,13 @@ public class ActConnect extends ActBase implements ModelListener, SystemListener
     // Define the Handler that receives messages from the thread and update the progress
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case PROGRESS_DIALOG: {
-                    int total = msg.getData().getInt("total");
-                    progressDialog.setProgress(total);
-                    if (total >= 100 && progressDialog != null && progressDialog.isShowing()) {
-                        dismissDialog(PROGRESS_DIALOG);
-                        m_RocrailService.Prefs.saveConnection();
-                    }
+            if (msg.what == PROGRESS_DIALOG) {
+                int total = msg.getData().getInt("total");
+                progressDialog.setProgress(total);
+                if (total >= 100 && progressDialog != null && progressDialog.isShowing()) {
+                    dismissDialog(PROGRESS_DIALOG);
+                    m_RocrailService.Prefs.saveConnection();
                 }
-                break;
             }
         }
     };
@@ -139,17 +136,15 @@ public class ActConnect extends ActBase implements ModelListener, SystemListener
         } catch (Exception e) {
             e.printStackTrace();
             AlertDialog.Builder builder = new AlertDialog.Builder(ActConnect.this);
-            builder.setMessage(e.getClass().getName() + "\nCould not connect to " + m_RocrailService.Prefs.Host + ":" + m_RocrailService.Prefs.Port).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    //andRoc.this.finish();
-                    dialog.cancel();
-                }
+            builder.setMessage(e.getClass().getName() + "\nCould not connect to " + m_RocrailService.Prefs.Host + ":" + m_RocrailService.Prefs.Port).setCancelable(false).setPositiveButton("OK", (dialog, id) -> {
+                //andRoc.this.finish();
+                dialog.cancel();
             });
 
             AlertDialog alert = builder.create();
             alert.show();
 
-            Button v = (Button) findViewById(R.id.ButtonConnect);
+            Button v = findViewById(R.id.ButtonConnect);
             v.setEnabled(true);
 
         }
@@ -158,11 +153,11 @@ public class ActConnect extends ActBase implements ModelListener, SystemListener
     public void initView() {
         setContentView(R.layout.connect);
 
-        Spinner recent = (Spinner) findViewById(R.id.connectRecent);
+        Spinner recent = findViewById(R.id.connectRecent);
 
         recent.setPrompt("Select connection");
 
-        ArrayAdapter<String> m_adapterForSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> m_adapterForSpinner = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         m_adapterForSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         recent.setAdapter(m_adapterForSpinner);
 
@@ -175,16 +170,16 @@ public class ActConnect extends ActBase implements ModelListener, SystemListener
         recent.setOnItemSelectedListener(this);
 
 
-        final Button button = (Button) findViewById(R.id.ButtonConnect);
+        final Button button = findViewById(R.id.ButtonConnect);
         button.setOnClickListener(v -> {
             // Perform action on click
             v.setEnabled(false);
 
-            EditText s = (EditText) findViewById(R.id.connectHost);
+            EditText s = findViewById(R.id.connectHost);
             m_RocrailService.Prefs.Host = s.getText().toString();
-            s = (EditText) findViewById(R.id.controlCode);
+            s = findViewById(R.id.controlCode);
             m_RocrailService.Prefs.CtrlCode = s.getText().toString();
-            s = (EditText) findViewById(R.id.connectPort);
+            s = findViewById(R.id.connectPort);
             try {
                 m_RocrailService.Prefs.Port = Integer.parseInt(s.getText().toString());
                 RRConnection.addToList(m_RocrailService.Prefs.Title, m_RocrailService.Prefs.Host, m_RocrailService.Prefs.Port, m_RocrailService.Prefs.CtrlCode, m_RocrailService.Prefs.conList);
@@ -197,11 +192,11 @@ public class ActConnect extends ActBase implements ModelListener, SystemListener
         });
 
         if (m_RocrailService != null) {
-            EditText s = (EditText) findViewById(R.id.connectHost);
+            EditText s = findViewById(R.id.connectHost);
             s.setText(m_RocrailService.Prefs.Host);
-            s = (EditText) findViewById(R.id.connectPort);
+            s = findViewById(R.id.connectPort);
             s.setText("" + m_RocrailService.Prefs.Port);
-            TextView tv = (TextView) findViewById(R.id.connectTitle);
+            TextView tv = findViewById(R.id.connectTitle);
             tv.setText(m_RocrailService.Prefs.Title);
         }
 
@@ -228,15 +223,15 @@ public class ActConnect extends ActBase implements ModelListener, SystemListener
     @Override
     public void onItemSelected(AdapterView<?> arg0, View view, int position, long longID) {
         if (position > 0) {
-            Button button = (Button) findViewById(R.id.ButtonConnect);
+            Button button = findViewById(R.id.ButtonConnect);
             button.setEnabled(false);
             RRConnection con = m_RocrailService.Prefs.conList.get(position - 1);
 
-            EditText s = (EditText) findViewById(R.id.connectHost);
+            EditText s = findViewById(R.id.connectHost);
             s.setText(con.HostName);
-            s = (EditText) findViewById(R.id.connectPort);
+            s = findViewById(R.id.connectPort);
             s.setText("" + con.Port);
-            TextView tv = (TextView) findViewById(R.id.connectTitle);
+            TextView tv = findViewById(R.id.connectTitle);
             tv.setText(con.Title);
 
             doConnect(con.HostName, con.Port, con.ControlCode);
@@ -260,7 +255,7 @@ public class ActConnect extends ActBase implements ModelListener, SystemListener
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == MobileControl2.KEYCODE_BOTTOM_RIGHT) {
-            ((Button) findViewById(R.id.ButtonConnect)).performClick();
+            findViewById(R.id.ButtonConnect).performClick();
             return true;
         }
         return super.onKeyDown(keyCode, event);

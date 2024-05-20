@@ -70,7 +70,7 @@ public class ActLocoSetup extends ActBase implements OnItemSelectedListener, OnS
 
         if (m_Loco == null) return;
 
-        LocoImage image = (LocoImage) findViewById(R.id.locoImage);
+        LocoImage image = findViewById(R.id.locoImage);
 
         if (m_Loco.getBmp(null) != null) {
             if (image != null) {
@@ -80,42 +80,40 @@ public class ActLocoSetup extends ActBase implements OnItemSelectedListener, OnS
 
         image.setOnClickListener(v -> throttleView());
 
-        SeekBar Vmin = (SeekBar) findViewById(R.id.locoVmin);
+        SeekBar Vmin = findViewById(R.id.locoVmin);
         Vmin.setOnSeekBarChangeListener(this);
         Vmin.setProgress(m_Loco.Vmin);
 
-        SeekBar Vmid = (SeekBar) findViewById(R.id.locoVmid);
+        SeekBar Vmid = findViewById(R.id.locoVmid);
         Vmid.setOnSeekBarChangeListener(this);
         Vmid.setProgress(m_Loco.Vmid);
 
-        SeekBar Vmax = (SeekBar) findViewById(R.id.locoVmax);
+        SeekBar Vmax = findViewById(R.id.locoVmax);
         Vmax.setOnSeekBarChangeListener(this);
         Vmax.setProgress(m_Loco.Vmax);
 
 
-        EditText cvTxt = (EditText) findViewById(R.id.locoCV);
+        EditText cvTxt = findViewById(R.id.locoCV);
         cvTxt.setText("" + m_RocrailService.Prefs.CvNr);
 
-        Button Write = (Button) findViewById(R.id.locoCVWrite);
-        Write.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (m_Loco != null) {
-                    EditText cvTxt = (EditText) findViewById(R.id.locoCV);
-                    int cv = Integer.parseInt(cvTxt.getText().toString());
-                    EditText valTxt = (EditText) findViewById(R.id.locoVal);
-                    int val = Integer.parseInt(valTxt.getText().toString());
-                    m_Loco.CVWrite(cv, val);
-                    m_RocrailService.Prefs.saveProgramming(cv);
-                }
+        Button Write = findViewById(R.id.locoCVWrite);
+        Write.setOnClickListener(v -> {
+            if (m_Loco != null) {
+                EditText cvTxt12 = (EditText) findViewById(R.id.locoCV);
+                int cv = Integer.parseInt(cvTxt12.getText().toString());
+                EditText valTxt = (EditText) findViewById(R.id.locoVal);
+                int val = Integer.parseInt(valTxt.getText().toString());
+                m_Loco.CVWrite(cv, val);
+                m_RocrailService.Prefs.saveProgramming(cv);
             }
         });
 
 
-        Button Read = (Button) findViewById(R.id.locoCVRead);
+        Button Read = findViewById(R.id.locoCVRead);
         Read.requestFocus();
         Read.setOnClickListener(v -> {
             if (m_Loco != null) {
-                EditText cvTxt1 = (EditText) findViewById(R.id.locoCV);
+                EditText cvTxt1 = findViewById(R.id.locoCV);
                 int cv = Integer.parseInt(cvTxt1.getText().toString());
                 m_Loco.CVRead(cv);
                 m_RocrailService.Prefs.saveProgramming(cv);
@@ -123,7 +121,7 @@ public class ActLocoSetup extends ActBase implements OnItemSelectedListener, OnS
         });
 
 
-        Button Dispatch = (Button) findViewById(R.id.locoDispatch);
+        Button Dispatch = findViewById(R.id.locoDispatch);
         Dispatch.setOnClickListener(v -> {
             if (m_Loco != null) {
                 m_Loco.Dispatch();
@@ -166,12 +164,10 @@ public class ActLocoSetup extends ActBase implements OnItemSelectedListener, OnS
     @Override
     public void ReadResponse(int addr, int cv, int value) {
         CvVal = value;
-        EditText valTxt = (EditText) findViewById(R.id.locoVal);
-        valTxt.post(new Runnable() {
-            public void run() {
-                EditText valTxt = (EditText) findViewById(R.id.locoVal);
-                valTxt.setText("" + CvVal);
-            }
+        EditText valTxt = findViewById(R.id.locoVal);
+        valTxt.post(() -> {
+            EditText valTxt1 = (EditText) findViewById(R.id.locoVal);
+            valTxt1.setText("" + CvVal);
         });
     }
 }

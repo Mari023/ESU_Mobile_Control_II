@@ -115,8 +115,7 @@ public class Slider extends View implements Runnable {
         rect.top = (float) yu * 1 + 2;
         rect.bottom = (float) yu * 9 - 2;
 
-        int v = (int) V;
-        paint.setColor(Color.rgb(v + 120, 120, 120));
+        paint.setColor(Color.rgb((int) V + 120, 120, 120));
         canvas.drawRoundRect(rect, (float) yu / 2, (float) yu / 2, paint);
         paint.setColor(Color.rgb(100, 100, 100));
 
@@ -124,10 +123,12 @@ public class Slider extends View implements Runnable {
         float ly1 = (float) (yu * 1.2);
         float ly2 = (float) (yu * 8.6);
         float lx1 = (float) ((1.5 * xu) / 5);
-        canvas.drawLine((float) ((x - .75 * xu) + lx1 * 1), ly1, (float) ((x - .75 * xu) + lx1 * 1), ly2, paint);
-        canvas.drawLine((float) ((x - .75 * xu) + lx1 * 2), ly1, (float) ((x - .75 * xu) + lx1 * 2), ly2, paint);
-        canvas.drawLine((float) ((x - .75 * xu) + lx1 * 3), ly1, (float) ((x - .75 * xu) + lx1 * 3), ly2, paint);
-        canvas.drawLine((float) ((x - .75 * xu) + lx1 * 4), ly1, (float) ((x - .75 * xu) + lx1 * 4), ly2, paint);
+
+        double d = x - .75 * xu;
+        canvas.drawLine((float) d + lx1 * 1, ly1, (float) d + lx1 * 1, ly2, paint);
+        canvas.drawLine((float) d + lx1 * 2, ly1, (float) d + lx1 * 2, ly2, paint);
+        canvas.drawLine((float) d + lx1 * 3, ly1, (float) d + lx1 * 3, ly2, paint);
+        canvas.drawLine((float) d + lx1 * 4, ly1, (float) d + lx1 * 4, ly2, paint);
 
     }
 

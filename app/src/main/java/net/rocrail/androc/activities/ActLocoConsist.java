@@ -42,7 +42,7 @@ public class ActLocoConsist extends ActBase {
 
         setTitle("Consist " + m_Loco.getID());
 
-        LocoImage image = (LocoImage) findViewById(R.id.locoImage);
+        LocoImage image = findViewById(R.id.locoImage);
 
         if (m_Loco.getBmp(null) != null) {
             if (image != null) {
@@ -50,37 +50,31 @@ public class ActLocoConsist extends ActBase {
             }
         }
 
-        Button ViewConsist = (Button) findViewById(R.id.consistView);
-        ViewConsist.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (m_Loco != null) {
-                    Intent intent = new Intent(m_Activity, net.rocrail.androc.activities.ActLocoList.class);
-                    intent.putExtra("consist", m_Loco.Consist);
-                    startActivityForResult(intent, 3);
-                }
+        Button ViewConsist = findViewById(R.id.consistView);
+        ViewConsist.setOnClickListener(v -> {
+            if (m_Loco != null) {
+                Intent intent = new Intent(m_Activity, ActLocoList.class);
+                intent.putExtra("consist", m_Loco.Consist);
+                startActivityForResult(intent, 3);
             }
         });
 
-        Button AddMember = (Button) findViewById(R.id.consistAdd);
-        AddMember.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (m_Loco != null) {
-                    Intent intent = new Intent(m_Activity, net.rocrail.androc.activities.ActLocoList.class);
-                    intent.putExtra("exclude", m_Loco.getID() + "," + m_Loco.Consist);
-                    startActivityForResult(intent, 1);
-                }
+        Button AddMember = findViewById(R.id.consistAdd);
+        AddMember.setOnClickListener(v -> {
+            if (m_Loco != null) {
+                Intent intent = new Intent(m_Activity, ActLocoList.class);
+                intent.putExtra("exclude", m_Loco.getID() + "," + m_Loco.Consist);
+                startActivityForResult(intent, 1);
             }
         });
 
 
-        Button RemoveMember = (Button) findViewById(R.id.consistDelete);
-        RemoveMember.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (m_Loco != null) {
-                    Intent intent = new Intent(m_Activity, net.rocrail.androc.activities.ActLocoList.class);
-                    intent.putExtra("consist", m_Loco.Consist);
-                    startActivityForResult(intent, 2);
-                }
+        Button RemoveMember = findViewById(R.id.consistDelete);
+        RemoveMember.setOnClickListener(v -> {
+            if (m_Loco != null) {
+                Intent intent = new Intent(m_Activity, ActLocoList.class);
+                intent.putExtra("consist", m_Loco.Consist);
+                startActivityForResult(intent, 2);
             }
         });
     }
