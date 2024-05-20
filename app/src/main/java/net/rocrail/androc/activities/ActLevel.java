@@ -68,7 +68,7 @@ public class ActLevel extends ActBase implements OnZoomListener, OnLongClickList
             ModPlan = (Z == -1);
         }
 
-        MenuSelection = ActBase.MENU_THROTTLE | ActBase.MENU_MENU | ActBase.MENU_SYSTEM | ActBase.MENU_PREFERENCES | ActBase.MENU_ACCESSORY;
+        MenuSelection = ActBase.MENU_MENU | ActBase.MENU_SYSTEM | ActBase.MENU_PREFERENCES | ActBase.MENU_ACCESSORY;
 
         Finish = false;
         connectWithService();
@@ -78,9 +78,6 @@ public class ActLevel extends ActBase implements OnZoomListener, OnLongClickList
         super.connectedWithService();
         m_RocrailService.LevelView = this;
         initView();
-        if (!(m_RocrailService.m_Model.ModPlan && m_RocrailService.Prefs.Modview)) {
-            MenuSelection |= ActBase.MENU_LAYOUT;
-        }
     }
 
 

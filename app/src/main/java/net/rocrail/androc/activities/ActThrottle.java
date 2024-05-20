@@ -67,8 +67,7 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //MenuSelection = ActBase.MENU_MENU | ActBase.MENU_LAYOUT | ActBase.MENU_SYSTEM | ActBase.MENU_LOCO | ActBase.MENU_PREFERENCES | ActBase.MENU_ACCESSORY;
-        MenuSelection = ActBase.MENU_SYSTEM | ActBase.MENU_LOCO | ActBase.MENU_PREFERENCES | ActBase.MENU_POM;
+        MenuSelection = ActBase.MENU_SYSTEM | ActBase.MENU_LOCO | ActBase.MENU_LAYOUT | ActBase.MENU_MENU | ActBase.MENU_PREFERENCES | ActBase.MENU_POM;
 
         controller = new Controller(getApplicationContext());
         controller.setListener(new Controller.Listener() {
