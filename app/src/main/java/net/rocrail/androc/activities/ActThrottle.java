@@ -705,6 +705,21 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //Handle the back button
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            if (quitShowed) {
+                ActThrottle.this.finish();
+                return true;
+            }
+
+            Toast.makeText(getApplicationContext(), R.string.BackAgainQuit, Toast.LENGTH_SHORT).show();
+            quitShowed = true;
+            return true;
+        } else {
+            quitShowed = false;
+        }
+
         return switch (keyCode) {
             case MobileControl2.KEYCODE_TOP_LEFT -> {
                 LEDButton Lights = (LEDButton) findViewById(R.id.throttleLights);

@@ -212,46 +212,6 @@ public class ActLevel extends ActBase implements OnZoomListener, OnLongClickList
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        //Handle the back button
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-            if (quitShowed) {
-                ActLevel.this.finish();
-                return true;
-            }
-
-            Toast.makeText(getApplicationContext(), R.string.BackAgainQuit, Toast.LENGTH_SHORT).show();
-            quitShowed = true;
-
-            //Ask the user if they want to quit
-          /*
-          new AlertDialog.Builder(this)
-          .setIcon(android.R.drawable.ic_dialog_alert)
-          .setTitle(R.string.quit)
-          .setMessage(R.string.really_quit)
-          .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-
-                  //Stop the activity
-                  ActThrottle.this.finish();
-              }
-
-          })
-          .setNegativeButton(R.string.no, null)
-          .show();
-          */
-
-            return true;
-        } else {
-            quitShowed = false;
-            return super.onKeyDown(keyCode, event);
-        }
-    }
-
-    @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (levelView.zoomButtonsController == null) {
             levelView.zoomButtonsController = new ZoomButtonsController(getWindow().getDecorView());
