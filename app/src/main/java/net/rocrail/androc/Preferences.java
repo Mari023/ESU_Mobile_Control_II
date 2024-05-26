@@ -54,7 +54,6 @@ public class Preferences {
     public static final String PREFS_CATEGORY = "category";
     public static final String PREFS_USEALLSPEEDSTEPS = "useallspeedsteps";
     public static final String PREFS_SYNCSPEED = "syncspeed";
-    public static final String PREFS_VDELTA = "vdelta";
 
     public static final String ACCTYPE_MADA = "M";
     public static final String ACCTYPE_FADA = "F";
@@ -74,6 +73,7 @@ public class Preferences {
     public int Category = 0;
     public boolean Modview = true;
     public boolean PowerOff4EBreak = false;
+    @Deprecated
     public boolean UseAllSpeedSteps = false;
     public boolean SyncSpeed = true;
     public String LocoID = "";
@@ -88,7 +88,6 @@ public class Preferences {
     public String AccType = ACCTYPE_MADA;
     public int Size = 32;
     public int Color = 0;
-    public int VDelta = 5;
     public List<RRConnection> conList = null;
     RocrailService rocrailService;
     boolean Initialized = false;
@@ -132,7 +131,6 @@ public class Preferences {
         LocoCatList = settings.getBoolean(PREFS_LOCOCATLIST, LocoCatList);
         Category = settings.getInt(PREFS_CATEGORY, Category);
         Color = settings.getInt(PREFS_COLOR, Color);
-        VDelta = settings.getInt(PREFS_VDELTA, VDelta);
 
         conList = RRConnection.parse(Recent);
 
@@ -226,7 +224,6 @@ public class Preferences {
         editor.putBoolean(PREFS_USEALLSPEEDSTEPS, UseAllSpeedSteps);
         editor.putBoolean(PREFS_SYNCSPEED, SyncSpeed);
         editor.putInt(PREFS_COLOR, Color);
-        editor.putInt(PREFS_VDELTA, VDelta);
         editor.commit();
     }
 

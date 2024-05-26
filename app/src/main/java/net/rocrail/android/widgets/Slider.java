@@ -38,8 +38,6 @@ public class Slider extends View implements Runnable {
     boolean isMin = false;
     boolean downHandled = false;
     int sleep = 1000;
-    int VDelta = 1;
-
 
     List<SliderListener> m_Listeners = new ArrayList<>();
 
@@ -65,10 +63,6 @@ public class Slider extends View implements Runnable {
 
     public void setRange(float range) {
         Range = range;
-    }
-
-    public void setDelta(int delta) {
-        VDelta = delta;
     }
 
     public void setV(int v) {
@@ -134,10 +128,10 @@ public class Slider extends View implements Runnable {
 
     void adjustV() {
         if (isMin) {
-            if (V > 0) V -= VDelta;
+            if (V > 0) V --;
             if (V < 0) V = 0;
         } else {
-            if (V < 100) V += VDelta;
+            if (V < 100) V --;
             if (V > 100) V = 100;
         }
     }

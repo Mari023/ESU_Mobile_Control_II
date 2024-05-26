@@ -545,7 +545,6 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
             Slider mSeekBar = findViewById(R.id.Speed);
             mSeekBar.setRange(m_Loco.getVMax());
             mSeekBar.setV(m_Loco.getSpeed());
-            mSeekBar.setDelta(m_RocrailService.Prefs.UseAllSpeedSteps ? 1 : m_RocrailService.Prefs.VDelta);
             LEDButton mDir = findViewById(R.id.throttleDirection);
             setDirSpeed(mDir, true);
 
@@ -557,7 +556,6 @@ public class ActThrottle extends ActBase implements ModelListener, net.rocrail.a
             image.setImageResource(R.drawable.noimg);
             Slider mSeekBar = findViewById(R.id.Speed);
             mSeekBar.setRange(100);
-            mSeekBar.setDelta(m_RocrailService.Prefs.UseAllSpeedSteps ? 1 : m_RocrailService.Prefs.VDelta);
             mSeekBar.setV(0);
             LEDButton mDir = findViewById(R.id.throttleDirection);
             mDir.setText("" + 0);

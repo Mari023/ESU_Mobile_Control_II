@@ -76,7 +76,7 @@ public abstract class MobileImpl implements Mobile {
     }
 
     public void setSpeed(int V, boolean force) {
-        if (force || V == Vmax || V == 0 || StrictMath.abs(Vprev - V) >= this.rocrailService.Prefs.VDelta || Steps < 50) {
+        if (force || V == Vmax || V == 0 || V != Vprev || Steps < 50) {
             Speed = V;
             System.out.println("set Speed=" + Speed);
             setSpeed(false);

@@ -62,8 +62,6 @@ public class ActPreferences extends ActBase implements OnItemSelectedListener {
         cb.setChecked(m_RocrailService.Prefs.LocoCatList);
         cb = findViewById(R.id.prefPowerOff4EBreak);
         cb.setChecked(m_RocrailService.Prefs.PowerOff4EBreak);
-        cb = findViewById(R.id.prefUseAllSpeedSteps);
-        cb.setChecked(m_RocrailService.Prefs.UseAllSpeedSteps);
         cb = findViewById(R.id.prefSyncSpeed);
         cb.setChecked(m_RocrailService.Prefs.SyncSpeed);
         Button b = findViewById(R.id.prefClearRecent);
@@ -78,9 +76,6 @@ public class ActPreferences extends ActBase implements OnItemSelectedListener {
         et = findViewById(R.id.prefR2RPort);
         et.setText("" + m_RocrailService.Prefs.RRPort);
 
-        et = findViewById(R.id.prefVDelta);
-        et.setText("" + m_RocrailService.Prefs.VDelta);
-
         Spinner color = findViewById(R.id.BackgroundColor);
 
         color.setPrompt(getString(R.string.SelectColor));
@@ -89,13 +84,11 @@ public class ActPreferences extends ActBase implements OnItemSelectedListener {
         m_adapterForSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         color.setAdapter(m_adapterForSpinner);
 
-
         m_adapterForSpinner.add(getString(R.string.Green));
         m_adapterForSpinner.add(getString(R.string.Grey));
         m_adapterForSpinner.add(getString(R.string.Blue));
         color.setOnItemSelectedListener(this);
         color.setSelection(m_RocrailService.Prefs.Color);
-
 
         Spinner category = findViewById(R.id.prefCategory);
 
@@ -105,14 +98,11 @@ public class ActPreferences extends ActBase implements OnItemSelectedListener {
         m_adapterForSpinner2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         category.setAdapter(m_adapterForSpinner2);
 
-
         m_adapterForSpinner2.add(getString(R.string.CatEngine));
         m_adapterForSpinner2.add(getString(R.string.CatEra));
         m_adapterForSpinner2.add(getString(R.string.CatRoadname));
         category.setOnItemSelectedListener(this);
         category.setSelection(m_RocrailService.Prefs.Category);
-
-
     }
 
     void savePrefs() {
@@ -130,8 +120,6 @@ public class ActPreferences extends ActBase implements OnItemSelectedListener {
         m_RocrailService.Prefs.LocoCatList = cb.isChecked();
         cb = findViewById(R.id.prefPowerOff4EBreak);
         m_RocrailService.Prefs.PowerOff4EBreak = cb.isChecked();
-        cb = findViewById(R.id.prefUseAllSpeedSteps);
-        m_RocrailService.Prefs.UseAllSpeedSteps = cb.isChecked();
         cb = findViewById(R.id.prefSyncSpeed);
         m_RocrailService.Prefs.SyncSpeed = cb.isChecked();
 
@@ -139,9 +127,6 @@ public class ActPreferences extends ActBase implements OnItemSelectedListener {
         m_RocrailService.Prefs.RRHost = et.getText().toString();
         et = findViewById(R.id.prefR2RPort);
         m_RocrailService.Prefs.RRPort = Integer.parseInt(et.getText().toString());
-
-        et = findViewById(R.id.prefVDelta);
-        m_RocrailService.Prefs.VDelta = Integer.parseInt(et.getText().toString());
 
         Spinner color = findViewById(R.id.BackgroundColor);
         if (m_RocrailService.Prefs.Color != color.getSelectedItemPosition()) {
