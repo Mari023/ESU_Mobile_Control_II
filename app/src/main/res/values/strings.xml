@@ -144,6 +144,7 @@
     <string name="Dispatch">Lok freigeben</string>
     <string name="AcceptIdent">BiDi Identität akzeptieren</string>
     <string name="EmergencyStop">Nothalt</string>
+    <string name="Shutdown">Runterfahren</string>
     <string name="SmallThrottle">Kleiner Regler</string>
     <string name="ControlCode">Zugriffscode</string>
     <string name="Zoom">Zoom</string>

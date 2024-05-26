@@ -267,13 +267,17 @@ public class RocrailService extends Service {
 
     public void EBrake() {
         EBrake = true;
-        if (Prefs.PowerOff4EBreak)
-            sendMessage("sys", "<sys cmd=\"stop\" informall=\"true\"/>");
+        if (Prefs.PowerOff4EBreak) sendMessage("sys", "<sys cmd=\"stop\" informall=\"true\"/>");
         else {
             sendMessage("sys", "<sys cmd=\"ebreak\" informall=\"true\"/>");
             MobileControl2.setLedState(MobileControl2.LED_GREEN, true);
             MobileControl2.setLedState(MobileControl2.LED_RED, true);
         }
+    }
+
+    public void shutdown() {
+        //FIXME doesn't actually work
+        sendMessage("sys", "<sys cmd=\"poweroff\" informall=\"true\"/>");
     }
 
     public class RocrailLocalBinder extends Binder {
